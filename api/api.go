@@ -9,16 +9,16 @@ import (
 	"context"
 
 	"github.com/go-chi/chi"
+	"strings"
 )
 
 type Server struct {
-	Version string
-	WebRoot string
-	Logger log.Logger
+	Version    string
+	WebRoot    string
+	Logger     log.Logger
 	httpServer *http.Server
 	lock       sync.Mutex
 }
-
 
 // Run the lister and request's router, activate server
 func (s *Server) Run(port int) {
@@ -28,8 +28,8 @@ func (s *Server) Run(port int) {
 
 	s.lock.Lock()
 	s.httpServer = &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
-		Handler: router,
+		Addr:              fmt.Sprintf(":%d", port),
+		Handler:           router,
 		ReadHeaderTimeout: 5 * time.Second,
 		WriteTimeout:      5 * time.Second,
 		IdleTimeout:       30 * time.Second,
@@ -63,11 +63,27 @@ func (s *Server) Shutdown() {
 func (s *Server) routes() chi.Router {
 
 	router := chi.NewRouter()
+	router.Route("/api/v1", func(rapi chi.Router) {
+		rapi.Group(func(ropen chi.Router) {
+			ropen.Get("/ping", s.pingCtrl)
+		})
+	})
 
 	//file server for static content from /web
 	addFileServer(router, "/web", http.Dir(s.WebRoot))
 
 	return router
+}
+
+func (s *Server) pingCtrl(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" && strings.HasSuffix(strings.ToLower(r.URL.Path), "/ping") {
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(http.StatusOK)
+		if _, err := w.Write([]byte("pong")); err != nil {
+			log.Printf("[WARN] can't send pong, %s", err)
+			return
+		}
+	}
 }
 
 // serves static files from /web

@@ -14,13 +14,14 @@ import (
 var version = "unknown"
 
 type Opts struct {
-	Port    int    `long:"port" env:"NABU_PORT" default:"8900" description:"port"`
+	Port    int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
 	WebRoot string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web" description:"web root directory"`
+	NabuURL string `long:"url" env:"NABU_URL" required:"true" description:"url to nabu"`
 }
 
 type Application struct {
 	Opts
-	srv    *api.Server
+	srv        *api.Server
 	terminated chan struct{}
 }
 
@@ -60,11 +61,10 @@ func Create(opts Opts) (*Application, error) {
 
 	tch := make(chan struct{})
 	return &Application{
-		srv:    srv,
+		srv:        srv,
 		Opts:       opts,
 		terminated: tch}, nil
 }
-
 
 // Run all application objects
 func (a *Application) Run(ctx context.Context) error {
