@@ -16,7 +16,7 @@ var version = "unknown"
 type Opts struct {
 	Port    int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
 	WebRoot string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web" description:"web root directory"`
-	NabuURL string `long:"url" env:"NABU_URL" required:"true" description:"url to nabu"`
+	NabuURL string `long:"url" env:"NABU_URL" default:"dev.nabu.app" required:"true" description:"url to nabu"`
 }
 
 type Application struct {
@@ -74,12 +74,17 @@ func (a *Application) Run(ctx context.Context) error {
 		a.srv.Shutdown()
 	}()
 
+	log.Println("[DEBUG] run a.srv")
 	a.srv.Run(a.Port)
+
+	log.Println("[DEBUG] closing a.terminated")
 	close(a.terminated)
 	return nil
 }
 
 // Wait for application completion (termination)
 func (a *Application) Wait() {
+	log.Println("[DEBUG] wait <-a.terminated")
 	<-a.terminated
+	log.Println("[DEBUG] closed <-a.terminated")
 }
