@@ -21,7 +21,7 @@ type Server struct {
 }
 
 // Run the lister and request's router, activate server
-func (s *Server) Run(port int) {
+func (s *Server) Run(port int) error {
 	log.Printf("[INFO] activate server on port %d", port)
 
 	router := s.routes()
@@ -37,11 +37,8 @@ func (s *Server) Run(port int) {
 	s.lock.Unlock()
 
 	err := s.httpServer.ListenAndServe()
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
 
-	log.Printf("[WARN] http server terminated, %s", err)
+	return err
 }
 
 // Shutdown rest http server

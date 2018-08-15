@@ -72,19 +72,13 @@ func (a *Application) Run(ctx context.Context) error {
 		// shutdown on context cancellation
 		<-ctx.Done()
 		a.srv.Shutdown()
+		close(a.terminated)
 	}()
 
-	log.Println("[DEBUG] run a.srv")
-	a.srv.Run(a.Port)
-
-	log.Println("[DEBUG] closing a.terminated")
-	close(a.terminated)
-	return nil
+	return a.srv.Run(a.Port)
 }
 
 // Wait for application completion (termination)
 func (a *Application) Wait() {
-	log.Println("[DEBUG] wait <-a.terminated")
 	<-a.terminated
-	log.Println("[DEBUG] closed <-a.terminated")
 }

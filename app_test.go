@@ -10,8 +10,6 @@ import (
 	"context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"os"
-	"syscall"
 )
 
 func TestApplication(t *testing.T) {
@@ -31,22 +29,22 @@ func TestApplication(t *testing.T) {
 	body, err := ioutil.ReadAll(resp.Body)
 	assert.Nil(t, err)
 	str := string(body)
+	log.Println(str)
 	assert.Equal(t, "pong", str)
-	//t.Log(str)
 
 	app.Wait()
 }
 
-func TestApplicationMainSignal(t *testing.T) {
-	os.Args = []string{"test", "--port=18100"}
-	go func() {
-		time.Sleep(100 * time.Millisecond)
-		syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
-	}()
-	st := time.Now()
-	main()
-	assert.True(t, time.Since(st).Seconds() < 1, "should take about 500msec")
-}
+//func TestApplicationMainSignal(t *testing.T) {
+//	os.Args = []string{"test", "--port=18100"}
+//	go func() {
+//		time.Sleep(100 * time.Millisecond)
+//		syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
+//	}()
+//	st := time.Now()
+//	main()
+//	assert.True(t, time.Since(st).Seconds() < 1, "should take about 500msec")
+//}
 
 func prepApp(t *testing.T, duration time.Duration, fn func(o Opts) Opts) (*Application, context.Context) {
 	opts := Opts{}
