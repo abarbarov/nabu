@@ -37,7 +37,6 @@ func (s *Server) Run(port int) error {
 	s.lock.Unlock()
 
 	err := s.httpServer.ListenAndServe()
-
 	return err
 }
 
