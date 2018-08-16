@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+
+message Story {
+    int32 id = 1;
+    int32 score = 2;
+    string title = 3;
+    string by = 4;
+    int32 time = 5;
+    string url = 6;
+}
+
+service HackerNewsService {
+    rpc ListStories (ListStoriesRequest) returns (stream ListStoriesResponse);
+}
+
+message ListStoriesResponse {
+    Story story = 1;
+}
+message ListStoriesRequest {}

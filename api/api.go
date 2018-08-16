@@ -65,6 +65,10 @@ func (s *Server) routes() chi.Router {
 		})
 	})
 
+	router.Route("/grpc/v1", func(rgrpc chi.Router){
+
+	})
+
 	//file server for static content from /web
 	addFileServer(router, "/web", http.Dir(s.WebRoot))
 
