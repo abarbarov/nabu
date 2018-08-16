@@ -1,8 +1,8 @@
 import { Action } from 'redux';
-import { ListStoriesRequest, ListStoriesResponse, Story } from '../proto/nabu_pb';
+import { ListStoriesRequest, ListStoriesResponse, Story } from '../protobuf/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
-import { Code, Metadata } from 'grpc-web-client';
-import { HackerNewsService } from '../proto/nabu_pb_service';
+import { grpc } from 'grpc-web-client';
+import { HackerNewsService } from '../protobuf/nabu_pb_service';
 
 export const STORIES_INIT = 'STORIES_INIT';
 export const ADD_STORY = 'ADD_STORY';
@@ -23,7 +23,7 @@ export const listStories = () => {
   return grpcRequest<ListStoriesRequest, ListStoriesResponse>({
     request: new ListStoriesRequest(),
     onStart: () => listStoriesInit(),
-    onEnd: (code: Code, message: string | undefined, trailers: Metadata): Action | void => {
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
       return;
     },

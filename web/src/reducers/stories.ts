@@ -1,6 +1,6 @@
 import { RootAction } from '../actions';
 import { ADD_STORY, SELECT_STORY, STORIES_INIT } from '../actions/stories';
-import { Story } from '../proto/nabu_pb';
+import { Story } from '../protobuf/nabu_pb';
 
 export type StoryState = {
   readonly stories: { [storyId: number]: Story.AsObject },

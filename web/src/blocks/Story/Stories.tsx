@@ -6,7 +6,7 @@ import StoryList from './List/StoryList';
 import StoryView from './View/StoryView';
 import { RootAction } from '../../actions';
 import { listStories, selectStory } from '../../actions/stories';
-import { Story } from '../../proto/nabu_pb';
+import { Story } from '../../protobuf/nabu_pb';
 
 type StoriesProps = {
   stories: Story.AsObject[],

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Story } from '../../../proto/nabu_pb';
+import { Story } from '../../../protobuf/nabu_pb';
 
 type StoryViewProps = {
   story: Story.AsObject,

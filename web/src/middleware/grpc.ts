@@ -1,4 +1,4 @@
-import { Action, Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import { Action, AnyAction, Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { grpc } from 'grpc-web-client';
 import * as jspb from 'google-protobuf';
 
@@ -10,7 +10,7 @@ export type GrpcActionPayload<RequestType extends jspb.Message, ResponseType ext
   // The method descriptor to use for a gRPC request, equivalent to grpc.invoke(methodDescriptor, ...)
   methodDescriptor: grpc.MethodDefinition<RequestType, ResponseType>,
   // The transport to use for grpc-web, automatically selected if empty
-  transport?: grpc.Transport,
+  transport?: grpc.TransportConstructor,
   // toggle debug messages
   debug?: boolean,
   // the URL of a host this request should go to
@@ -45,8 +45,9 @@ export function grpcRequest<RequestType extends jspb.Message, ResponseType exten
   };
 }
 
+
 export function newGrpcMiddleware(): Middleware {
-  return ({getState, dispatch}: MiddlewareAPI<{}>) => (next: Dispatch<{}>) => (action: any) => {
+  return ({ dispatch }: MiddlewareAPI<any>) => (next: Dispatch<AnyAction>) => (action: any) => {
     // skip non-grpc actions
     if (!isGrpcWebUnaryAction(action)) {
       return next(action);
@@ -65,13 +66,17 @@ export function newGrpcMiddleware(): Middleware {
       metadata: payload.metadata,
       transport: payload.transport,
       onHeaders: headers => {
-        if (!payload.onHeaders) { return; }
+        if (!payload.onHeaders) {
+          return;
+        }
         const actionToDispatch = payload.onHeaders(headers);
         return actionToDispatch && dispatch(actionToDispatch);
       },
       onMessage: res => {
-        if (!payload.onMessage) { return; }
-        const actionToDispatch = payload.onMessage(res);
+        if (!payload.onMessage) {
+          return;
+        }
+        const actionToDispatch = payload.onMessage(res as any);
         return actionToDispatch && dispatch(actionToDispatch);
       },
       onEnd: (code, msg, trailers) => {

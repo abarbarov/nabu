@@ -1,5 +1,5 @@
-// package: proto
-// file: proto/nabu.proto
+// package: protobuf
+// file: protobuf/nabu.proto
 
 import * as jspb from "google-protobuf";
 

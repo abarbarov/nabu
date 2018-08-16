@@ -1,12 +1,13 @@
-// package: proto
-// file: proto/nabu.proto
+/* eslint-disable */
+// package: protobuf
+// file: protobuf/nabu.proto
 
-var proto_nabu_pb = require("../proto/nabu_pb");
+var protobuf_nabu_pb = require("../protobuf/nabu_pb");
 var grpc = require("grpc-web-client").grpc;
 
 var HackerNewsService = (function () {
   function HackerNewsService() {}
-  HackerNewsService.serviceName = "proto.HackerNewsService";
+  HackerNewsService.serviceName = "protobuf.HackerNewsService";
   return HackerNewsService;
 }());
 
@@ -15,8 +16,8 @@ HackerNewsService.ListStories = {
   service: HackerNewsService,
   requestStream: false,
   responseStream: true,
-  requestType: proto_nabu_pb.ListStoriesRequest,
-  responseType: proto_nabu_pb.ListStoriesResponse
+  requestType: protobuf_nabu_pb.ListStoriesRequest,
+  responseType: protobuf_nabu_pb.ListStoriesResponse
 };
 
 exports.HackerNewsService = HackerNewsService;
