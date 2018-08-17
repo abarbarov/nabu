@@ -25,15 +25,9 @@ func (m *GrpcWebMiddleware) Handler(next http.Handler) http.Handler {
 func NewGrpcWebMiddleware() *GrpcWebMiddleware {
 
 	grpcServer := grpc.NewServer()
-	hackernewsService := nabuGrpc.NewHackerNewsService(nil)
+	hackernewsService := nabuGrpc.NewNabuGrpcService()
 	pb.RegisterNabuServiceServer(grpcServer, hackernewsService)
 	wrappedGrpc := grpcweb.WrapServer(grpcServer)
-
-	//grpcServer := grpc.NewServer()
-	//
-	//nabuGrpcService := nabuGrpc.NabuGrpcService{}
-	//pb.RegisterNabuServiceServer(grpcServer, nabuGrpcService)
-	//wrappedGrpc := grpcweb.WrapServer(grpcServer)
 
 	return &GrpcWebMiddleware{wrappedGrpc}
 }
