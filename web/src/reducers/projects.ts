@@ -1,22 +1,22 @@
 import { RootAction } from '../actions';
 import { ADD_PROJECT, SELECT_PROJECT, PROJECTS_INIT } from '../actions/stories';
-import { Story } from '../protobuf/nabu_pb';
+import { Project } from '../protobuf/nabu_pb';
 
-export type StoryState = {
-  readonly stories: { [storyId: number]: Story.AsObject },
+export type ProjectState = {
+  readonly projects: { [storyId: number]: Project.AsObject },
   readonly error: Error | null,
   readonly loading: boolean,
-  readonly selected: Story.AsObject | null,
+  readonly selected: Project.AsObject | null,
 };
 
 const initialState = {
-  stories: {},
+  projects: {},
   error: null,
   loading: false,
   selected: null,
 };
 
-export default function (state: StoryState = initialState, action: RootAction): StoryState {
+export default function (state: ProjectState = initialState, action: RootAction): ProjectState {
 
   switch (action.type) {
 
@@ -24,20 +24,20 @@ export default function (state: StoryState = initialState, action: RootAction): 
       return {...state, loading: true};
 
     case ADD_PROJECT:
-      const story: Story.AsObject = action.payload.toObject();
+      const story: Project.AsObject = action.payload.toObject();
       const selected = state.selected !== null ? state.selected : story;
       if (story.id) {
         return {
           ...state,
           loading: false,
-          stories: {...state.stories, [story.id]: story},
+          projects: {...state.projects, [story.id]: story},
           selected,
         };
       }
       return state;
 
     case SELECT_PROJECT:
-      return {...state, selected: state.stories[action.payload]};
+      return {...state, selected: state.projects[action.payload]};
 
     default:
       return state;

@@ -4,24 +4,25 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../store';
 import StoryList from './List/StoryList';
 import StoryView from './View/StoryView';
+import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
-import { listProjects, selectStory } from '../../actions/stories';
-import { Story } from '../../protobuf/nabu_pb';
+import { listProjects, selectProject } from '../../actions/stories';
+import { Project } from '../../protobuf/nabu_pb';
 
-type StoriesProps = {
-  stories: Story.AsObject[],
+type ProjectsProps = {
+  stories: Project.AsObject[],
   loading: boolean,
   error: Error | null,
-  selected: Story.AsObject | null,
+  selected: Project.AsObject | null,
 
-  fetchStories: () => void,
+  fetchProjects: () => void,
   selectStory: (id: number) => void,
 };
 
-class Stories extends React.Component<StoriesProps, {}> {
+class Projects extends React.Component<ProjectsProps, {}> {
 
   componentDidMount() {
-    this.props.fetchStories();
+    this.props.fetchProjects();
   }
 
   render() {
@@ -43,6 +44,10 @@ class Stories extends React.Component<StoriesProps, {}> {
               ? <StoryView story={this.props.selected} />
               : null
             }
+            { this.props.selected
+              ? <ProjectView project={this.props.selected} />
+              : null
+            }
           </div>
         </div>
 
@@ -54,22 +59,22 @@ class Stories extends React.Component<StoriesProps, {}> {
 
 function mapStateToProps(state: RootState) {
   return {
-    stories: Object.keys(state.stories.stories).map(key => state.stories.stories[parseInt(key, 10)]),
-    loading: state.stories.loading,
-    error: state.stories.error,
-    selected: state.stories.selected,
+    stories: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
+    loading: state.projects.loading,
+    error: state.projects.error,
+    selected: state.projects.selected,
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
-    fetchStories: () => {
+    fetchProjects: () => {
       dispatch(listProjects());
     },
     selectStory: (storyId: number) => {
-      dispatch(selectStory(storyId));
+      dispatch(selectProject(storyId));
     },
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stories);
+export default connect(mapStateToProps, mapDispatchToProps)(Projects);

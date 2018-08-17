@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { ListStoriesRequest, ListStoriesResponse, Story } from '../protobuf/nabu_pb';
+import { EmptyRequest, ListProjectsResponse, Project } from '../protobuf/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
 import { grpc } from 'grpc-web-client';
 import { NabuService } from '../protobuf/nabu_pb_service';
@@ -10,9 +10,9 @@ export const SELECT_PROJECT = 'SELECT_PROJECT';
 
 type AddProject = {
   type: typeof ADD_PROJECT,
-  payload: Story,
+  payload: Project,
 };
-export const addProject = (story: Story) => ({ type: ADD_PROJECT, payload: story });
+export const addProject = (story: Project) => ({ type: ADD_PROJECT, payload: story });
 
 type ListProjectsInit = {
   type: typeof PROJECTS_INIT,
@@ -21,17 +21,17 @@ export const listProjectsInit = (): ListProjectsInit => ({type: PROJECTS_INIT});
 
 export const listProjects = () => {
 
-  return grpcRequest<ListStoriesRequest, ListStoriesResponse>({
-    request: new ListStoriesRequest(),
+  return grpcRequest<EmptyRequest, ListProjectsResponse>({
+    request: new EmptyRequest(),
     onStart: () => listProjectsInit(),
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
       return;
     },
     host: 'http://localhost:9091',
-    methodDescriptor: NabuService.ListStories,
+    methodDescriptor: NabuService.ListProjects,
     onMessage: message => {
-      const story = message.getStory();
+      const story = message.getProject();
       if (story) {
         return addProject(story);
       }
@@ -40,14 +40,14 @@ export const listProjects = () => {
   });
 };
 
-type SelectStory = {
+type SelectProject = {
   type: typeof SELECT_PROJECT,
   payload: number,
 };
-export const selectStory = (storyId: number): SelectStory => ({ type: SELECT_PROJECT, payload: storyId });
+export const selectProject = (storyId: number): SelectProject => ({ type: SELECT_PROJECT, payload: storyId });
 
 export type StoryActionTypes =
   | ListProjectsInit
   | AddProject
-  | SelectStory
-  | GrpcAction<ListStoriesRequest, ListStoriesResponse>;
+  | SelectProject
+  | GrpcAction<EmptyRequest, ListProjectsResponse>;

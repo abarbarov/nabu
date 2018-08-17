@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Story } from '../../../protobuf/nabu_pb';
+import { Project } from '../../../protobuf/nabu_pb';
 
 type StoryListProps = {
-  stories: Story.AsObject[],
-  selected: Story.AsObject | null,
+  stories: Project.AsObject[],
+  selected: Project.AsObject | null,
   onStorySelect: (id: number) => void
 };
 
@@ -23,7 +23,7 @@ const StoryList: React.SFC<StoryListProps> = (props) => {
           }}>
           <div>
             <div>{story.title}</div>
-            <div>{story.score} | {story.by}</div>
+            <div>{story.id} | {story.id}</div>
           </div>
         </div>
       )}

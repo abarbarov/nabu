@@ -1,16 +1,16 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
-import stories, { StoryState } from './reducers/stories';
+import projects, { ProjectState } from './reducers/projects';
 import { newGrpcMiddleware } from './middleware/grpc';
 
 interface StoreEnhancerState {
 }
 
 export interface RootState extends StoreEnhancerState {
-  stories: StoryState;
+  projects: ProjectState;
 }
 
 const reducers = combineReducers<RootState>({
-  stories,
+  projects,
 });
 
 export default createStore(
