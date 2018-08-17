@@ -1,39 +1,38 @@
-/* eslint-disable */
 // package: protobuf
 // file: protobuf/nabu.proto
 
 var protobuf_nabu_pb = require("../protobuf/nabu_pb");
 var grpc = require("grpc-web-client").grpc;
 
-var HackerNewsService = (function () {
-  function HackerNewsService() {}
-  HackerNewsService.serviceName = "protobuf.HackerNewsService";
-  return HackerNewsService;
+var NabuService = (function () {
+  function NabuService() {}
+  NabuService.serviceName = "protobuf.NabuService";
+  return NabuService;
 }());
 
-HackerNewsService.ListStories = {
+NabuService.ListStories = {
   methodName: "ListStories",
-  service: HackerNewsService,
+  service: NabuService,
   requestStream: false,
   responseStream: true,
   requestType: protobuf_nabu_pb.ListStoriesRequest,
   responseType: protobuf_nabu_pb.ListStoriesResponse
 };
 
-exports.HackerNewsService = HackerNewsService;
+exports.NabuService = NabuService;
 
-function HackerNewsServiceClient(serviceHost, options) {
+function NabuServiceClient(serviceHost, options) {
   this.serviceHost = serviceHost;
   this.options = options || {};
 }
 
-HackerNewsServiceClient.prototype.listStories = function listStories(requestMessage, metadata) {
+NabuServiceClient.prototype.listStories = function listStories(requestMessage, metadata) {
   var listeners = {
     data: [],
     end: [],
     status: []
   };
-  var client = grpc.invoke(HackerNewsService.ListStories, {
+  var client = grpc.invoke(NabuService.ListStories, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -66,5 +65,5 @@ HackerNewsServiceClient.prototype.listStories = function listStories(requestMess
   };
 };
 
-exports.HackerNewsServiceClient = HackerNewsServiceClient;
+exports.NabuServiceClient = NabuServiceClient;
 

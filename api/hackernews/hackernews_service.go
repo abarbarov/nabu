@@ -1,7 +1,7 @@
 package hackernews
 
 import (
-	hackernews_pb "github.com/abarbarov/nabu/protobuf"
+	pb "github.com/abarbarov/nabu/protobuf"
 )
 
 type hackerNewsService struct {
@@ -15,14 +15,14 @@ func NewHackerNewsService(api *hackerNewsApi) *hackerNewsService {
 	return &hackerNewsService{api}
 }
 
-func (s *hackerNewsService) ListStories(req *hackernews_pb.ListStoriesRequest, resp hackernews_pb.HackerNewsService_ListStoriesServer) error {
+func (s *hackerNewsService) ListStories(req *pb.ListStoriesRequest, resp pb.NabuService_ListStoriesServer) error {
 	stories, err := s.api.TopStories()
 	defer close(stories)
 	if err != nil {
 		return err
 	}
 	for story := range stories {
-		resp.Send(&hackernews_pb.ListStoriesResponse{
+		resp.Send(&pb.ListStoriesResponse{
 			Story: story,
 		})
 	}

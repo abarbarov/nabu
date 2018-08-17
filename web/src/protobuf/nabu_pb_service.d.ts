@@ -4,18 +4,18 @@
 import * as protobuf_nabu_pb from "../protobuf/nabu_pb";
 import {grpc} from "grpc-web-client";
 
-type HackerNewsServiceListStories = {
+type NabuServiceListStories = {
   readonly methodName: string;
-  readonly service: typeof HackerNewsService;
+  readonly service: typeof NabuService;
   readonly requestStream: false;
   readonly responseStream: true;
   readonly requestType: typeof protobuf_nabu_pb.ListStoriesRequest;
   readonly responseType: typeof protobuf_nabu_pb.ListStoriesResponse;
 };
 
-export class HackerNewsService {
+export class NabuService {
   static readonly serviceName: string;
-  static readonly ListStories: HackerNewsServiceListStories;
+  static readonly ListStories: NabuServiceListStories;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -29,7 +29,7 @@ interface ResponseStream<T> {
   on(type: 'status', handler: (status: Status) => void): ResponseStream<T>;
 }
 
-export class HackerNewsServiceClient {
+export class NabuServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: ServiceClientOptions);

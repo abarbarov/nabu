@@ -39,7 +39,7 @@ func (m *Story) Reset()         { *m = Story{} }
 func (m *Story) String() string { return proto.CompactTextString(m) }
 func (*Story) ProtoMessage()    {}
 func (*Story) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_c4c49c147fc9144f, []int{0}
+	return fileDescriptor_nabu_b721f25ff8c492fb, []int{0}
 }
 func (m *Story) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Story.Unmarshal(m, b)
@@ -112,7 +112,7 @@ func (m *ListStoriesResponse) Reset()         { *m = ListStoriesResponse{} }
 func (m *ListStoriesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListStoriesResponse) ProtoMessage()    {}
 func (*ListStoriesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_c4c49c147fc9144f, []int{1}
+	return fileDescriptor_nabu_b721f25ff8c492fb, []int{1}
 }
 func (m *ListStoriesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListStoriesResponse.Unmarshal(m, b)
@@ -149,7 +149,7 @@ func (m *ListStoriesRequest) Reset()         { *m = ListStoriesRequest{} }
 func (m *ListStoriesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListStoriesRequest) ProtoMessage()    {}
 func (*ListStoriesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_c4c49c147fc9144f, []int{2}
+	return fileDescriptor_nabu_b721f25ff8c492fb, []int{2}
 }
 func (m *ListStoriesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListStoriesRequest.Unmarshal(m, b)
@@ -183,27 +183,27 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// HackerNewsServiceClient is the client API for HackerNewsService service.
+// NabuServiceClient is the client API for NabuService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type HackerNewsServiceClient interface {
-	ListStories(ctx context.Context, in *ListStoriesRequest, opts ...grpc.CallOption) (HackerNewsService_ListStoriesClient, error)
+type NabuServiceClient interface {
+	ListStories(ctx context.Context, in *ListStoriesRequest, opts ...grpc.CallOption) (NabuService_ListStoriesClient, error)
 }
 
-type hackerNewsServiceClient struct {
+type nabuServiceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewHackerNewsServiceClient(cc *grpc.ClientConn) HackerNewsServiceClient {
-	return &hackerNewsServiceClient{cc}
+func NewNabuServiceClient(cc *grpc.ClientConn) NabuServiceClient {
+	return &nabuServiceClient{cc}
 }
 
-func (c *hackerNewsServiceClient) ListStories(ctx context.Context, in *ListStoriesRequest, opts ...grpc.CallOption) (HackerNewsService_ListStoriesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_HackerNewsService_serviceDesc.Streams[0], "/protobuf.HackerNewsService/ListStories", opts...)
+func (c *nabuServiceClient) ListStories(ctx context.Context, in *ListStoriesRequest, opts ...grpc.CallOption) (NabuService_ListStoriesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[0], "/protobuf.NabuService/ListStories", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &hackerNewsServiceListStoriesClient{stream}
+	x := &nabuServiceListStoriesClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -213,16 +213,16 @@ func (c *hackerNewsServiceClient) ListStories(ctx context.Context, in *ListStori
 	return x, nil
 }
 
-type HackerNewsService_ListStoriesClient interface {
+type NabuService_ListStoriesClient interface {
 	Recv() (*ListStoriesResponse, error)
 	grpc.ClientStream
 }
 
-type hackerNewsServiceListStoriesClient struct {
+type nabuServiceListStoriesClient struct {
 	grpc.ClientStream
 }
 
-func (x *hackerNewsServiceListStoriesClient) Recv() (*ListStoriesResponse, error) {
+func (x *nabuServiceListStoriesClient) Recv() (*ListStoriesResponse, error) {
 	m := new(ListStoriesResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -230,67 +230,66 @@ func (x *hackerNewsServiceListStoriesClient) Recv() (*ListStoriesResponse, error
 	return m, nil
 }
 
-// HackerNewsServiceServer is the server API for HackerNewsService service.
-type HackerNewsServiceServer interface {
-	ListStories(*ListStoriesRequest, HackerNewsService_ListStoriesServer) error
+// NabuServiceServer is the server API for NabuService service.
+type NabuServiceServer interface {
+	ListStories(*ListStoriesRequest, NabuService_ListStoriesServer) error
 }
 
-func RegisterHackerNewsServiceServer(s *grpc.Server, srv HackerNewsServiceServer) {
-	s.RegisterService(&_HackerNewsService_serviceDesc, srv)
+func RegisterNabuServiceServer(s *grpc.Server, srv NabuServiceServer) {
+	s.RegisterService(&_NabuService_serviceDesc, srv)
 }
 
-func _HackerNewsService_ListStories_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _NabuService_ListStories_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(ListStoriesRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(HackerNewsServiceServer).ListStories(m, &hackerNewsServiceListStoriesServer{stream})
+	return srv.(NabuServiceServer).ListStories(m, &nabuServiceListStoriesServer{stream})
 }
 
-type HackerNewsService_ListStoriesServer interface {
+type NabuService_ListStoriesServer interface {
 	Send(*ListStoriesResponse) error
 	grpc.ServerStream
 }
 
-type hackerNewsServiceListStoriesServer struct {
+type nabuServiceListStoriesServer struct {
 	grpc.ServerStream
 }
 
-func (x *hackerNewsServiceListStoriesServer) Send(m *ListStoriesResponse) error {
+func (x *nabuServiceListStoriesServer) Send(m *ListStoriesResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-var _HackerNewsService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "protobuf.HackerNewsService",
-	HandlerType: (*HackerNewsServiceServer)(nil),
+var _NabuService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "protobuf.NabuService",
+	HandlerType: (*NabuServiceServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "ListStories",
-			Handler:       _HackerNewsService_ListStories_Handler,
+			Handler:       _NabuService_ListStories_Handler,
 			ServerStreams: true,
 		},
 	},
 	Metadata: "protobuf/nabu.proto",
 }
 
-func init() { proto.RegisterFile("protobuf/nabu.proto", fileDescriptor_nabu_c4c49c147fc9144f) }
+func init() { proto.RegisterFile("protobuf/nabu.proto", fileDescriptor_nabu_b721f25ff8c492fb) }
 
-var fileDescriptor_nabu_c4c49c147fc9144f = []byte{
-	// 233 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x8e, 0x4f, 0x4b, 0x03, 0x31,
-	0x10, 0xc5, 0xd9, 0x6d, 0x53, 0x74, 0x0a, 0xfe, 0x99, 0xf6, 0x10, 0x44, 0xa1, 0x2c, 0x08, 0x3d,
-	0xad, 0x52, 0xaf, 0x7e, 0x00, 0x0f, 0xc5, 0xc3, 0xf6, 0x13, 0x6c, 0xb6, 0x23, 0x04, 0x6b, 0x53,
-	0x33, 0x89, 0x92, 0x6f, 0x2f, 0x99, 0x50, 0x54, 0xc4, 0xdb, 0xbc, 0xf7, 0xe6, 0xcd, 0xfc, 0x60,
-	0x76, 0xf0, 0x2e, 0x38, 0x13, 0x5f, 0xee, 0xf6, 0xbd, 0x89, 0xad, 0x28, 0x3c, 0x39, 0x9a, 0x4d,
-	0x02, 0xb5, 0x09, 0xce, 0x27, 0x3c, 0x83, 0xda, 0x6e, 0x75, 0xb5, 0xa8, 0x96, 0xaa, 0xab, 0xed,
-	0x16, 0xe7, 0xa0, 0x78, 0x70, 0x9e, 0x74, 0x2d, 0x56, 0x11, 0xd9, 0x0d, 0x36, 0xec, 0x48, 0x8f,
-	0x16, 0xd5, 0xf2, 0xb4, 0x2b, 0x22, 0x77, 0x4d, 0xd2, 0x63, 0xb1, 0x6a, 0x93, 0x10, 0x61, 0x1c,
-	0xec, 0x1b, 0x69, 0x25, 0x55, 0x99, 0xf1, 0x02, 0x46, 0xd1, 0xef, 0xf4, 0x44, 0x96, 0xf2, 0xd8,
-	0x3c, 0xc2, 0x6c, 0x6d, 0x39, 0xe4, 0xf7, 0x96, 0xb8, 0x23, 0x3e, 0xb8, 0x3d, 0x13, 0xde, 0x82,
-	0xe2, 0x4c, 0x24, 0x2c, 0xd3, 0xd5, 0x79, 0x7b, 0x64, 0x6d, 0x05, 0xb4, 0x2b, 0x69, 0x33, 0x07,
-	0xfc, 0xd5, 0x7e, 0x8f, 0xc4, 0x61, 0xd5, 0xc3, 0xe5, 0x53, 0x3f, 0xbc, 0x92, 0x7f, 0xa6, 0x4f,
-	0xde, 0x90, 0xff, 0xb0, 0x03, 0xe1, 0x1a, 0xa6, 0x3f, 0x56, 0xf1, 0xfa, 0xfb, 0xe2, 0xdf, 0x0b,
-	0x57, 0x37, 0xff, 0xa4, 0x85, 0xee, 0xbe, 0x32, 0x13, 0xc9, 0x1f, 0xbe, 0x02, 0x00, 0x00, 0xff,
-	0xff, 0x3d, 0x98, 0x71, 0xa1, 0x59, 0x01, 0x00, 0x00,
+var fileDescriptor_nabu_b721f25ff8c492fb = []byte{
+	// 224 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x8e, 0xcb, 0x4a, 0x43, 0x31,
+	0x10, 0x86, 0x49, 0xda, 0x14, 0x9d, 0x03, 0x2a, 0xd3, 0x2e, 0x82, 0x28, 0x94, 0x03, 0x42, 0x57,
+	0x47, 0xa9, 0x5b, 0x1f, 0xa1, 0xb8, 0x48, 0x97, 0xae, 0x9a, 0x76, 0x84, 0x40, 0x6d, 0x6a, 0x2e,
+	0x42, 0xde, 0x5e, 0x32, 0xa1, 0xa8, 0x48, 0x77, 0xf3, 0xdf, 0x92, 0x0f, 0xa6, 0xc7, 0xe0, 0x93,
+	0xb7, 0xf9, 0xfd, 0xf1, 0xb0, 0xb1, 0x79, 0x60, 0x85, 0x17, 0x27, 0xb3, 0x2f, 0xa0, 0xd6, 0xc9,
+	0x87, 0x82, 0x57, 0x20, 0xdd, 0x4e, 0x8b, 0xb9, 0x58, 0x28, 0x23, 0xdd, 0x0e, 0x67, 0xa0, 0xe2,
+	0xd6, 0x07, 0xd2, 0x92, 0xad, 0x26, 0xaa, 0x9b, 0x5c, 0xda, 0x93, 0x1e, 0xcd, 0xc5, 0xe2, 0xd2,
+	0x34, 0x51, 0xb7, 0xb6, 0xe8, 0x31, 0x5b, 0xd2, 0x16, 0x44, 0x18, 0x27, 0xf7, 0x41, 0x5a, 0xf1,
+	0x94, 0x6f, 0xbc, 0x81, 0x51, 0x0e, 0x7b, 0x3d, 0xe1, 0x52, 0x3d, 0xfb, 0x17, 0x98, 0xae, 0x5c,
+	0x4c, 0xf5, 0x7b, 0x47, 0xd1, 0x50, 0x3c, 0xfa, 0x43, 0x24, 0x7c, 0x00, 0x15, 0x2b, 0x11, 0xb3,
+	0x74, 0xcb, 0xeb, 0xe1, 0xc4, 0x3a, 0x30, 0xa8, 0x69, 0x69, 0x3f, 0x03, 0xfc, 0xb3, 0xfe, 0xcc,
+	0x14, 0xd3, 0xf2, 0x0d, 0xba, 0xd7, 0x8d, 0xcd, 0x6b, 0x0a, 0x5f, 0x6e, 0x4b, 0xb8, 0x82, 0xee,
+	0x57, 0x09, 0xef, 0x7e, 0xde, 0xfa, 0xbf, 0xbd, 0xbd, 0x3f, 0x93, 0x36, 0xae, 0x27, 0x61, 0x27,
+	0x9c, 0x3f, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0x78, 0x8f, 0xd3, 0xcb, 0x53, 0x01, 0x00, 0x00,
 }

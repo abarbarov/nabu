@@ -78,22 +78,22 @@ func (s *Server) routes() chi.Router {
 
 	grpcServer := grpc.NewServer()
 	hackernewsService := hackernews.NewHackerNewsService(nil)
-	pb.RegisterHackerNewsServiceServer(grpcServer, hackernewsService)
+	pb.RegisterNabuServiceServer(grpcServer, hackernewsService)
 	wrappedGrpc := grpcweb.WrapServer(grpcServer)
 
 	router.Use(middleware.NewGrpcWebMiddleware(wrappedGrpc).Handler)
 	router.Use(corsMiddleware.Handler)
 
-	//router.Route("/api/v1", func(rapi chi.Router) {
-	//	rapi.Group(func(ropen chi.Router) {
-	//		ropen.Get("/ping", s.pingCtrl)
-	//	})
-	//})
+	router.Route("/api/v1", func(rapi chi.Router) {
+		rapi.Group(func(ropen chi.Router) {
+			ropen.Get("/ping", s.pingCtrl)
+		})
+	})
 
-	router.Get("/article-proxy", proxy.Article)
+	router.Get("/grpc-article-proxy", proxy.Article)
 
 	//file server for static content from /web
-	//addFileServer(router, "/web", http.Dir(s.WebRoot))
+	addFileServer(router, "/web", http.Dir(s.WebRoot))
 
 	return router
 }

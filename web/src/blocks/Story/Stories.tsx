@@ -26,8 +26,8 @@ class Stories extends React.Component<StoriesProps, {}> {
 
   render() {
     return (
-      <div style={{padding: '1em'}}>
-        <div>Hacker News with gRPC-Web</div>
+      <div>
+        <div>Next Awesome Build Unit</div>
 
         <div>
           <div>
@@ -54,10 +54,7 @@ class Stories extends React.Component<StoriesProps, {}> {
 
 function mapStateToProps(state: RootState) {
   return {
-    stories: Object.keys(state.stories.stories).map(key => {
-      let key2 = parseInt(key,10)
-      return state.stories.stories[key2];
-    }),
+    stories: Object.keys(state.stories.stories).map(key => state.stories.stories[parseInt(key, 10)]),
     loading: state.stories.loading,
     error: state.stories.error,
     selected: state.stories.selected,

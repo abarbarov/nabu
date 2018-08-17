@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { ListStoriesRequest, ListStoriesResponse, Story } from '../protobuf/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
 import { grpc } from 'grpc-web-client';
-import { HackerNewsService } from '../protobuf/nabu_pb_service';
+import { NabuService } from '../protobuf/nabu_pb_service';
 
 export const STORIES_INIT = 'STORIES_INIT';
 export const ADD_STORY = 'ADD_STORY';
@@ -28,7 +28,7 @@ export const listStories = () => {
       return;
     },
     host: 'http://localhost:9091',
-    methodDescriptor: HackerNewsService.ListStories,
+    methodDescriptor: NabuService.ListStories,
     onMessage: message => {
       const story = message.getStory();
       if (story) {

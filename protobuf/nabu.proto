@@ -11,7 +11,7 @@ message Story {
     string url = 6;
 }
 
-service HackerNewsService {
+service NabuService {
     rpc ListStories (ListStoriesRequest) returns (stream ListStoriesResponse);
 }
 
