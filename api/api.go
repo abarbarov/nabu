@@ -8,7 +8,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/abarbarov/nabu/api/grpc"
 	"github.com/abarbarov/nabu/api/middleware"
 	"github.com/go-chi/chi"
 	"strings"
@@ -76,9 +75,6 @@ func (s *Server) routes() chi.Router {
 
 	router.Use(grpcMiddleware.Handler)
 	router.Use(corsMiddleware.Handler)
-
-	router.Get("/grpc-article-proxy", grpc.Article)
-	router.Get("/grpc-project-proxy", grpc.Project)
 
 	router.Route("/api/v1", func(rapi chi.Router) {
 		rapi.Group(func(ropen chi.Router) {

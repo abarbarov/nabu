@@ -6,7 +6,7 @@ type ProjectViewProps = {
 };
 
 const ProjectView: React.SFC<ProjectViewProps> = (props) => {
-  const url = `http://localhost:9091/grpc-project-proxy?q=${encodeURIComponent(`${props.project.id}`)}`;
+  const url = `http://localhost:9091/api/v1/ping?q=${encodeURIComponent(`${props.project.id}`)}`;
   return (
     <div>
       <iframe
