@@ -125,7 +125,7 @@ func (api *githubApi) TopStories() (chan *pb.Story, error) {
 func (api *githubApi) Projects() (chan *pb.Project, error) {
 	stories := make(chan *pb.Project)
 
-	ids := []int64{0, 1, 2}
+	ids := []int64{1, 2, 3, 4, 5, 6}
 	for _, id := range ids {
 		go func(id int64) {
 			story, _ := api.GetProject(id)

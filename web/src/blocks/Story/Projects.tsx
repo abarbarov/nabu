@@ -2,21 +2,20 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store';
-import StoryList from './List/StoryList';
-import StoryView from './View/StoryView';
+import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
-import { listProjects, selectProject } from '../../actions/stories';
+import { listProjects, selectProject } from '../../actions/projects';
 import { Project } from '../../protobuf/nabu_pb';
 
 type ProjectsProps = {
-  stories: Project.AsObject[],
+  projects: Project.AsObject[],
   loading: boolean,
   error: Error | null,
   selected: Project.AsObject | null,
 
   fetchProjects: () => void,
-  selectStory: (id: number) => void,
+  selectProject: (id: number) => void,
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -31,19 +30,15 @@ class Projects extends React.Component<ProjectsProps, {}> {
         <div>Next Awesome Build Unit</div>
 
         <div>
+          Projects available
+        </div>
+        <div>
+          <ProjectList
+            selected={this.props.selected}
+            projects={this.props.projects}
+            onProjectSelect={this.props.selectProject}
+          />
           <div>
-            <StoryList
-              selected={this.props.selected}
-              stories={this.props.stories}
-              onStorySelect={this.props.selectStory}
-            />
-          </div>
-
-          <div>
-            { this.props.selected
-              ? <StoryView story={this.props.selected} />
-              : null
-            }
             { this.props.selected
               ? <ProjectView project={this.props.selected} />
               : null
@@ -51,6 +46,9 @@ class Projects extends React.Component<ProjectsProps, {}> {
           </div>
         </div>
 
+        <div>
+          <button>Add new</button>
+        </div>
       </div>
     );
   }
@@ -59,7 +57,7 @@ class Projects extends React.Component<ProjectsProps, {}> {
 
 function mapStateToProps(state: RootState) {
   return {
-    stories: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
+    projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
     loading: state.projects.loading,
     error: state.projects.error,
     selected: state.projects.selected,
@@ -71,8 +69,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
     fetchProjects: () => {
       dispatch(listProjects());
     },
-    selectStory: (storyId: number) => {
-      dispatch(selectProject(storyId));
+    selectProject: (projectId: number) => {
+      dispatch(selectProject(projectId));
     },
   };
 }

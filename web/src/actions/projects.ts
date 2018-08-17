@@ -31,9 +31,9 @@ export const listProjects = () => {
     host: 'http://localhost:9091',
     methodDescriptor: NabuService.ListProjects,
     onMessage: message => {
-      const story = message.getProject();
-      if (story) {
-        return addProject(story);
+      const project = message.getProject();
+      if (project) {
+        return addProject(project);
       }
       return;
     },
@@ -44,9 +44,9 @@ type SelectProject = {
   type: typeof SELECT_PROJECT,
   payload: number,
 };
-export const selectProject = (storyId: number): SelectProject => ({ type: SELECT_PROJECT, payload: storyId });
+export const selectProject = (projectId: number): SelectProject => ({ type: SELECT_PROJECT, payload: projectId });
 
-export type StoryActionTypes =
+export type ProjectActionTypes =
   | ListProjectsInit
   | AddProject
   | SelectProject
