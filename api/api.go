@@ -8,15 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/abarbarov/nabu/api/hackernews"
+	"github.com/abarbarov/nabu/api/grpc"
 	"github.com/abarbarov/nabu/api/middleware"
 	"github.com/go-chi/chi"
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
-	"google.golang.org/grpc"
 	"strings"
 
-	"github.com/abarbarov/nabu/api/proxy"
-	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/go-chi/cors"
 )
 
@@ -65,8 +61,8 @@ func (s *Server) Shutdown() {
 }
 
 func (s *Server) routes() chi.Router {
-
 	router := chi.NewRouter()
+
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -76,21 +72,18 @@ func (s *Server) routes() chi.Router {
 		MaxAge:           300,
 	})
 
-	grpcServer := grpc.NewServer()
-	hackernewsService := hackernews.NewHackerNewsService(nil)
-	pb.RegisterNabuServiceServer(grpcServer, hackernewsService)
-	wrappedGrpc := grpcweb.WrapServer(grpcServer)
+	grpcMiddleware := middleware.NewGrpcWebMiddleware()
 
-	router.Use(middleware.NewGrpcWebMiddleware(wrappedGrpc).Handler)
+	router.Use(grpcMiddleware.Handler)
 	router.Use(corsMiddleware.Handler)
+
+	router.Get("/grpc-article-proxy", grpc.Article)
 
 	router.Route("/api/v1", func(rapi chi.Router) {
 		rapi.Group(func(ropen chi.Router) {
 			ropen.Get("/ping", s.pingCtrl)
 		})
 	})
-
-	router.Get("/grpc-article-proxy", proxy.Article)
 
 	//file server for static content from /web
 	addFileServer(router, "/web", http.Dir(s.WebRoot))

@@ -1,7 +1,10 @@
 package middleware
 
 import (
+	nabuGrpc "github.com/abarbarov/nabu/api/grpc"
+	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"google.golang.org/grpc"
 	"net/http"
 )
 
@@ -19,6 +22,18 @@ func (m *GrpcWebMiddleware) Handler(next http.Handler) http.Handler {
 	})
 }
 
-func NewGrpcWebMiddleware(grpcWeb *grpcweb.WrappedGrpcServer) *GrpcWebMiddleware {
-	return &GrpcWebMiddleware{grpcWeb}
+func NewGrpcWebMiddleware() *GrpcWebMiddleware {
+
+	grpcServer := grpc.NewServer()
+	hackernewsService := nabuGrpc.NewHackerNewsService(nil)
+	pb.RegisterNabuServiceServer(grpcServer, hackernewsService)
+	wrappedGrpc := grpcweb.WrapServer(grpcServer)
+
+	//grpcServer := grpc.NewServer()
+	//
+	//nabuGrpcService := nabuGrpc.NabuGrpcService{}
+	//pb.RegisterNabuServiceServer(grpcServer, nabuGrpcService)
+	//wrappedGrpc := grpcweb.WrapServer(grpcServer)
+
+	return &GrpcWebMiddleware{wrappedGrpc}
 }

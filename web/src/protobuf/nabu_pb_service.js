@@ -1,3 +1,4 @@
+/* eslint-disable */
 // package: protobuf
 // file: protobuf/nabu.proto
 

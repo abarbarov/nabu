@@ -20,6 +20,8 @@ type ListStoriesInit = {
 export const listStoriesInit = (): ListStoriesInit => ({type: STORIES_INIT});
 
 export const listStories = () => {
+  debugger;
+
   return grpcRequest<ListStoriesRequest, ListStoriesResponse>({
     request: new ListStoriesRequest(),
     onStart: () => listStoriesInit(),

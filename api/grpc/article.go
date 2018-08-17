@@ -1,4 +1,4 @@
-package proxy
+package grpc
 
 import (
 	"bufio"
@@ -12,7 +12,7 @@ func Article(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Must specify the url to request", 400)
 		return
 	}
-	response, err := http.Get(url)
+	response, err := http.Get("https://google.com")
 	if err != nil {
 		http.Error(w, "Failed to retrieve article", 500)
 		return
