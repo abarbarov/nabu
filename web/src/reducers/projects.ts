@@ -1,5 +1,5 @@
 import { RootAction } from '../actions';
-import { ADD_PROJECT, PROJECTS_INIT, SELECT_PROJECT } from '../actions/projects';
+import { ADD_COMMIT, ADD_PROJECT, PROJECTS_INIT, SELECT_PROJECT } from '../actions/projects';
 import { Commit, Project } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
@@ -21,11 +21,13 @@ const initialState = {
 };
 
 export default function (state: ProjectState = initialState, action: RootAction): ProjectState {
-
   switch (action.type) {
 
     case PROJECTS_INIT:
       return { ...state, loading: true };
+
+    case SELECT_PROJECT:
+      return { ...state, loading: true, selectedProject: state.projects[action.payload] };
 
     case ADD_PROJECT:
       const project: Project.AsObject = action.payload.toObject();
@@ -40,8 +42,18 @@ export default function (state: ProjectState = initialState, action: RootAction)
       }
       return state;
 
-    case SELECT_PROJECT:
-      return { ...state, selectedProject: state.projects[action.payload] };
+    case ADD_COMMIT:
+      const commit: Commit.AsObject = action.payload.toObject();
+      const selectedCommit = state.selectedCommit !== null ? state.selectedCommit : commit;
+      if (commit.sha) {
+        return {
+          ...state,
+          loading: false,
+          commits: { ...state.commits, [commit.sha]: commit },
+          selectedCommit,
+        };
+      }
+      return state;
 
     default:
       return state;

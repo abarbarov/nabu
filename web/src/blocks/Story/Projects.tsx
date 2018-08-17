@@ -5,8 +5,8 @@ import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
-import { listProjects, selectProject } from '../../actions/projects';
-import { Project, Commit } from '../../protobuf/nabu_pb';
+import { listCommits, listProjects } from '../../actions/projects';
+import { Commit, Project } from '../../protobuf/nabu_pb';
 
 type ProjectsProps = {
   projects: Project.AsObject[],
@@ -17,6 +17,7 @@ type ProjectsProps = {
   selectedCommit: Commit.AsObject | null,
   fetchProjects: () => void,
   selectProject: (id: number) => void,
+  selectCommit: (sha: string) => void,
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -40,8 +41,12 @@ class Projects extends React.Component<ProjectsProps, {}> {
             onProjectSelect={this.props.selectProject}
           />
           <div>
-            { this.props.selectedProject
-              ? <ProjectView project={this.props.selectedProject} commits={this.props.commits} />
+            {this.props.selectedProject
+              ? <ProjectView
+                selectedProject={this.props.selectedProject}
+                commits={this.props.commits}
+                selectedCommit={this.props.selectedCommit}
+                onCommitSelect={this.props.selectCommit}/>
               : null
             }
           </div>
@@ -59,7 +64,9 @@ class Projects extends React.Component<ProjectsProps, {}> {
 function mapStateToProps(state: RootState) {
   return {
     projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
-    commits: Object.keys(state.projects.commits).map(key=>state.projects.commits[key]),
+    commits: Object.keys(state.projects.commits).map(key => {
+      return state.projects.commits[parseInt(key, 10)];
+    }),
     loading: state.projects.loading,
     error: state.projects.error,
     selectedProject: state.projects.selectedProject,
@@ -73,8 +80,11 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(listProjects());
     },
     selectProject: (projectId: number) => {
-      dispatch(selectProject(projectId));
+      dispatch(listCommits(projectId));
     },
+    selectCommit: (sha: string) => {
+      console.log(sha);
+    }
   };
 }
 
