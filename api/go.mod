@@ -1,6 +1,7 @@
 module github.com/abarbarov/nabu/api
 
 require (
+	github.com/abarbarov/nabu/protobuf v0.0.0-20180817132138-36d69187f852
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-chi/chi v0.0.0-20171222161133-e83ac2304db3
 	github.com/go-chi/cors v1.0.0
@@ -12,7 +13,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/cors v1.5.0 // indirect
 	github.com/stretchr/testify v1.2.2 // indirect
-	golang.org/x/net v0.0.0-20180816102801-aaf60122140d // indirect
+	golang.org/x/net v0.0.0-20180816102801-aaf60122140d
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
 	golang.org/x/sys v0.0.0-20180816055513-1c9583448a9c // indirect
 	golang.org/x/text v0.3.0 // indirect

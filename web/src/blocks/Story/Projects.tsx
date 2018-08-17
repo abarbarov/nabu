@@ -6,14 +6,15 @@ import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
 import { listProjects, selectProject } from '../../actions/projects';
-import { Project } from '../../protobuf/nabu_pb';
+import { Project, Commit } from '../../protobuf/nabu_pb';
 
 type ProjectsProps = {
   projects: Project.AsObject[],
+  commits: Commit.AsObject[],
   loading: boolean,
   error: Error | null,
-  selected: Project.AsObject | null,
-
+  selectedProject: Project.AsObject | null,
+  selectedCommit: Commit.AsObject | null,
   fetchProjects: () => void,
   selectProject: (id: number) => void,
 };
@@ -34,13 +35,13 @@ class Projects extends React.Component<ProjectsProps, {}> {
         </div>
         <div>
           <ProjectList
-            selected={this.props.selected}
+            selectedProject={this.props.selectedProject}
             projects={this.props.projects}
             onProjectSelect={this.props.selectProject}
           />
           <div>
-            { this.props.selected
-              ? <ProjectView project={this.props.selected} />
+            { this.props.selectedProject
+              ? <ProjectView project={this.props.selectedProject} commits={this.props.commits} />
               : null
             }
           </div>
@@ -58,9 +59,11 @@ class Projects extends React.Component<ProjectsProps, {}> {
 function mapStateToProps(state: RootState) {
   return {
     projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
+    commits: Object.keys(state.projects.commits).map(key=>state.projects.commits[key]),
     loading: state.projects.loading,
     error: state.projects.error,
-    selected: state.projects.selected,
+    selectedProject: state.projects.selectedProject,
+    selectedCommit: state.projects.selectedCommit,
   };
 }
 

@@ -45,7 +45,7 @@ func NewNabuGrpcService() *nabuGrpcService {
 }
 
 func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService_ListProjectsServer) error {
-	stories, err := s.github.Projects()
+	stories, err := s.store.Projects()
 	defer close(stories)
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func (s *nabuGrpcService) CreateProject(ctx context.Context, req *pb.CreateProje
 	return &pb.ListProjectsResponse{}, nil
 }
 
-func (api *githubApi) GetProject(id int64) (*pb.Project, error) {
+func (api *storeApi) GetProject(id int64) (*pb.Project, error) {
 	return &pb.Project{
 		Id: id,
 	}, nil
@@ -89,18 +89,18 @@ func (api *githubApi) GetCommit(id int64) (*pb.Commit, error) {
 	}, nil
 }
 
-func (api *githubApi) Projects() (chan *pb.Project, error) {
-	stories := make(chan *pb.Project)
+func (api *storeApi) Projects() (chan *pb.Project, error) {
+	projects := make(chan *pb.Project)
 
 	ids := []int64{1, 2, 3, 4, 5, 6}
 	for _, id := range ids {
 		go func(id int64) {
-			story, _ := api.GetProject(id)
-			stories <- story
+			project, _ := api.GetProject(id)
+			projects <- project
 		}(id)
 	}
 
-	return stories, nil
+	return projects, nil
 }
 
 func (api *githubApi) Commits() (chan *pb.Commit, error) {

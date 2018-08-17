@@ -3,7 +3,7 @@ import { Project } from '../../../protobuf/nabu_pb';
 
 type ProjectListProps = {
   projects: Project.AsObject[],
-  selected: Project.AsObject | null,
+  selectedProject: Project.AsObject | null,
   onProjectSelect: (id: number) => void
 };
 
@@ -11,7 +11,7 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
   return (
     <div>
       {props.projects.map((project, i) =>
-        <div style={props.selected && project.id === props.selected.id
+        <div style={props.selectedProject && project.id === props.selectedProject.id
             ? {'backgroundColor': 'rgba(0, 0, 0, 0.08)'}
             : {}
           }

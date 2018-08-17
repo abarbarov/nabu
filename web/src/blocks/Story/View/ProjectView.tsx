@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Project } from '../../../protobuf/nabu_pb';
+import { Project, Commit } from '../../../protobuf/nabu_pb';
 
 type ProjectViewProps = {
   project: Project.AsObject,
+  commits: Commit.AsObject[],
 };
 
 const ProjectView: React.SFC<ProjectViewProps> = (props) => {
