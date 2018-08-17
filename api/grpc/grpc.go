@@ -1,7 +1,9 @@
 package grpc
 
 import (
+	"fmt"
 	pb "github.com/abarbarov/nabu/protobuf"
+	"golang.org/x/net/context"
 )
 
 type nabuGrpcService struct {
@@ -30,7 +32,7 @@ type storeApi struct {
 }
 
 type ItemResult struct {
-	Item  *pb.Story
+	Item  *pb.Project
 	Error error
 }
 
@@ -42,20 +44,6 @@ func NewNabuGrpcService() *nabuGrpcService {
 	return &nabuGrpcService{github, terraform, store}
 }
 
-func (s *nabuGrpcService) ListStories(req *pb.ListStoriesRequest, resp pb.NabuService_ListStoriesServer) error {
-	stories, err := s.github.TopStories()
-	defer close(stories)
-	if err != nil {
-		return err
-	}
-	for story := range stories {
-		resp.Send(&pb.ListStoriesResponse{
-			Story: story,
-		})
-	}
-
-	return nil
-}
 func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService_ListProjectsServer) error {
 	stories, err := s.github.Projects()
 	defer close(stories)
@@ -70,7 +58,7 @@ func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService
 
 	return nil
 }
-func (s *nabuGrpcService) ListCommits(req *pb.EmptyRequest, resp pb.NabuService_ListCommitsServer) error {
+func (s *nabuGrpcService) ListCommits(req *pb.RepositoryRequest, resp pb.NabuService_ListCommitsServer) error {
 	stories, err := s.github.Commits()
 	defer close(stories)
 	if err != nil {
@@ -85,15 +73,8 @@ func (s *nabuGrpcService) ListCommits(req *pb.EmptyRequest, resp pb.NabuService_
 	return nil
 }
 
-func (api *githubApi) GetStory(id int64) (*pb.Story, error) {
-	return &pb.Story{
-		Id:    id,
-		By:    "test by",
-		Score: 1,
-		Time:  1121231231,
-		Title: "test",
-		Url:   "https://nabu.app",
-	}, nil
+func (s *nabuGrpcService) CreateProject(ctx context.Context, req *pb.CreateProjectRequest) (*pb.ListProjectsResponse, error) {
+	return &pb.ListProjectsResponse{}, nil
 }
 
 func (api *githubApi) GetProject(id int64) (*pb.Project, error) {
@@ -104,22 +85,8 @@ func (api *githubApi) GetProject(id int64) (*pb.Project, error) {
 
 func (api *githubApi) GetCommit(id int64) (*pb.Commit, error) {
 	return &pb.Commit{
-		Id: id,
+		Sha: fmt.Sprintf("%d", id),
 	}, nil
-}
-
-func (api *githubApi) TopStories() (chan *pb.Story, error) {
-	stories := make(chan *pb.Story)
-
-	ids := []int64{0, 1, 2}
-	for _, id := range ids {
-		go func(id int64) {
-			story, _ := api.GetStory(id)
-			stories <- story
-		}(id)
-	}
-
-	return stories, nil
 }
 
 func (api *githubApi) Projects() (chan *pb.Project, error) {

@@ -4,13 +4,13 @@
 import * as protobuf_nabu_pb from "../protobuf/nabu_pb";
 import {grpc} from "grpc-web-client";
 
-type NabuServiceListStories = {
+type NabuServiceCreateProject = {
   readonly methodName: string;
   readonly service: typeof NabuService;
   readonly requestStream: false;
-  readonly responseStream: true;
-  readonly requestType: typeof protobuf_nabu_pb.ListStoriesRequest;
-  readonly responseType: typeof protobuf_nabu_pb.ListStoriesResponse;
+  readonly responseStream: false;
+  readonly requestType: typeof protobuf_nabu_pb.CreateProjectRequest;
+  readonly responseType: typeof protobuf_nabu_pb.ListProjectsResponse;
 };
 
 type NabuServiceListProjects = {
@@ -27,13 +27,13 @@ type NabuServiceListCommits = {
   readonly service: typeof NabuService;
   readonly requestStream: false;
   readonly responseStream: true;
-  readonly requestType: typeof protobuf_nabu_pb.EmptyRequest;
+  readonly requestType: typeof protobuf_nabu_pb.RepositoryRequest;
   readonly responseType: typeof protobuf_nabu_pb.ListCommitsResponse;
 };
 
 export class NabuService {
   static readonly serviceName: string;
-  static readonly ListStories: NabuServiceListStories;
+  static readonly CreateProject: NabuServiceCreateProject;
   static readonly ListProjects: NabuServiceListProjects;
   static readonly ListCommits: NabuServiceListCommits;
 }
@@ -53,8 +53,16 @@ export class NabuServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
-  listStories(requestMessage: protobuf_nabu_pb.ListStoriesRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListStoriesResponse>;
+  createProject(
+    requestMessage: protobuf_nabu_pb.CreateProjectRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.ListProjectsResponse|null) => void
+  ): void;
+  createProject(
+    requestMessage: protobuf_nabu_pb.CreateProjectRequest,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.ListProjectsResponse|null) => void
+  ): void;
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
-  listCommits(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
+  listCommits(requestMessage: protobuf_nabu_pb.RepositoryRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
 }
 

@@ -3,7 +3,7 @@ import { ADD_PROJECT, SELECT_PROJECT, PROJECTS_INIT } from '../actions/projects'
 import { Project } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
-  readonly projects: { [storyId: number]: Project.AsObject },
+  readonly projects: { [projectId: number]: Project.AsObject },
   readonly error: Error | null,
   readonly loading: boolean,
   readonly selected: Project.AsObject | null,

@@ -3,52 +3,17 @@
 
 import * as jspb from "google-protobuf";
 
-export class Story extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
-
-  getScore(): number;
-  setScore(value: number): void;
-
-  getTitle(): string;
-  setTitle(value: string): void;
-
-  getBy(): string;
-  setBy(value: string): void;
-
-  getTime(): number;
-  setTime(value: number): void;
-
-  getUrl(): string;
-  setUrl(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Story.AsObject;
-  static toObject(includeInstance: boolean, msg: Story): Story.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Story, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Story;
-  static deserializeBinaryFromReader(message: Story, reader: jspb.BinaryReader): Story;
-}
-
-export namespace Story {
-  export type AsObject = {
-    id: number,
-    score: number,
-    title: string,
-    by: string,
-    time: number,
-    url: string,
-  }
-}
-
 export class Project extends jspb.Message {
   getId(): number;
   setId(value: number): void;
 
   getTitle(): string;
   setTitle(value: string): void;
+
+  hasRepository(): boolean;
+  clearRepository(): void;
+  getRepository(): Repository | undefined;
+  setRepository(value?: Repository): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Project.AsObject;
@@ -64,12 +29,24 @@ export namespace Project {
   export type AsObject = {
     id: number,
     title: string,
+    repository?: Repository.AsObject,
   }
 }
 
 export class Repository extends jspb.Message {
   getId(): number;
   setId(value: number): void;
+
+  getName(): string;
+  setName(value: string): void;
+
+  getKey(): string;
+  setKey(value: string): void;
+
+  clearCommitsList(): void;
+  getCommitsList(): Array<Commit>;
+  setCommitsList(value: Array<Commit>): void;
+  addCommits(value?: Commit, index?: number): Commit;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Repository.AsObject;
@@ -84,12 +61,21 @@ export class Repository extends jspb.Message {
 export namespace Repository {
   export type AsObject = {
     id: number,
+    name: string,
+    key: string,
+    commitsList: Array<Commit.AsObject>,
   }
 }
 
 export class Commit extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
+  getMessage(): string;
+  setMessage(value: string): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  getTimestamp(): number;
+  setTimestamp(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Commit.AsObject;
@@ -103,29 +89,9 @@ export class Commit extends jspb.Message {
 
 export namespace Commit {
   export type AsObject = {
-    id: number,
-  }
-}
-
-export class ListStoriesResponse extends jspb.Message {
-  hasStory(): boolean;
-  clearStory(): void;
-  getStory(): Story | undefined;
-  setStory(value?: Story): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ListStoriesResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: ListStoriesResponse): ListStoriesResponse.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: ListStoriesResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ListStoriesResponse;
-  static deserializeBinaryFromReader(message: ListStoriesResponse, reader: jspb.BinaryReader): ListStoriesResponse;
-}
-
-export namespace ListStoriesResponse {
-  export type AsObject = {
-    story?: Story.AsObject,
+    message: string,
+    sha: string,
+    timestamp: number,
   }
 }
 
@@ -173,22 +139,6 @@ export namespace ListCommitsResponse {
   }
 }
 
-export class ListStoriesRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ListStoriesRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: ListStoriesRequest): ListStoriesRequest.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: ListStoriesRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ListStoriesRequest;
-  static deserializeBinaryFromReader(message: ListStoriesRequest, reader: jspb.BinaryReader): ListStoriesRequest;
-}
-
-export namespace ListStoriesRequest {
-  export type AsObject = {
-  }
-}
-
 export class EmptyRequest extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EmptyRequest.AsObject;
@@ -202,6 +152,60 @@ export class EmptyRequest extends jspb.Message {
 
 export namespace EmptyRequest {
   export type AsObject = {
+  }
+}
+
+export class RepositoryRequest extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  getOwner(): string;
+  setOwner(value: string): void;
+
+  getBranch(): string;
+  setBranch(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RepositoryRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: RepositoryRequest): RepositoryRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: RepositoryRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RepositoryRequest;
+  static deserializeBinaryFromReader(message: RepositoryRequest, reader: jspb.BinaryReader): RepositoryRequest;
+}
+
+export namespace RepositoryRequest {
+  export type AsObject = {
+    name: string,
+    owner: string,
+    branch: string,
+  }
+}
+
+export class CreateProjectRequest extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  hasRepository(): boolean;
+  clearRepository(): void;
+  getRepository(): Repository | undefined;
+  setRepository(value?: Repository): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateProjectRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateProjectRequest): CreateProjectRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: CreateProjectRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateProjectRequest;
+  static deserializeBinaryFromReader(message: CreateProjectRequest, reader: jspb.BinaryReader): CreateProjectRequest;
+}
+
+export namespace CreateProjectRequest {
+  export type AsObject = {
+    name: string,
+    repository?: Repository.AsObject,
   }
 }
 

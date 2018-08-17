@@ -11,13 +11,13 @@ var NabuService = (function () {
   return NabuService;
 }());
 
-NabuService.ListStories = {
-  methodName: "ListStories",
+NabuService.CreateProject = {
+  methodName: "CreateProject",
   service: NabuService,
   requestStream: false,
-  responseStream: true,
-  requestType: protobuf_nabu_pb.ListStoriesRequest,
-  responseType: protobuf_nabu_pb.ListStoriesResponse
+  responseStream: false,
+  requestType: protobuf_nabu_pb.CreateProjectRequest,
+  responseType: protobuf_nabu_pb.ListProjectsResponse
 };
 
 NabuService.ListProjects = {
@@ -34,7 +34,7 @@ NabuService.ListCommits = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.EmptyRequest,
+  requestType: protobuf_nabu_pb.RepositoryRequest,
   responseType: protobuf_nabu_pb.ListCommitsResponse
 };
 
@@ -45,43 +45,26 @@ function NabuServiceClient(serviceHost, options) {
   this.options = options || {};
 }
 
-NabuServiceClient.prototype.listStories = function listStories(requestMessage, metadata) {
-  var listeners = {
-    data: [],
-    end: [],
-    status: []
-  };
-  var client = grpc.invoke(NabuService.ListStories, {
+NabuServiceClient.prototype.createProject = function createProject(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  grpc.unary(NabuService.CreateProject, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
     transport: this.options.transport,
     debug: this.options.debug,
-    onMessage: function (responseMessage) {
-      listeners.data.forEach(function (handler) {
-        handler(responseMessage);
-      });
-    },
-    onEnd: function (status, statusMessage, trailers) {
-      listeners.end.forEach(function (handler) {
-        handler();
-      });
-      listeners.status.forEach(function (handler) {
-        handler({ code: status, details: statusMessage, metadata: trailers });
-      });
-      listeners = null;
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+        } else {
+          callback(null, response.message);
+        }
+      }
     }
   });
-  return {
-    on: function (type, handler) {
-      listeners[type].push(handler);
-      return this;
-    },
-    cancel: function () {
-      listeners = null;
-      client.close();
-    }
-  };
 };
 
 NabuServiceClient.prototype.listProjects = function listProjects(requestMessage, metadata) {

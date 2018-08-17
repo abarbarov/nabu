@@ -23,97 +23,20 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type Story struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Score                int32    `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
-	Title                string   `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
-	By                   string   `protobuf:"bytes,4,opt,name=by,proto3" json:"by,omitempty"`
-	Time                 int32    `protobuf:"varint,5,opt,name=time,proto3" json:"time,omitempty"`
-	Url                  string   `protobuf:"bytes,6,opt,name=url,proto3" json:"url,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Story) Reset()         { *m = Story{} }
-func (m *Story) String() string { return proto.CompactTextString(m) }
-func (*Story) ProtoMessage()    {}
-func (*Story) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{0}
-}
-func (m *Story) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Story.Unmarshal(m, b)
-}
-func (m *Story) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Story.Marshal(b, m, deterministic)
-}
-func (dst *Story) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Story.Merge(dst, src)
-}
-func (m *Story) XXX_Size() int {
-	return xxx_messageInfo_Story.Size(m)
-}
-func (m *Story) XXX_DiscardUnknown() {
-	xxx_messageInfo_Story.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Story proto.InternalMessageInfo
-
-func (m *Story) GetId() int64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-func (m *Story) GetScore() int32 {
-	if m != nil {
-		return m.Score
-	}
-	return 0
-}
-
-func (m *Story) GetTitle() string {
-	if m != nil {
-		return m.Title
-	}
-	return ""
-}
-
-func (m *Story) GetBy() string {
-	if m != nil {
-		return m.By
-	}
-	return ""
-}
-
-func (m *Story) GetTime() int32 {
-	if m != nil {
-		return m.Time
-	}
-	return 0
-}
-
-func (m *Story) GetUrl() string {
-	if m != nil {
-		return m.Url
-	}
-	return ""
-}
-
 type Project struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title                string   `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Id                   int64       `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title                string      `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Repository           *Repository `protobuf:"bytes,3,opt,name=repository,proto3" json:"repository,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *Project) Reset()         { *m = Project{} }
 func (m *Project) String() string { return proto.CompactTextString(m) }
 func (*Project) ProtoMessage()    {}
 func (*Project) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{1}
+	return fileDescriptor_nabu_3dab948c501e4379, []int{0}
 }
 func (m *Project) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Project.Unmarshal(m, b)
@@ -147,18 +70,28 @@ func (m *Project) GetTitle() string {
 	return ""
 }
 
+func (m *Project) GetRepository() *Repository {
+	if m != nil {
+		return m.Repository
+	}
+	return nil
+}
+
 type Repository struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Id                   int64     `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string    `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Key                  string    `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	Commits              []*Commit `protobuf:"bytes,4,rep,name=commits,proto3" json:"commits,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *Repository) Reset()         { *m = Repository{} }
 func (m *Repository) String() string { return proto.CompactTextString(m) }
 func (*Repository) ProtoMessage()    {}
 func (*Repository) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{2}
+	return fileDescriptor_nabu_3dab948c501e4379, []int{1}
 }
 func (m *Repository) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Repository.Unmarshal(m, b)
@@ -185,8 +118,31 @@ func (m *Repository) GetId() int64 {
 	return 0
 }
 
+func (m *Repository) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Repository) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *Repository) GetCommits() []*Commit {
+	if m != nil {
+		return m.Commits
+	}
+	return nil
+}
+
 type Commit struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Message              string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Sha                  string   `protobuf:"bytes,2,opt,name=sha,proto3" json:"sha,omitempty"`
+	Timestamp            int64    `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -196,7 +152,7 @@ func (m *Commit) Reset()         { *m = Commit{} }
 func (m *Commit) String() string { return proto.CompactTextString(m) }
 func (*Commit) ProtoMessage()    {}
 func (*Commit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{3}
+	return fileDescriptor_nabu_3dab948c501e4379, []int{2}
 }
 func (m *Commit) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Commit.Unmarshal(m, b)
@@ -216,49 +172,25 @@ func (m *Commit) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Commit proto.InternalMessageInfo
 
-func (m *Commit) GetId() int64 {
+func (m *Commit) GetMessage() string {
 	if m != nil {
-		return m.Id
+		return m.Message
+	}
+	return ""
+}
+
+func (m *Commit) GetSha() string {
+	if m != nil {
+		return m.Sha
+	}
+	return ""
+}
+
+func (m *Commit) GetTimestamp() int64 {
+	if m != nil {
+		return m.Timestamp
 	}
 	return 0
-}
-
-type ListStoriesResponse struct {
-	Story                *Story   `protobuf:"bytes,1,opt,name=story,proto3" json:"story,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListStoriesResponse) Reset()         { *m = ListStoriesResponse{} }
-func (m *ListStoriesResponse) String() string { return proto.CompactTextString(m) }
-func (*ListStoriesResponse) ProtoMessage()    {}
-func (*ListStoriesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{4}
-}
-func (m *ListStoriesResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListStoriesResponse.Unmarshal(m, b)
-}
-func (m *ListStoriesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListStoriesResponse.Marshal(b, m, deterministic)
-}
-func (dst *ListStoriesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListStoriesResponse.Merge(dst, src)
-}
-func (m *ListStoriesResponse) XXX_Size() int {
-	return xxx_messageInfo_ListStoriesResponse.Size(m)
-}
-func (m *ListStoriesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListStoriesResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListStoriesResponse proto.InternalMessageInfo
-
-func (m *ListStoriesResponse) GetStory() *Story {
-	if m != nil {
-		return m.Story
-	}
-	return nil
 }
 
 type ListProjectsResponse struct {
@@ -272,7 +204,7 @@ func (m *ListProjectsResponse) Reset()         { *m = ListProjectsResponse{} }
 func (m *ListProjectsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListProjectsResponse) ProtoMessage()    {}
 func (*ListProjectsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{5}
+	return fileDescriptor_nabu_3dab948c501e4379, []int{3}
 }
 func (m *ListProjectsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProjectsResponse.Unmarshal(m, b)
@@ -310,7 +242,7 @@ func (m *ListCommitsResponse) Reset()         { *m = ListCommitsResponse{} }
 func (m *ListCommitsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCommitsResponse) ProtoMessage()    {}
 func (*ListCommitsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{6}
+	return fileDescriptor_nabu_3dab948c501e4379, []int{4}
 }
 func (m *ListCommitsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCommitsResponse.Unmarshal(m, b)
@@ -337,36 +269,6 @@ func (m *ListCommitsResponse) GetCommit() *Commit {
 	return nil
 }
 
-type ListStoriesRequest struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListStoriesRequest) Reset()         { *m = ListStoriesRequest{} }
-func (m *ListStoriesRequest) String() string { return proto.CompactTextString(m) }
-func (*ListStoriesRequest) ProtoMessage()    {}
-func (*ListStoriesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{7}
-}
-func (m *ListStoriesRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListStoriesRequest.Unmarshal(m, b)
-}
-func (m *ListStoriesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListStoriesRequest.Marshal(b, m, deterministic)
-}
-func (dst *ListStoriesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListStoriesRequest.Merge(dst, src)
-}
-func (m *ListStoriesRequest) XXX_Size() int {
-	return xxx_messageInfo_ListStoriesRequest.Size(m)
-}
-func (m *ListStoriesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListStoriesRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListStoriesRequest proto.InternalMessageInfo
-
 type EmptyRequest struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -377,7 +279,7 @@ func (m *EmptyRequest) Reset()         { *m = EmptyRequest{} }
 func (m *EmptyRequest) String() string { return proto.CompactTextString(m) }
 func (*EmptyRequest) ProtoMessage()    {}
 func (*EmptyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_35a19cf51212b491, []int{8}
+	return fileDescriptor_nabu_3dab948c501e4379, []int{5}
 }
 func (m *EmptyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EmptyRequest.Unmarshal(m, b)
@@ -397,16 +299,115 @@ func (m *EmptyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EmptyRequest proto.InternalMessageInfo
 
+type RepositoryRequest struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Owner                string   `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`
+	Branch               string   `protobuf:"bytes,3,opt,name=branch,proto3" json:"branch,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RepositoryRequest) Reset()         { *m = RepositoryRequest{} }
+func (m *RepositoryRequest) String() string { return proto.CompactTextString(m) }
+func (*RepositoryRequest) ProtoMessage()    {}
+func (*RepositoryRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_3dab948c501e4379, []int{6}
+}
+func (m *RepositoryRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RepositoryRequest.Unmarshal(m, b)
+}
+func (m *RepositoryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RepositoryRequest.Marshal(b, m, deterministic)
+}
+func (dst *RepositoryRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RepositoryRequest.Merge(dst, src)
+}
+func (m *RepositoryRequest) XXX_Size() int {
+	return xxx_messageInfo_RepositoryRequest.Size(m)
+}
+func (m *RepositoryRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RepositoryRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RepositoryRequest proto.InternalMessageInfo
+
+func (m *RepositoryRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *RepositoryRequest) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *RepositoryRequest) GetBranch() string {
+	if m != nil {
+		return m.Branch
+	}
+	return ""
+}
+
+type CreateProjectRequest struct {
+	Name                 string      `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Repository           *Repository `protobuf:"bytes,2,opt,name=repository,proto3" json:"repository,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *CreateProjectRequest) Reset()         { *m = CreateProjectRequest{} }
+func (m *CreateProjectRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateProjectRequest) ProtoMessage()    {}
+func (*CreateProjectRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_3dab948c501e4379, []int{7}
+}
+func (m *CreateProjectRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateProjectRequest.Unmarshal(m, b)
+}
+func (m *CreateProjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateProjectRequest.Marshal(b, m, deterministic)
+}
+func (dst *CreateProjectRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateProjectRequest.Merge(dst, src)
+}
+func (m *CreateProjectRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateProjectRequest.Size(m)
+}
+func (m *CreateProjectRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateProjectRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateProjectRequest proto.InternalMessageInfo
+
+func (m *CreateProjectRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CreateProjectRequest) GetRepository() *Repository {
+	if m != nil {
+		return m.Repository
+	}
+	return nil
+}
+
 func init() {
-	proto.RegisterType((*Story)(nil), "protobuf.Story")
 	proto.RegisterType((*Project)(nil), "protobuf.Project")
 	proto.RegisterType((*Repository)(nil), "protobuf.Repository")
 	proto.RegisterType((*Commit)(nil), "protobuf.Commit")
-	proto.RegisterType((*ListStoriesResponse)(nil), "protobuf.ListStoriesResponse")
 	proto.RegisterType((*ListProjectsResponse)(nil), "protobuf.ListProjectsResponse")
 	proto.RegisterType((*ListCommitsResponse)(nil), "protobuf.ListCommitsResponse")
-	proto.RegisterType((*ListStoriesRequest)(nil), "protobuf.ListStoriesRequest")
 	proto.RegisterType((*EmptyRequest)(nil), "protobuf.EmptyRequest")
+	proto.RegisterType((*RepositoryRequest)(nil), "protobuf.RepositoryRequest")
+	proto.RegisterType((*CreateProjectRequest)(nil), "protobuf.CreateProjectRequest")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -421,9 +422,9 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type NabuServiceClient interface {
-	ListStories(ctx context.Context, in *ListStoriesRequest, opts ...grpc.CallOption) (NabuService_ListStoriesClient, error)
+	CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*ListProjectsResponse, error)
 	ListProjects(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (NabuService_ListProjectsClient, error)
-	ListCommits(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (NabuService_ListCommitsClient, error)
+	ListCommits(ctx context.Context, in *RepositoryRequest, opts ...grpc.CallOption) (NabuService_ListCommitsClient, error)
 }
 
 type nabuServiceClient struct {
@@ -434,40 +435,17 @@ func NewNabuServiceClient(cc *grpc.ClientConn) NabuServiceClient {
 	return &nabuServiceClient{cc}
 }
 
-func (c *nabuServiceClient) ListStories(ctx context.Context, in *ListStoriesRequest, opts ...grpc.CallOption) (NabuService_ListStoriesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[0], "/protobuf.NabuService/ListStories", opts...)
+func (c *nabuServiceClient) CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*ListProjectsResponse, error) {
+	out := new(ListProjectsResponse)
+	err := c.cc.Invoke(ctx, "/protobuf.NabuService/CreateProject", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &nabuServiceListStoriesClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type NabuService_ListStoriesClient interface {
-	Recv() (*ListStoriesResponse, error)
-	grpc.ClientStream
-}
-
-type nabuServiceListStoriesClient struct {
-	grpc.ClientStream
-}
-
-func (x *nabuServiceListStoriesClient) Recv() (*ListStoriesResponse, error) {
-	m := new(ListStoriesResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 func (c *nabuServiceClient) ListProjects(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (NabuService_ListProjectsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[1], "/protobuf.NabuService/ListProjects", opts...)
+	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[0], "/protobuf.NabuService/ListProjects", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -498,8 +476,8 @@ func (x *nabuServiceListProjectsClient) Recv() (*ListProjectsResponse, error) {
 	return m, nil
 }
 
-func (c *nabuServiceClient) ListCommits(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (NabuService_ListCommitsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[2], "/protobuf.NabuService/ListCommits", opts...)
+func (c *nabuServiceClient) ListCommits(ctx context.Context, in *RepositoryRequest, opts ...grpc.CallOption) (NabuService_ListCommitsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[1], "/protobuf.NabuService/ListCommits", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -532,34 +510,31 @@ func (x *nabuServiceListCommitsClient) Recv() (*ListCommitsResponse, error) {
 
 // NabuServiceServer is the server API for NabuService service.
 type NabuServiceServer interface {
-	ListStories(*ListStoriesRequest, NabuService_ListStoriesServer) error
+	CreateProject(context.Context, *CreateProjectRequest) (*ListProjectsResponse, error)
 	ListProjects(*EmptyRequest, NabuService_ListProjectsServer) error
-	ListCommits(*EmptyRequest, NabuService_ListCommitsServer) error
+	ListCommits(*RepositoryRequest, NabuService_ListCommitsServer) error
 }
 
 func RegisterNabuServiceServer(s *grpc.Server, srv NabuServiceServer) {
 	s.RegisterService(&_NabuService_serviceDesc, srv)
 }
 
-func _NabuService_ListStories_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListStoriesRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _NabuService_CreateProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(NabuServiceServer).ListStories(m, &nabuServiceListStoriesServer{stream})
-}
-
-type NabuService_ListStoriesServer interface {
-	Send(*ListStoriesResponse) error
-	grpc.ServerStream
-}
-
-type nabuServiceListStoriesServer struct {
-	grpc.ServerStream
-}
-
-func (x *nabuServiceListStoriesServer) Send(m *ListStoriesResponse) error {
-	return x.ServerStream.SendMsg(m)
+	if interceptor == nil {
+		return srv.(NabuServiceServer).CreateProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protobuf.NabuService/CreateProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NabuServiceServer).CreateProject(ctx, req.(*CreateProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _NabuService_ListProjects_Handler(srv interface{}, stream grpc.ServerStream) error {
@@ -584,7 +559,7 @@ func (x *nabuServiceListProjectsServer) Send(m *ListProjectsResponse) error {
 }
 
 func _NabuService_ListCommits_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(EmptyRequest)
+	m := new(RepositoryRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
@@ -607,13 +582,13 @@ func (x *nabuServiceListCommitsServer) Send(m *ListCommitsResponse) error {
 var _NabuService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "protobuf.NabuService",
 	HandlerType: (*NabuServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
+	Methods: []grpc.MethodDesc{
 		{
-			StreamName:    "ListStories",
-			Handler:       _NabuService_ListStories_Handler,
-			ServerStreams: true,
+			MethodName: "CreateProject",
+			Handler:    _NabuService_CreateProject_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "ListProjects",
 			Handler:       _NabuService_ListProjects_Handler,
@@ -628,31 +603,34 @@ var _NabuService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "protobuf/nabu.proto",
 }
 
-func init() { proto.RegisterFile("protobuf/nabu.proto", fileDescriptor_nabu_35a19cf51212b491) }
+func init() { proto.RegisterFile("protobuf/nabu.proto", fileDescriptor_nabu_3dab948c501e4379) }
 
-var fileDescriptor_nabu_35a19cf51212b491 = []byte{
-	// 354 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x90, 0xdd, 0x6a, 0xfa, 0x30,
-	0x18, 0xc6, 0x49, 0xb5, 0xf5, 0xff, 0x7f, 0x15, 0xe7, 0xa2, 0x8c, 0x20, 0x6e, 0x48, 0x60, 0x50,
-	0x18, 0xa8, 0xb8, 0xd3, 0xc1, 0x0e, 0x64, 0x63, 0x07, 0x32, 0x46, 0xbc, 0x02, 0x5b, 0x33, 0xc8,
-	0xb0, 0xa6, 0x6b, 0xd2, 0x41, 0x2f, 0x7a, 0xf7, 0x30, 0x9a, 0x44, 0x5a, 0xbf, 0xce, 0xf2, 0x7e,
-	0x3c, 0xbf, 0xf7, 0xc9, 0x03, 0xfd, 0x34, 0x93, 0x5a, 0x46, 0xf9, 0xe7, 0x74, 0xb7, 0x8e, 0xf2,
-	0x89, 0xa9, 0xf0, 0xbf, 0x7d, 0x93, 0x16, 0xe0, 0xaf, 0xb4, 0xcc, 0x0a, 0xdc, 0x05, 0x4f, 0x6c,
-	0x08, 0x1a, 0xa3, 0xb0, 0xc1, 0x3c, 0xb1, 0xc1, 0x03, 0xf0, 0x55, 0x2c, 0x33, 0x4e, 0xbc, 0x31,
-	0x0a, 0x7d, 0x66, 0x8b, 0xb2, 0xab, 0x85, 0xde, 0x72, 0xd2, 0x18, 0xa3, 0xf0, 0x3f, 0xb3, 0x45,
-	0xa9, 0x8d, 0x0a, 0xd2, 0x34, 0x2d, 0x2f, 0x2a, 0x30, 0x86, 0xa6, 0x16, 0x09, 0x27, 0xbe, 0x91,
-	0x9a, 0x37, 0xee, 0x41, 0x23, 0xcf, 0xb6, 0x24, 0x30, 0x4b, 0xe5, 0x93, 0x4e, 0xa1, 0xf5, 0x91,
-	0xc9, 0x2f, 0x1e, 0xeb, 0x73, 0xc7, 0xed, 0x19, 0xaf, 0x76, 0x86, 0x8e, 0x00, 0x18, 0x4f, 0xa5,
-	0x12, 0xe7, 0x0c, 0x53, 0x02, 0xc1, 0x42, 0x26, 0x89, 0x38, 0xa1, 0xd1, 0x27, 0xe8, 0x2f, 0x85,
-	0xd2, 0xe5, 0x3f, 0x05, 0x57, 0x8c, 0xab, 0x54, 0xee, 0x14, 0xc7, 0xf7, 0xe0, 0xab, 0x92, 0x64,
-	0x36, 0xdb, 0xf3, 0xab, 0xc9, 0x3e, 0x94, 0x89, 0x49, 0x84, 0xd9, 0x29, 0x5d, 0xc0, 0xa0, 0x54,
-	0x3b, 0xab, 0x95, 0xfc, 0x01, 0x5a, 0xa9, 0xed, 0x39, 0xc0, 0x75, 0x05, 0x70, 0xcb, 0x6c, 0xbf,
-	0x41, 0x9f, 0xad, 0x05, 0x6b, 0xb0, 0x62, 0x84, 0x10, 0xc4, 0xa6, 0xe5, 0x10, 0xbd, 0x0a, 0x61,
-	0x57, 0x99, 0x9b, 0xd3, 0x01, 0xe0, 0x83, 0x3f, 0x7c, 0xe7, 0x5c, 0x69, 0xda, 0x85, 0xce, 0x4b,
-	0x92, 0xea, 0xc2, 0xd5, 0xf3, 0x5f, 0x04, 0xed, 0xf7, 0x75, 0x94, 0xaf, 0x78, 0xf6, 0x23, 0x62,
-	0x8e, 0x97, 0xd0, 0xae, 0xa9, 0xf0, 0xa8, 0xc2, 0x9f, 0xc2, 0x86, 0xb7, 0x17, 0xa6, 0xd6, 0xeb,
-	0x0c, 0xe1, 0x37, 0xe8, 0xd4, 0x93, 0xc0, 0x37, 0x95, 0xa0, 0xee, 0x62, 0x78, 0x77, 0x08, 0x3a,
-	0x4e, 0x6e, 0x86, 0xf0, 0xab, 0xf5, 0xe5, 0xe2, 0xb8, 0x08, 0x3a, 0x72, 0x74, 0x94, 0xde, 0x0c,
-	0x45, 0x81, 0x99, 0x3f, 0xfe, 0x05, 0x00, 0x00, 0xff, 0xff, 0x43, 0x04, 0x5e, 0xde, 0xe5, 0x02,
-	0x00, 0x00,
+var fileDescriptor_nabu_3dab948c501e4379 = []byte{
+	// 411 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0x4d, 0x6f, 0x13, 0x31,
+	0x10, 0x95, 0xb3, 0x6d, 0x42, 0x66, 0x4b, 0xd5, 0x4e, 0x57, 0xd5, 0x8a, 0x2f, 0x45, 0x3e, 0xad,
+	0x40, 0x0a, 0x55, 0xe0, 0xce, 0x21, 0x42, 0x42, 0x02, 0x01, 0x32, 0xe2, 0x8e, 0x37, 0x1d, 0xa8,
+	0x81, 0x5d, 0x2f, 0xb6, 0x03, 0xea, 0x0f, 0xe7, 0x8e, 0xe2, 0xb5, 0xbb, 0x0e, 0x89, 0xa0, 0x37,
+	0xcf, 0x7b, 0xa3, 0xf7, 0x66, 0xde, 0x18, 0xce, 0x3a, 0xa3, 0x9d, 0xae, 0xd7, 0x9f, 0x9f, 0xb6,
+	0xb2, 0x5e, 0xcf, 0x7d, 0x85, 0x77, 0x22, 0xc8, 0x09, 0x26, 0xef, 0x8d, 0xfe, 0x4a, 0x2b, 0x87,
+	0xc7, 0x30, 0x52, 0x97, 0x25, 0x9b, 0xb1, 0x2a, 0x13, 0x23, 0x75, 0x89, 0x05, 0x1c, 0x3a, 0xe5,
+	0xbe, 0x53, 0x39, 0x9a, 0xb1, 0x6a, 0x2a, 0xfa, 0x02, 0x9f, 0x03, 0x18, 0xea, 0xb4, 0x55, 0x4e,
+	0x9b, 0xeb, 0x32, 0x9b, 0xb1, 0x2a, 0x5f, 0x14, 0xf3, 0xa8, 0x37, 0x17, 0x37, 0x9c, 0x48, 0xfa,
+	0x78, 0x0b, 0x30, 0x30, 0x3b, 0x4e, 0x08, 0x07, 0xad, 0x6c, 0xa2, 0x91, 0x7f, 0xe3, 0x09, 0x64,
+	0xdf, 0xa8, 0x37, 0x98, 0x8a, 0xcd, 0x13, 0x1f, 0xc3, 0x64, 0xa5, 0x9b, 0x46, 0x39, 0x5b, 0x1e,
+	0xcc, 0xb2, 0x2a, 0x5f, 0x9c, 0x0c, 0xb6, 0x4b, 0x4f, 0x88, 0xd8, 0xc0, 0x05, 0x8c, 0x7b, 0x08,
+	0x4b, 0x98, 0x34, 0x64, 0xad, 0xfc, 0x42, 0xde, 0x70, 0x2a, 0x62, 0xb9, 0x71, 0xb0, 0x57, 0x32,
+	0x98, 0x6e, 0x9e, 0xf8, 0x00, 0xa6, 0x4e, 0x35, 0x64, 0x9d, 0x6c, 0x3a, 0xef, 0x9c, 0x89, 0x01,
+	0xe0, 0x4b, 0x28, 0xde, 0x28, 0xeb, 0x42, 0x5c, 0x56, 0x90, 0xed, 0x74, 0x6b, 0x09, 0x9f, 0xc0,
+	0xa4, 0xeb, 0x31, 0xef, 0x90, 0x2f, 0x4e, 0x87, 0xb9, 0x42, 0xb3, 0x88, 0x1d, 0xfc, 0x05, 0x9c,
+	0x6d, 0x44, 0xfa, 0xe1, 0x06, 0x8d, 0x0a, 0xc6, 0xfd, 0xe8, 0x41, 0x62, 0x77, 0xb5, 0xc0, 0xf3,
+	0x63, 0x38, 0x7a, 0xd9, 0x74, 0xee, 0x5a, 0xd0, 0x8f, 0x35, 0x59, 0xc7, 0x3f, 0xc2, 0x69, 0x92,
+	0x79, 0x0f, 0xde, 0x04, 0xca, 0x92, 0x40, 0x0b, 0x38, 0xd4, 0xbf, 0x5a, 0x32, 0xf1, 0x9c, 0xbe,
+	0xc0, 0x73, 0x18, 0xd7, 0x46, 0xb6, 0xab, 0xab, 0x90, 0x74, 0xa8, 0xf8, 0x27, 0x28, 0x96, 0x86,
+	0xa4, 0xa3, 0xb8, 0xc1, 0x3f, 0x94, 0xb7, 0xbf, 0xc4, 0xe8, 0x76, 0x5f, 0x62, 0xf1, 0x9b, 0x41,
+	0xfe, 0x56, 0xd6, 0xeb, 0x0f, 0x64, 0x7e, 0xaa, 0x15, 0xe1, 0x3b, 0xb8, 0xbb, 0xe5, 0x88, 0x8f,
+	0x92, 0x0c, 0xf6, 0x8c, 0x72, 0x2f, 0xe1, 0xf7, 0xde, 0xe5, 0x15, 0x1c, 0xa5, 0x38, 0x9e, 0x0f,
+	0xfd, 0x69, 0x82, 0xff, 0xd3, 0xb9, 0x60, 0xf8, 0x1a, 0xf2, 0xe4, 0x68, 0x78, 0x7f, 0xef, 0x6e,
+	0x41, 0xed, 0xe1, 0xb6, 0xda, 0x5f, 0x87, 0xbe, 0x60, 0xf5, 0xd8, 0xf3, 0xcf, 0xfe, 0x04, 0x00,
+	0x00, 0xff, 0xff, 0x8d, 0xef, 0x56, 0x6e, 0x99, 0x03, 0x00, 0x00,
 }
