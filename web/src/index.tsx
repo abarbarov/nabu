@@ -6,8 +6,6 @@ import store from './store';
 import './blocks/Page/Page.css';
 import Stories from "./blocks/Story/Stories";
 
-
-
 ReactDOM.render(
   <Provider store={store}>
     <div>

@@ -1,5 +1,5 @@
 import { RootAction } from '../actions';
-import { ADD_STORY, SELECT_STORY, STORIES_INIT } from '../actions/stories';
+import { ADD_PROJECT, SELECT_PROJECT, PROJECTS_INIT } from '../actions/stories';
 import { Story } from '../protobuf/nabu_pb';
 
 export type StoryState = {
@@ -20,10 +20,10 @@ export default function (state: StoryState = initialState, action: RootAction): 
 
   switch (action.type) {
 
-    case STORIES_INIT:
+    case PROJECTS_INIT:
       return {...state, loading: true};
 
-    case ADD_STORY:
+    case ADD_PROJECT:
       const story: Story.AsObject = action.payload.toObject();
       const selected = state.selected !== null ? state.selected : story;
       if (story.id) {
@@ -36,7 +36,7 @@ export default function (state: StoryState = initialState, action: RootAction): 
       }
       return state;
 
-    case SELECT_STORY:
+    case SELECT_PROJECT:
       return {...state, selected: state.stories[action.payload]};
 
     default:

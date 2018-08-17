@@ -3,7 +3,7 @@ syntax = "proto3";
 package protobuf;
 
 message Story {
-    int32 id = 1;
+    int64 id = 1;
     int32 score = 2;
     string title = 3;
     string by = 4;
@@ -11,11 +11,39 @@ message Story {
     string url = 6;
 }
 
-service NabuService {
-    rpc ListStories (ListStoriesRequest) returns (stream ListStoriesResponse);
+message Project {
+    int64 id = 1;
+    string title = 2;
+}
+
+message Repository {
+    int64 id = 1;
+}
+
+message Commit {
+    int64 id = 1;
 }
 
 message ListStoriesResponse {
     Story story = 1;
 }
-message ListStoriesRequest {}
+
+message ListProjectsResponse {
+    Project project = 1;
+}
+
+message ListCommitsResponse {
+    Commit commit = 1;
+}
+
+message ListStoriesRequest {
+}
+
+message EmptyRequest {
+}
+
+service NabuService {
+    rpc ListStories (ListStoriesRequest) returns (stream ListStoriesResponse);
+    rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
+    rpc ListCommits (EmptyRequest) returns (stream ListCommitsResponse);
+}

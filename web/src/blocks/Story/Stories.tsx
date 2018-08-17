@@ -5,7 +5,7 @@ import { RootState } from '../../store';
 import StoryList from './List/StoryList';
 import StoryView from './View/StoryView';
 import { RootAction } from '../../actions';
-import { listStories, selectStory } from '../../actions/stories';
+import { listProjects, selectStory } from '../../actions/stories';
 import { Story } from '../../protobuf/nabu_pb';
 
 type StoriesProps = {
@@ -64,7 +64,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
     fetchStories: () => {
-      dispatch(listStories());
+      dispatch(listProjects());
     },
     selectStory: (storyId: number) => {
       dispatch(selectStory(storyId));

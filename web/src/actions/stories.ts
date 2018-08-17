@@ -4,27 +4,26 @@ import { GrpcAction, grpcRequest } from '../middleware/grpc';
 import { grpc } from 'grpc-web-client';
 import { NabuService } from '../protobuf/nabu_pb_service';
 
-export const STORIES_INIT = 'STORIES_INIT';
-export const ADD_STORY = 'ADD_STORY';
-export const SELECT_STORY = 'SELECT_STORY';
+export const PROJECTS_INIT = 'PROJECTS_INIT';
+export const ADD_PROJECT = 'ADD_PROJECT';
+export const SELECT_PROJECT = 'SELECT_PROJECT';
 
-type AddStory = {
-  type: typeof ADD_STORY,
+type AddProject = {
+  type: typeof ADD_PROJECT,
   payload: Story,
 };
-export const addStory = (story: Story) => ({ type: ADD_STORY, payload: story });
+export const addProject = (story: Story) => ({ type: ADD_PROJECT, payload: story });
 
-type ListStoriesInit = {
-  type: typeof STORIES_INIT,
+type ListProjectsInit = {
+  type: typeof PROJECTS_INIT,
 };
-export const listStoriesInit = (): ListStoriesInit => ({type: STORIES_INIT});
+export const listProjectsInit = (): ListProjectsInit => ({type: PROJECTS_INIT});
 
-export const listStories = () => {
-  debugger;
+export const listProjects = () => {
 
   return grpcRequest<ListStoriesRequest, ListStoriesResponse>({
     request: new ListStoriesRequest(),
-    onStart: () => listStoriesInit(),
+    onStart: () => listProjectsInit(),
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
       return;
@@ -34,7 +33,7 @@ export const listStories = () => {
     onMessage: message => {
       const story = message.getStory();
       if (story) {
-        return addStory(story);
+        return addProject(story);
       }
       return;
     },
@@ -42,13 +41,13 @@ export const listStories = () => {
 };
 
 type SelectStory = {
-  type: typeof SELECT_STORY,
+  type: typeof SELECT_PROJECT,
   payload: number,
 };
-export const selectStory = (storyId: number): SelectStory => ({ type: SELECT_STORY, payload: storyId });
+export const selectStory = (storyId: number): SelectStory => ({ type: SELECT_PROJECT, payload: storyId });
 
 export type StoryActionTypes =
-  | ListStoriesInit
-  | AddStory
+  | ListProjectsInit
+  | AddProject
   | SelectStory
   | GrpcAction<ListStoriesRequest, ListStoriesResponse>;

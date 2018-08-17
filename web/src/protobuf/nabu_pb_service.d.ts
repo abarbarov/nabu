@@ -13,9 +13,29 @@ type NabuServiceListStories = {
   readonly responseType: typeof protobuf_nabu_pb.ListStoriesResponse;
 };
 
+type NabuServiceListProjects = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.EmptyRequest;
+  readonly responseType: typeof protobuf_nabu_pb.ListProjectsResponse;
+};
+
+type NabuServiceListCommits = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.EmptyRequest;
+  readonly responseType: typeof protobuf_nabu_pb.ListCommitsResponse;
+};
+
 export class NabuService {
   static readonly serviceName: string;
   static readonly ListStories: NabuServiceListStories;
+  static readonly ListProjects: NabuServiceListProjects;
+  static readonly ListCommits: NabuServiceListCommits;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -34,5 +54,7 @@ export class NabuServiceClient {
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
   listStories(requestMessage: protobuf_nabu_pb.ListStoriesRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListStoriesResponse>;
+  listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
+  listCommits(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
 }
 
