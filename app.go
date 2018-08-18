@@ -1,13 +1,14 @@
 package main
 
 import (
-	"log"
-	"github.com/abarbarov/nabu/api"
-	"github.com/jessevdk/go-flags"
+	"context"
 	"fmt"
+	"github.com/abarbarov/nabu/api"
+	"github.com/abarbarov/nabu/store"
+	"github.com/jessevdk/go-flags"
+	"log"
 	"os"
 	"os/signal"
-	"context"
 	"syscall"
 )
 
@@ -54,9 +55,12 @@ func main() {
 }
 
 func Create(opts Opts) (*Application, error) {
+	datastore := &store.DataStore{}
+
 	srv := &api.Server{
 		Version: version,
 		WebRoot: opts.WebRoot,
+		Store:   datastore,
 	}
 
 	tch := make(chan struct{})

@@ -3,23 +3,15 @@ package grpc
 import (
 	"fmt"
 	pb "github.com/abarbarov/nabu/protobuf"
+	"github.com/abarbarov/nabu/store"
 	"golang.org/x/net/context"
+	"log"
 )
 
 type nabuGrpcService struct {
-	github *githubApi
-	tfapi  *terraformApi
-	store  *storeApi
-}
-
-type Item struct {
-	Id    int32  `json:id`
-	Score int32  `json:score`
-	Title string `json:title`
-	By    string `json:by`
-	Time  int32  `json:time`
-	Url   string `json:url`
-	Type  string `json:type`
+	github    *githubApi
+	terraform *terraformApi
+	store     *store.DataStore
 }
 
 type githubApi struct {
@@ -28,31 +20,23 @@ type githubApi struct {
 type terraformApi struct {
 }
 
-type storeApi struct {
-}
-
-type ItemResult struct {
-	Item  *pb.Project
-	Error error
-}
-
-func NewNabuGrpcService() *nabuGrpcService {
+func NewNabuGrpcService(s *store.DataStore) *nabuGrpcService {
 	github := &githubApi{}
 	terraform := &terraformApi{}
-	store := &storeApi{}
+	store := s
 
 	return &nabuGrpcService{github, terraform, store}
 }
 
 func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService_ListProjectsServer) error {
-	stories, err := s.store.Projects()
-	defer close(stories)
+	projects, err := s.Projects()
+	defer close(projects)
 	if err != nil {
 		return err
 	}
-	for story := range stories {
+	for project := range projects {
 		resp.Send(&pb.ListProjectsResponse{
-			Project: story,
+			Project: project,
 		})
 	}
 
@@ -77,11 +61,19 @@ func (s *nabuGrpcService) CreateProject(ctx context.Context, req *pb.CreateProje
 	return &pb.ListProjectsResponse{}, nil
 }
 
-func (api *storeApi) GetProject(id int64) (*pb.Project, error) {
-	return &pb.Project{
-		Id: id,
-	}, nil
-}
+//
+//func (s *nabuGrpcService) GetProject(id int64) (*pb.Project, error) {
+//
+//	project, err := s.store.Project(id)
+//
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	return &pb.Project{
+//		Id: project.Id,
+//	}, nil
+//}
 
 func (api *githubApi) GetCommit(id int64) (*pb.Commit, error) {
 	return &pb.Commit{
@@ -89,18 +81,25 @@ func (api *githubApi) GetCommit(id int64) (*pb.Commit, error) {
 	}, nil
 }
 
-func (api *storeApi) Projects() (chan *pb.Project, error) {
-	projects := make(chan *pb.Project)
+func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
+	output := make(chan *pb.Project)
 
-	ids := []int64{1, 2, 3, 4, 5, 6}
-	for _, id := range ids {
-		go func(id int64) {
-			project, _ := api.GetProject(id)
-			projects <- project
-		}(id)
+	projects, err := s.store.Projects()
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, p := range projects {
+		go func(p *store.Project) {
+			project := &pb.Project{
+				Id:    p.Id,
+				Title: p.Title,
+			}
+
+			output <- project
+		}(p)
 	}
 
-	return projects, nil
+	return output, nil
 }
 
 func (api *githubApi) Commits() (chan *pb.Commit, error) {
