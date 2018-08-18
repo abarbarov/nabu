@@ -27,7 +27,7 @@ type NabuServiceListCommits = {
   readonly service: typeof NabuService;
   readonly requestStream: false;
   readonly responseStream: true;
-  readonly requestType: typeof protobuf_nabu_pb.RepositoryRequest;
+  readonly requestType: typeof protobuf_nabu_pb.ProjectRequest;
   readonly responseType: typeof protobuf_nabu_pb.ListCommitsResponse;
 };
 
@@ -63,6 +63,6 @@ export class NabuServiceClient {
     callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.ListProjectsResponse|null) => void
   ): void;
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
-  listCommits(requestMessage: protobuf_nabu_pb.RepositoryRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
+  listCommits(requestMessage: protobuf_nabu_pb.ProjectRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
 }
 

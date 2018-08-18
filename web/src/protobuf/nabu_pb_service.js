@@ -34,7 +34,7 @@ NabuService.ListCommits = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.RepositoryRequest,
+  requestType: protobuf_nabu_pb.ProjectRequest,
   responseType: protobuf_nabu_pb.ListCommitsResponse
 };
 

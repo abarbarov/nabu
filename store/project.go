@@ -6,7 +6,14 @@ type Project struct {
 	Repository *Repository
 }
 
-func (s *DataStore) Projects() ([]*Project, error) {
+type Repository struct {
+	Id    int64
+	Title string
+	Owner string
+	Token string
+}
+
+func (ds *DataStore) Projects() ([]*Project, error) {
 	var projects []*Project
 
 	projects = append(projects, &Project{
@@ -16,6 +23,7 @@ func (s *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Title: "trademark.web",
 			Owner: "abarbarov",
+			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
 	})
 
@@ -26,6 +34,7 @@ func (s *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Title: "trademark.web",
 			Owner: "abarbarov",
+			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
 	})
 
@@ -42,9 +51,9 @@ func (s *DataStore) Projects() ([]*Project, error) {
 	return projects, nil
 }
 
-func (s *DataStore) Project(id int64) (*Project, error) {
+func (ds *DataStore) Project(id int64) (*Project, error) {
 
-	allProjects, err := s.Projects()
+	allProjects, err := ds.Projects()
 
 	if err != nil {
 		return nil, err

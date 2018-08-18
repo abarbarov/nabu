@@ -187,31 +187,23 @@ export namespace EmptyRequest {
   }
 }
 
-export class RepositoryRequest extends jspb.Message {
-  getName(): string;
-  setName(value: string): void;
-
-  getOwner(): string;
-  setOwner(value: string): void;
-
-  getBranch(): string;
-  setBranch(value: string): void;
+export class ProjectRequest extends jspb.Message {
+  getId(): number;
+  setId(value: number): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): RepositoryRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: RepositoryRequest): RepositoryRequest.AsObject;
+  toObject(includeInstance?: boolean): ProjectRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ProjectRequest): ProjectRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: RepositoryRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): RepositoryRequest;
-  static deserializeBinaryFromReader(message: RepositoryRequest, reader: jspb.BinaryReader): RepositoryRequest;
+  static serializeBinaryToWriter(message: ProjectRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ProjectRequest;
+  static deserializeBinaryFromReader(message: ProjectRequest, reader: jspb.BinaryReader): ProjectRequest;
 }
 
-export namespace RepositoryRequest {
+export namespace ProjectRequest {
   export type AsObject = {
-    name: string,
-    owner: string,
-    branch: string,
+    id: number,
   }
 }
 

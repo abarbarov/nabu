@@ -31,7 +31,7 @@ message Commit {
 service NabuService {
     rpc CreateProject (CreateProjectRequest) returns (ListProjectsResponse);
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
-    rpc ListCommits (RepositoryRequest) returns (stream ListCommitsResponse);
+    rpc ListCommits (ProjectRequest) returns (stream ListCommitsResponse);
 }
 
 message ListProjectsResponse {
@@ -45,10 +45,8 @@ message ListCommitsResponse {
 message EmptyRequest {
 }
 
-message RepositoryRequest {
-    string name = 1;
-    string owner = 2;
-    string branch = 3;
+message ProjectRequest {
+    int64 id = 1;
 }
 
 message CreateProjectRequest {

@@ -42,29 +42,9 @@ func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService
 
 	return nil
 }
-func (s *nabuGrpcService) ListCommits(req *pb.RepositoryRequest, resp pb.NabuService_ListCommitsServer) error {
-	stories, err := s.github.Commits()
-	defer close(stories)
-	if err != nil {
-		return err
-	}
-	for story := range stories {
-		resp.Send(&pb.ListCommitsResponse{
-			Commit: story,
-		})
-	}
-
-	return nil
-}
 
 func (s *nabuGrpcService) CreateProject(ctx context.Context, req *pb.CreateProjectRequest) (*pb.ListProjectsResponse, error) {
 	return &pb.ListProjectsResponse{}, nil
-}
-
-func (api *githubApi) GetCommit(id int64) (*pb.Commit, error) {
-	return &pb.Commit{
-		Sha: fmt.Sprintf("%d", id),
-	}, nil
 }
 
 func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
@@ -89,13 +69,37 @@ func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
 	return output, nil
 }
 
-func (api *githubApi) Commits() (chan *pb.Commit, error) {
+func (s *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuService_ListCommitsServer) error {
+	repo := s.store.Project(req.Id)
+	log.Printf("%v", repo)
+
+	commits, err := s.Commits(req.Owner, req.Name, req.Branch)
+	defer close(commits)
+	if err != nil {
+		return err
+	}
+	for commit := range commits {
+		resp.Send(&pb.ListCommitsResponse{
+			Commit: commit,
+		})
+	}
+
+	return nil
+}
+
+func (s *nabuGrpcService) GetCommit(id int64) (*pb.Commit, error) {
+	return &pb.Commit{
+		Sha: fmt.Sprintf("%d", id),
+	}, nil
+}
+
+func (s *nabuGrpcService) Commits(owner, name, branch string) (chan *pb.Commit, error) {
 	commits := make(chan *pb.Commit)
 
-	ids := []int64{0, 1, 2}
+	s.github.Commits(owner, name, branch)
 	for _, id := range ids {
 		go func(id int64) {
-			commit, _ := api.GetCommit(id)
+			commit, _ := s.GetCommit(id)
 			commits <- commit
 		}(id)
 	}

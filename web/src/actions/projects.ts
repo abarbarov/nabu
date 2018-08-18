@@ -1,15 +1,15 @@
-import { Action } from 'redux';
+import {Action} from 'redux';
 import {
   Commit,
   EmptyRequest,
   ListCommitsResponse,
   ListProjectsResponse,
   Project,
-  RepositoryRequest
+  ProjectRequest
 } from '../protobuf/nabu_pb';
-import { GrpcAction, grpcRequest } from '../middleware/grpc';
-import { grpc } from 'grpc-web-client';
-import { NabuService } from '../protobuf/nabu_pb_service';
+import {GrpcAction, grpcRequest} from '../middleware/grpc';
+import {grpc} from 'grpc-web-client';
+import {NabuService} from '../protobuf/nabu_pb_service';
 
 export const PROJECTS_INIT = 'PROJECTS_INIT';
 export const ADD_COMMIT = 'ADD_COMMIT';
@@ -20,12 +20,12 @@ type AddProject = {
   type: typeof ADD_PROJECT,
   payload: Project,
 };
-export const addProject = (story: Project) => ({ type: ADD_PROJECT, payload: story });
+export const addProject = (story: Project) => ({type: ADD_PROJECT, payload: story});
 
 type ListProjectsInit = {
   type: typeof PROJECTS_INIT,
 };
-export const listProjectsInit = (): ListProjectsInit => ({ type: PROJECTS_INIT });
+export const listProjectsInit = (): ListProjectsInit => ({type: PROJECTS_INIT});
 
 export const listProjects = () => {
 
@@ -54,22 +54,22 @@ type SelectProject = {
   payload: number,
 };
 export const selectProject = (projectId: number): SelectProject => {
-  return ({ type: SELECT_PROJECT, payload: projectId });
+  return ({type: SELECT_PROJECT, payload: projectId});
 };
 
 type AddCommit = {
   type: typeof ADD_COMMIT,
   payload: Commit,
 };
-export const addCommit = (commit: Commit) => ({ type: ADD_COMMIT, payload: commit });
+export const addCommit = (commit: Commit) => ({type: ADD_COMMIT, payload: commit});
 
 export const listCommits = (projectId: number) => {
+  let projectRequest = new ProjectRequest();
+  projectRequest.setId(projectId);
 
-  return grpcRequest<RepositoryRequest, ListCommitsResponse>({
-    request: new RepositoryRequest(),
-    onStart: () => {
-      return selectProject(projectId);
-    },
+  return grpcRequest<ProjectRequest, ListCommitsResponse>({
+    request: projectRequest,
+    onStart: () => selectProject(projectId),
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
@@ -91,4 +91,4 @@ export type ProjectActionTypes =
   | AddCommit
   | SelectProject
   | GrpcAction<EmptyRequest, ListProjectsResponse>
-  | GrpcAction<RepositoryRequest, ListCommitsResponse>;
+  | GrpcAction<ProjectRequest, ListCommitsResponse>;
