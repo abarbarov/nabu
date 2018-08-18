@@ -8,7 +8,7 @@ type Project struct {
 
 type Repository struct {
 	Id    int64
-	Title string
+	Name  string
 	Owner string
 	Token string
 }
@@ -21,7 +21,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Title: "firstfile-dev",
 		Repository: &Repository{
 			Id:    1,
-			Title: "trademark.web",
+			Name:  "trademark.web",
 			Owner: "abarbarov",
 			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
@@ -32,7 +32,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Title: "firstfile-prod",
 		Repository: &Repository{
 			Id:    1,
-			Title: "trademark.web",
+			Name:  "trademark.web",
 			Owner: "abarbarov",
 			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
@@ -43,7 +43,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Title: "nabu",
 		Repository: &Repository{
 			Id:    1,
-			Title: "nabu",
+			Name:  "nabu",
 			Owner: "abarbarov",
 		},
 	})

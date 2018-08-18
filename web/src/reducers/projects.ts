@@ -1,6 +1,6 @@
-import { RootAction } from '../actions';
-import { ADD_COMMIT, ADD_PROJECT, PROJECTS_INIT, SELECT_PROJECT } from '../actions/projects';
-import { Commit, Project } from '../protobuf/nabu_pb';
+import {RootAction} from '../actions';
+import {ADD_COMMIT, ADD_PROJECT, PROJECTS_INIT, SELECT_PROJECT} from '../actions/projects';
+import {Commit, Project} from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -24,10 +24,10 @@ export default function (state: ProjectState = initialState, action: RootAction)
   switch (action.type) {
 
     case PROJECTS_INIT:
-      return { ...state, loading: true };
+      return {...state, loading: true};
 
     case SELECT_PROJECT:
-      return { ...state, selectedProject: state.projects[action.payload] };
+      return {...state, selectedProject: state.projects[action.payload]};
 
     case ADD_PROJECT:
       const project: Project.AsObject = action.payload.toObject();
@@ -35,18 +35,20 @@ export default function (state: ProjectState = initialState, action: RootAction)
         return {
           ...state,
           loading: false,
-          projects: { ...state.projects, [project.id]: project },
+          projects: {...state.projects, [project.id]: project},
         };
       }
       return state;
 
     case ADD_COMMIT:
+      debugger;
+
       const commit: Commit.AsObject = action.payload.toObject();
       if (commit.id) {
         return {
           ...state,
           loading: false,
-          commits: { ...state.commits, [commit.id]: commit },
+          commits: {...state.commits, [commit.id]: commit},
         };
       }
       return state;

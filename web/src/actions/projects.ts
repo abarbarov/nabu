@@ -7,9 +7,9 @@ import {
   Project,
   ProjectRequest
 } from '../protobuf/nabu_pb';
-import {GrpcAction, grpcRequest} from '../middleware/grpc';
-import {grpc} from 'grpc-web-client';
-import {NabuService} from '../protobuf/nabu_pb_service';
+import { GrpcAction, grpcRequest } from '../middleware/grpc';
+import { grpc } from 'grpc-web-client';
+import { NabuService } from '../protobuf/nabu_pb_service';
 
 export const PROJECTS_INIT = 'PROJECTS_INIT';
 export const ADD_COMMIT = 'ADD_COMMIT';
@@ -48,7 +48,6 @@ export const listProjects = () => {
   });
 };
 
-
 type SelectProject = {
   type: typeof SELECT_PROJECT,
   payload: number,
@@ -64,6 +63,8 @@ type AddCommit = {
 export const addCommit = (commit: Commit) => ({type: ADD_COMMIT, payload: commit});
 
 export const listCommits = (projectId: number) => {
+  debugger;
+
   let projectRequest = new ProjectRequest();
   projectRequest.setId(projectId);
 
@@ -76,6 +77,7 @@ export const listCommits = (projectId: number) => {
     host: 'http://localhost:9091',
     methodDescriptor: NabuService.ListCommits,
     onMessage: message => {
+      debugger;
       const commit = message.getCommit();
       if (commit) {
         return addCommit(commit);

@@ -7,6 +7,7 @@ import (
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 	"net/http"
+	"github.com/abarbarov/nabu/github"
 )
 
 type GrpcWebMiddleware struct {
@@ -23,10 +24,10 @@ func (m *GrpcWebMiddleware) Handler(next http.Handler) http.Handler {
 	})
 }
 
-func NewGrpcWebMiddleware(store *store.DataStore) *GrpcWebMiddleware {
+func NewGrpcWebMiddleware(store *store.DataStore, gh *github.Github) *GrpcWebMiddleware {
 
 	grpcServer := grpc.NewServer()
-	hackernewsService := nabuGrpc.NewNabuGrpcService(store)
+	hackernewsService := nabuGrpc.NewNabuGrpcService(store, gh)
 	pb.RegisterNabuServiceServer(grpcServer, hackernewsService)
 	wrappedGrpc := grpcweb.WrapServer(grpcServer)
 

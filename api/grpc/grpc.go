@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"fmt"
+	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
 	"golang.org/x/net/context"
@@ -9,19 +10,16 @@ import (
 )
 
 type nabuGrpcService struct {
-	github    *githubApi
+	github    *github.Github
 	terraform *terraformApi
 	store     *store.DataStore
-}
-
-type githubApi struct {
 }
 
 type terraformApi struct {
 }
 
-func NewNabuGrpcService(s *store.DataStore) *nabuGrpcService {
-	github := &githubApi{}
+func NewNabuGrpcService(s *store.DataStore, g *github.Github) *nabuGrpcService {
+	github := g
 	terraform := &terraformApi{}
 	store := s
 
@@ -59,7 +57,7 @@ func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
 			project := &pb.Project{
 				Id:         p.Id,
 				Title:      p.Title,
-				Repository: p.Repository.Title,
+				Repository: p.Repository.Name,
 			}
 
 			output <- project
@@ -71,13 +69,14 @@ func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
 
 func (s *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuService_ListCommitsServer) error {
 	repo := s.store.Project(req.Id)
-	log.Printf("%v", repo)
 
-	commits, err := s.Commits(req.Owner, req.Name, req.Branch)
+	commits, err := s.Commits(repo.Repository.Name, repo.Repository.Owner, "master")
 	defer close(commits)
+
 	if err != nil {
 		return err
 	}
+
 	for commit := range commits {
 		resp.Send(&pb.ListCommitsResponse{
 			Commit: commit,
@@ -87,22 +86,28 @@ func (s *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuServic
 	return nil
 }
 
-func (s *nabuGrpcService) GetCommit(id int64) (*pb.Commit, error) {
-	return &pb.Commit{
-		Sha: fmt.Sprintf("%d", id),
-	}, nil
-}
-
 func (s *nabuGrpcService) Commits(owner, name, branch string) (chan *pb.Commit, error) {
-	commits := make(chan *pb.Commit)
+	output := make(chan *pb.Commit)
 
-	s.github.Commits(owner, name, branch)
-	for _, id := range ids {
-		go func(id int64) {
-			commit, _ := s.GetCommit(id)
-			commits <- commit
-		}(id)
+	token := "d14813a8df45fa3d136e3fd6690a49b780268978"
+	commits, err := s.github.Commits(token, owner, name, branch)
+
+	if err != nil {
+		log.Printf("%v", err)
 	}
 
-	return commits, nil
+	for _, c := range commits {
+		go func(c *github.Commit) {
+			//commit, _ := s.GetCommit(id)
+			commit := &pb.Commit{
+				Sha:     c.Sha,
+				Message: c.Message,
+				Id:      1,
+				//Timestamp: c.Date,
+			}
+			output <- commit
+		}(c)
+	}
+
+	return output, nil
 }
