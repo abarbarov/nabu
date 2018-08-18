@@ -67,7 +67,9 @@ export const listCommits = (projectId: number) => {
 
   return grpcRequest<RepositoryRequest, ListCommitsResponse>({
     request: new RepositoryRequest(),
-    onStart: () => selectProject(projectId),
+    onStart: () => {
+      return selectProject(projectId);
+    },
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },

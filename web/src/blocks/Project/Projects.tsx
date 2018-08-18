@@ -5,7 +5,7 @@ import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
-import { listCommits, listProjects } from '../../actions/projects';
+import { listCommits, listProjects, selectProject } from '../../actions/projects';
 import { Commit, Project } from '../../protobuf/nabu_pb';
 
 type ProjectsProps = {
@@ -17,7 +17,7 @@ type ProjectsProps = {
   selectedCommit: Commit.AsObject | null,
   fetchProjects: () => void,
   selectProject: (id: number) => void,
-  selectCommit: (sha: string) => void,
+  selectCommit: (id: number) => void,
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -80,10 +80,11 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(listProjects());
     },
     selectProject: (projectId: number) => {
+      dispatch(selectProject(projectId));
       dispatch(listCommits(projectId));
     },
-    selectCommit: (sha: string) => {
-      console.log(sha);
+    selectCommit: (id: number) => {
+      console.log("commitId: ", id);
     }
   };
 }

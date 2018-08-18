@@ -61,20 +61,6 @@ func (s *nabuGrpcService) CreateProject(ctx context.Context, req *pb.CreateProje
 	return &pb.ListProjectsResponse{}, nil
 }
 
-//
-//func (s *nabuGrpcService) GetProject(id int64) (*pb.Project, error) {
-//
-//	project, err := s.store.Project(id)
-//
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return &pb.Project{
-//		Id: project.Id,
-//	}, nil
-//}
-
 func (api *githubApi) GetCommit(id int64) (*pb.Commit, error) {
 	return &pb.Commit{
 		Sha: fmt.Sprintf("%d", id),
@@ -91,8 +77,9 @@ func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
 	for _, p := range projects {
 		go func(p *store.Project) {
 			project := &pb.Project{
-				Id:    p.Id,
-				Title: p.Title,
+				Id:         p.Id,
+				Title:      p.Title,
+				Repository: p.Repository.Title,
 			}
 
 			output <- project
@@ -103,15 +90,15 @@ func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
 }
 
 func (api *githubApi) Commits() (chan *pb.Commit, error) {
-	stories := make(chan *pb.Commit)
+	commits := make(chan *pb.Commit)
 
 	ids := []int64{0, 1, 2}
 	for _, id := range ids {
 		go func(id int64) {
-			story, _ := api.GetCommit(id)
-			stories <- story
+			commit, _ := api.GetCommit(id)
+			commits <- commit
 		}(id)
 	}
 
-	return stories, nil
+	return commits, nil
 }

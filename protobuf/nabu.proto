@@ -5,20 +5,27 @@ package protobuf;
 message Project {
     int64 id = 1;
     string title = 2;
-    Repository repository = 3;
+    string repository = 3;
 }
 
 message Repository {
     int64 id = 1;
     string name = 2;
     string key = 3;
-    repeated Commit commits = 4;
+    repeated Branch branches = 4;
+}
+
+message Branch {
+    int64 id = 1;
+    string name = 2;
+    repeated Commit commits = 3;
 }
 
 message Commit {
-    string message = 1;
-    string sha = 2;
-    int64 timestamp = 3;
+    int64 id = 1;
+    string message = 2;
+    string sha = 3;
+    int64 timestamp = 4;
 }
 
 service NabuService {

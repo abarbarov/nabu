@@ -10,10 +10,8 @@ export class Project extends jspb.Message {
   getTitle(): string;
   setTitle(value: string): void;
 
-  hasRepository(): boolean;
-  clearRepository(): void;
-  getRepository(): Repository | undefined;
-  setRepository(value?: Repository): void;
+  getRepository(): string;
+  setRepository(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Project.AsObject;
@@ -29,7 +27,7 @@ export namespace Project {
   export type AsObject = {
     id: number,
     title: string,
-    repository?: Repository.AsObject,
+    repository: string,
   }
 }
 
@@ -43,10 +41,10 @@ export class Repository extends jspb.Message {
   getKey(): string;
   setKey(value: string): void;
 
-  clearCommitsList(): void;
-  getCommitsList(): Array<Commit>;
-  setCommitsList(value: Array<Commit>): void;
-  addCommits(value?: Commit, index?: number): Commit;
+  clearBranchesList(): void;
+  getBranchesList(): Array<Branch>;
+  setBranchesList(value: Array<Branch>): void;
+  addBranches(value?: Branch, index?: number): Branch;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Repository.AsObject;
@@ -63,11 +61,44 @@ export namespace Repository {
     id: number,
     name: string,
     key: string,
+    branchesList: Array<Branch.AsObject>,
+  }
+}
+
+export class Branch extends jspb.Message {
+  getId(): number;
+  setId(value: number): void;
+
+  getName(): string;
+  setName(value: string): void;
+
+  clearCommitsList(): void;
+  getCommitsList(): Array<Commit>;
+  setCommitsList(value: Array<Commit>): void;
+  addCommits(value?: Commit, index?: number): Commit;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Branch.AsObject;
+  static toObject(includeInstance: boolean, msg: Branch): Branch.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Branch, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Branch;
+  static deserializeBinaryFromReader(message: Branch, reader: jspb.BinaryReader): Branch;
+}
+
+export namespace Branch {
+  export type AsObject = {
+    id: number,
+    name: string,
     commitsList: Array<Commit.AsObject>,
   }
 }
 
 export class Commit extends jspb.Message {
+  getId(): number;
+  setId(value: number): void;
+
   getMessage(): string;
   setMessage(value: string): void;
 
@@ -89,6 +120,7 @@ export class Commit extends jspb.Message {
 
 export namespace Commit {
   export type AsObject = {
+    id: number,
     message: string,
     sha: string,
     timestamp: number,

@@ -21,9 +21,10 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
               props.onProjectSelect(project.id);
             }
           }}>
-          <div>
-            <div>{project.title}</div>
-            <div>{project.id} | {project.id}</div>
+          <div style={{display: "flex"}}>
+            <div>{project.id} | </div>
+            <div>{project.title} | </div>
+            <div>{project.repository}</div>
           </div>
         </div>
       )}

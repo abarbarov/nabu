@@ -27,30 +27,26 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return { ...state, loading: true };
 
     case SELECT_PROJECT:
-      return { ...state, loading: true, selectedProject: state.projects[action.payload] };
+      return { ...state, selectedProject: state.projects[action.payload] };
 
     case ADD_PROJECT:
       const project: Project.AsObject = action.payload.toObject();
-      const selectedProject = state.selectedProject !== null ? state.selectedProject : project;
       if (project.id) {
         return {
           ...state,
           loading: false,
           projects: { ...state.projects, [project.id]: project },
-          selectedProject,
         };
       }
       return state;
 
     case ADD_COMMIT:
       const commit: Commit.AsObject = action.payload.toObject();
-      const selectedCommit = state.selectedCommit !== null ? state.selectedCommit : commit;
-      if (commit.sha) {
+      if (commit.id) {
         return {
           ...state,
           loading: false,
-          commits: { ...state.commits, [commit.sha]: commit },
-          selectedCommit,
+          commits: { ...state.commits, [commit.id]: commit },
         };
       }
       return state;
