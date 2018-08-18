@@ -5,28 +5,31 @@ type ProjectViewProps = {
   selectedProject: Project.AsObject,
   selectedCommit: Commit.AsObject | null,
   commits: Commit.AsObject[],
-  onCommitSelect: (id: number) => void
+  onCommitSelect: (sha: string) => void
 };
 
 const ProjectView: React.SFC<ProjectViewProps> = (props) => {
+  console.log(props.commits);
+
   return (
-    <div style={{border: "1px solid red;"}}>
+    <div style={{border: "1px solid red"}}>
       <h5>Commits available</h5>
+
       {props.commits.map((commit, i) =>
-        <div style={props.selectedCommit && commit.id === props.selectedCommit.id
+        <div style={props.selectedCommit && commit.sha === props.selectedCommit.sha
           ? {'backgroundColor': 'rgba(0, 0, 0, 0.08)'}
           : {}
         }
              key={i}
              onClick={() => {
                if (commit.sha) {
-                 props.onCommitSelect(commit.id);
+                 props.onCommitSelect(commit.sha);
                }
              }}>
           <div style={{display: 'flex'}}>
-            <div>{commit.message} |</div>
-            <div>{commit.sha} |</div>
-            <div>{commit.id}</div>
+            <div>{commit.id} | </div>
+            <div>{commit.message} | </div>
+            <div>{commit.sha}</div>
           </div>
         </div>
       )}

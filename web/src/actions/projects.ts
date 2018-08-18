@@ -63,7 +63,6 @@ type AddCommit = {
 export const addCommit = (commit: Commit) => ({type: ADD_COMMIT, payload: commit});
 
 export const listCommits = (projectId: number) => {
-  debugger;
 
   let projectRequest = new ProjectRequest();
   projectRequest.setId(projectId);
@@ -77,7 +76,6 @@ export const listCommits = (projectId: number) => {
     host: 'http://localhost:9091',
     methodDescriptor: NabuService.ListCommits,
     onMessage: message => {
-      debugger;
       const commit = message.getCommit();
       if (commit) {
         return addCommit(commit);

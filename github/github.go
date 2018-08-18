@@ -44,7 +44,7 @@ func (g *Github) Branches(token, owner, name string) (data []*Branch, err error)
 	return data, nil
 }
 
-func (g *Github) Commits(token, owner, name, branch string) (data []Commit, err error) {
+func (g *Github) Commits(token, owner, name, branch string) (data []*Commit, err error) {
 
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
@@ -58,7 +58,7 @@ func (g *Github) Commits(token, owner, name, branch string) (data []Commit, err 
 	}
 
 	for _, element := range commits {
-		elem := Commit{
+		elem := &Commit{
 			*element.Commit.Message,
 			*element.SHA,
 			*element.Commit.Author.Date,

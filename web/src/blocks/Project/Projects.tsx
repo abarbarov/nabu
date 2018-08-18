@@ -17,7 +17,7 @@ type ProjectsProps = {
   selectedCommit: Commit.AsObject | null,
   fetchProjects: () => void,
   selectProject: (id: number) => void,
-  selectCommit: (id: number) => void,
+  selectCommit: (sha: string) => void,
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -64,9 +64,7 @@ class Projects extends React.Component<ProjectsProps, {}> {
 function mapStateToProps(state: RootState) {
   return {
     projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
-    commits: Object.keys(state.projects.commits).map(key => {
-      return state.projects.commits[parseInt(key, 10)];
-    }),
+    commits: Object.keys(state.projects.commits).map(key => state.projects.commits[key]),
     loading: state.projects.loading,
     error: state.projects.error,
     selectedProject: state.projects.selectedProject,
@@ -83,8 +81,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(selectProject(projectId));
       dispatch(listCommits(projectId));
     },
-    selectCommit: (id: number) => {
-      console.log("commitId: ", id);
+    selectCommit: (sha: string) => {
+      console.log('commit sha: ', sha);
     }
   };
 }

@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"fmt"
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
@@ -68,9 +67,12 @@ func (s *nabuGrpcService) Projects() (chan *pb.Project, error) {
 }
 
 func (s *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuService_ListCommitsServer) error {
-	repo := s.store.Project(req.Id)
+	repo, err := s.store.Project(req.Id)
+	if err != nil {
+		return err
+	}
 
-	commits, err := s.Commits(repo.Repository.Name, repo.Repository.Owner, "master")
+	commits, err := s.Commits(repo.Repository.Owner, repo.Repository.Name, "master")
 	defer close(commits)
 
 	if err != nil {
@@ -100,7 +102,7 @@ func (s *nabuGrpcService) Commits(owner, name, branch string) (chan *pb.Commit, 
 		go func(c *github.Commit) {
 			//commit, _ := s.GetCommit(id)
 			commit := &pb.Commit{
-				Sha:     c.Sha,
+				Sha:     c.SHA,
 				Message: c.Message,
 				Id:      1,
 				//Timestamp: c.Date,

@@ -27,7 +27,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return {...state, loading: true};
 
     case SELECT_PROJECT:
-      return {...state, selectedProject: state.projects[action.payload]};
+      return {...state, loading: true, selectedProject: state.projects[action.payload]};
 
     case ADD_PROJECT:
       const project: Project.AsObject = action.payload.toObject();
@@ -41,14 +41,12 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return state;
 
     case ADD_COMMIT:
-      debugger;
-
       const commit: Commit.AsObject = action.payload.toObject();
-      if (commit.id) {
+      if (commit && commit.sha) {
         return {
           ...state,
           loading: false,
-          commits: {...state.commits, [commit.id]: commit},
+          commits: {...state.commits, [commit.sha]: commit},
         };
       }
       return state;
@@ -56,5 +54,4 @@ export default function (state: ProjectState = initialState, action: RootAction)
     default:
       return state;
   }
-
 }
