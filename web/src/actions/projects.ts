@@ -1,4 +1,4 @@
-import {Action} from 'redux';
+import { Action } from 'redux';
 import {
   Commit,
   EmptyRequest,
@@ -12,20 +12,22 @@ import { grpc } from 'grpc-web-client';
 import { NabuService } from '../protobuf/nabu_pb_service';
 
 export const PROJECTS_INIT = 'PROJECTS_INIT';
+export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 export const ADD_COMMIT = 'ADD_COMMIT';
 export const ADD_PROJECT = 'ADD_PROJECT';
+export const BUILD_PROJECT = 'BUILD_PROJECT';
 export const SELECT_PROJECT = 'SELECT_PROJECT';
 
 type AddProject = {
   type: typeof ADD_PROJECT,
   payload: Project,
 };
-export const addProject = (story: Project) => ({type: ADD_PROJECT, payload: story});
+export const addProject = (story: Project) => ({ type: ADD_PROJECT, payload: story });
 
 type ListProjectsInit = {
   type: typeof PROJECTS_INIT,
 };
-export const listProjectsInit = (): ListProjectsInit => ({type: PROJECTS_INIT});
+export const listProjectsInit = (): ListProjectsInit => ({ type: PROJECTS_INIT });
 
 export const listProjects = () => {
 
@@ -53,14 +55,14 @@ type SelectProject = {
   payload: number,
 };
 export const selectProject = (projectId: number): SelectProject => {
-  return ({type: SELECT_PROJECT, payload: projectId});
+  return ({ type: SELECT_PROJECT, payload: projectId });
 };
 
 type AddCommit = {
   type: typeof ADD_COMMIT,
   payload: Commit,
 };
-export const addCommit = (commit: Commit) => ({type: ADD_COMMIT, payload: commit});
+export const addCommit = (commit: Commit) => ({ type: ADD_COMMIT, payload: commit });
 
 export const listCommits = (projectId: number) => {
 
@@ -85,10 +87,26 @@ export const listCommits = (projectId: number) => {
   });
 };
 
+type ClearMessages = {
+  type: typeof CLEAR_MESSAGES,
+};
+export const clearMessages = (): ClearMessages => ({ type: CLEAR_MESSAGES });
+
+type BuildProject = {
+  type: typeof BUILD_PROJECT,
+  payload: object,
+};
+export const buildProject = (projectId: number, sha: string): BuildProject => {
+  return ({ type: BUILD_PROJECT, payload: { projectId: projectId, sha: sha } });
+};
+
+
 export type ProjectActionTypes =
   | ListProjectsInit
   | AddProject
   | AddCommit
   | SelectProject
+  | BuildProject
+  | ClearMessages
   | GrpcAction<EmptyRequest, ListProjectsResponse>
   | GrpcAction<ProjectRequest, ListCommitsResponse>;

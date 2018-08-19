@@ -1,6 +1,13 @@
-import {RootAction} from '../actions';
-import {ADD_COMMIT, ADD_PROJECT, PROJECTS_INIT, SELECT_PROJECT} from '../actions/projects';
-import {Commit, Project} from '../protobuf/nabu_pb';
+import { RootAction } from '../actions';
+import {
+  ADD_COMMIT,
+  ADD_PROJECT,
+  BUILD_PROJECT,
+  CLEAR_MESSAGES,
+  PROJECTS_INIT,
+  SELECT_PROJECT
+} from '../actions/projects';
+import { Commit, Project } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -9,11 +16,13 @@ export type ProjectState = {
   readonly loading: boolean,
   readonly selectedProject: Project.AsObject | null,
   readonly selectedCommit: Commit.AsObject | null,
+  readonly messages: string[],
 };
 
 const initialState = {
   projects: {},
   commits: {},
+  messages: [],
   error: null,
   loading: false,
   selectedProject: null,
@@ -21,13 +30,20 @@ const initialState = {
 };
 
 export default function (state: ProjectState = initialState, action: RootAction): ProjectState {
+  console.log(action.type);
   switch (action.type) {
 
     case PROJECTS_INIT:
-      return {...state, loading: true};
+      return { ...state, loading: true };
 
     case SELECT_PROJECT:
-      return {...state, loading: true, selectedProject: state.projects[action.payload]};
+      return { ...state, loading: true, commits: {}, selectedProject: state.projects[action.payload] };
+
+    case BUILD_PROJECT:
+      return { ...state, loading: true, messages: [...state.messages, "test message"] };
+
+    case CLEAR_MESSAGES:
+      return { ...state, loading: true, messages: [] };
 
     case ADD_PROJECT:
       const project: Project.AsObject = action.payload.toObject();
@@ -35,7 +51,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
         return {
           ...state,
           loading: false,
-          projects: {...state.projects, [project.id]: project},
+          projects: { ...state.projects, [project.id]: project },
         };
       }
       return state;
@@ -46,7 +62,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
         return {
           ...state,
           loading: false,
-          commits: {...state.commits, [commit.sha]: commit},
+          commits: { ...state.commits, [commit.sha]: commit },
         };
       }
       return state;
