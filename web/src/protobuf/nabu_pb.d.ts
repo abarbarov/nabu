@@ -96,9 +96,6 @@ export namespace Branch {
 }
 
 export class Commit extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
-
   getMessage(): string;
   setMessage(value: string): void;
 
@@ -120,7 +117,6 @@ export class Commit extends jspb.Message {
 
 export namespace Commit {
   export type AsObject = {
-    id: number,
     message: string,
     sha: string,
     timestamp: number,

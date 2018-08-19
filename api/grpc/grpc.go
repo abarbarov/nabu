@@ -75,45 +75,23 @@ func (s *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuServic
 		return err
 	}
 
-	commits, err := s.Commits(repo.Repository.Owner, repo.Repository.Name, "master")
+	commits, err := s.github.Commits("d14813a8df45fa3d136e3fd6690a49b780268978", repo.Repository.Owner, repo.Repository.Name, "master")
 	defer close(commits)
 
 	if err != nil {
 		return err
 	}
 
-	for commit := range commits {
+	for c := range commits {
 		resp.Send(&pb.ListCommitsResponse{
-			Commit: commit,
+			Commit: &pb.Commit{
+				Sha:     c.SHA,
+				Message: c.Message,
+			},
 		})
 	}
 
 	return nil
-}
-
-func (s *nabuGrpcService) Commits(owner, name, branch string) (chan *pb.Commit, error) {
-	output := make(chan *pb.Commit)
-
-	token := "d14813a8df45fa3d136e3fd6690a49b780268978"
-	commits, err := s.github.Commits(token, owner, name, branch)
-
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	for _, c := range commits {
-		go func(c *github.Commit) {
-			commit := &pb.Commit{
-				Sha:     c.SHA,
-				Message: c.Message,
-				Id:      1,
-				//Timestamp: c.Date,
-			}
-			output <- commit
-		}(c)
-	}
-
-	return output, nil
 }
 
 func (s *nabuGrpcService) Build(req *pb.BuildRequest, resp pb.NabuService_BuildServer) error {

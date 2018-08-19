@@ -18,9 +18,9 @@ const ProjectView: React.SFC<ProjectViewProps> = (props) => {
           style={props.selectedCommit && commit.sha === props.selectedCommit.sha ? { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' } : {}}
           key={i}>
           <div style={{ display: 'flex' }}>
-            <div>{commit.id} |</div>
-            <div>{commit.message} |</div>
-            <div>{commit.sha}</div>
+            <div>[{commit.timestamp || 'timestamp'}]|</div>
+            <div>{commit.sha} |</div>
+            <div>{commit.message}</div>
             <button type="button" onClick={() => props.onBuild(props.selectedProject.id, commit.sha)}>Build</button>
           </div>
         </div>

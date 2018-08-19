@@ -22,7 +22,6 @@ message Branch {
 }
 
 message Commit {
-    int64 id = 1;
     string message = 2;
     string sha = 3;
     int64 timestamp = 4;

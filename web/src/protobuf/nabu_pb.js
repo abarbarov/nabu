@@ -739,7 +739,6 @@ proto.protobuf.Commit.prototype.toObject = function(opt_includeInstance) {
  */
 proto.protobuf.Commit.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
     message: jspb.Message.getFieldWithDefault(msg, 2, ""),
     sha: jspb.Message.getFieldWithDefault(msg, 3, ""),
     timestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
@@ -779,10 +778,6 @@ proto.protobuf.Commit.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.setId(value);
-      break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
@@ -824,13 +819,6 @@ proto.protobuf.Commit.prototype.serializeBinary = function() {
  */
 proto.protobuf.Commit.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
-  if (f !== 0) {
-    writer.writeInt64(
-      1,
-      f
-    );
-  }
   f = message.getMessage();
   if (f.length > 0) {
     writer.writeString(
@@ -852,21 +840,6 @@ proto.protobuf.Commit.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-};
-
-
-/**
- * optional int64 id = 1;
- * @return {number}
- */
-proto.protobuf.Commit.prototype.getId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.protobuf.Commit.prototype.setId = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
