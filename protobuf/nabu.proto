@@ -28,10 +28,33 @@ message Commit {
     int64 timestamp = 4;
 }
 
+enum StatusType {
+    UNKNOWN = 0;
+    SUCCESS = 1;
+    ERROR = 2;
+    WARNING = 3;
+}
+
+message Message {
+    int64 id = 1;
+    string message = 2;
+    StatusType status = 3;
+}
+
 service NabuService {
     rpc CreateProject (CreateProjectRequest) returns (ListProjectsResponse);
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
     rpc ListCommits (ProjectRequest) returns (stream ListCommitsResponse);
+    rpc Build (BuildRequest) returns (stream BuildResponse);
+}
+
+message BuildRequest {
+    int64 project_id = 1;
+    string sha = 2;
+}
+
+message BuildResponse {
+    Message message = 1;
 }
 
 message ListProjectsResponse {

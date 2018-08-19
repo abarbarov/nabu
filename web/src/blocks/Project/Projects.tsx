@@ -5,13 +5,14 @@ import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
-import { listCommits, listProjects, selectProject, buildProject, clearMessages } from '../../actions/projects';
-import { Commit, Project } from '../../protobuf/nabu_pb';
+import { clearMessages, listCommits, listProjects, selectProject, buildProject } from '../../actions/projects';
+import { Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
 
 type ProjectsProps = {
   projects: Project.AsObject[],
   commits: Commit.AsObject[],
+  messages: Message.AsObject[],
   loading: boolean,
   error: Error | null,
   selectedProject: Project.AsObject | null,
@@ -19,7 +20,6 @@ type ProjectsProps = {
   fetchProjects: () => void,
   selectProject: (id: number) => void,
   build: (projectId: number, sha: string) => void,
-  messages: string[],
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -67,7 +67,7 @@ function mapStateToProps(state: RootState) {
   return {
     projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
     commits: Object.keys(state.projects.commits).map(key => state.projects.commits[key]),
-    messages: state.projects.messages,
+    messages: Object.keys(state.projects.messages).map(key => state.projects.messages[parseInt(key, 10)]),
     loading: state.projects.loading,
     error: state.projects.error,
     selectedProject: state.projects.selectedProject,

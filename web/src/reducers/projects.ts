@@ -1,13 +1,13 @@
 import { RootAction } from '../actions';
 import {
+  ADD_BUILD_MESSAGE,
   ADD_COMMIT,
   ADD_PROJECT,
-  BUILD_PROJECT,
   CLEAR_MESSAGES,
   PROJECTS_INIT,
   SELECT_PROJECT
 } from '../actions/projects';
-import { Commit, Project } from '../protobuf/nabu_pb';
+import { Commit, Message, Project } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -16,7 +16,7 @@ export type ProjectState = {
   readonly loading: boolean,
   readonly selectedProject: Project.AsObject | null,
   readonly selectedCommit: Commit.AsObject | null,
-  readonly messages: string[],
+  readonly messages: { [messageId: number]: Message.AsObject },
 };
 
 const initialState = {
@@ -39,9 +39,6 @@ export default function (state: ProjectState = initialState, action: RootAction)
     case SELECT_PROJECT:
       return { ...state, loading: true, commits: {}, selectedProject: state.projects[action.payload] };
 
-    case BUILD_PROJECT:
-      return { ...state, loading: true, messages: [...state.messages, "test message"] };
-
     case CLEAR_MESSAGES:
       return { ...state, loading: true, messages: [] };
 
@@ -63,6 +60,17 @@ export default function (state: ProjectState = initialState, action: RootAction)
           ...state,
           loading: false,
           commits: { ...state.commits, [commit.sha]: commit },
+        };
+      }
+      return state;
+
+    case ADD_BUILD_MESSAGE:
+      const m: Message.AsObject = action.payload.toObject();
+      if (m && m.message) {
+        return {
+          ...state,
+          loading: false,
+          messages: { ...state.messages, [m.id]: m },
         };
       }
       return state;

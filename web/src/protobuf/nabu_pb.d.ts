@@ -127,6 +127,80 @@ export namespace Commit {
   }
 }
 
+export class Message extends jspb.Message {
+  getId(): number;
+  setId(value: number): void;
+
+  getMessage(): string;
+  setMessage(value: string): void;
+
+  getStatus(): StatusType;
+  setStatus(value: StatusType): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Message.AsObject;
+  static toObject(includeInstance: boolean, msg: Message): Message.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Message, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Message;
+  static deserializeBinaryFromReader(message: Message, reader: jspb.BinaryReader): Message;
+}
+
+export namespace Message {
+  export type AsObject = {
+    id: number,
+    message: string,
+    status: StatusType,
+  }
+}
+
+export class BuildRequest extends jspb.Message {
+  getProjectId(): number;
+  setProjectId(value: number): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): BuildRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: BuildRequest): BuildRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: BuildRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): BuildRequest;
+  static deserializeBinaryFromReader(message: BuildRequest, reader: jspb.BinaryReader): BuildRequest;
+}
+
+export namespace BuildRequest {
+  export type AsObject = {
+    projectId: number,
+    sha: string,
+  }
+}
+
+export class BuildResponse extends jspb.Message {
+  hasMessage(): boolean;
+  clearMessage(): void;
+  getMessage(): Message | undefined;
+  setMessage(value?: Message): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): BuildResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: BuildResponse): BuildResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: BuildResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): BuildResponse;
+  static deserializeBinaryFromReader(message: BuildResponse, reader: jspb.BinaryReader): BuildResponse;
+}
+
+export namespace BuildResponse {
+  export type AsObject = {
+    message?: Message.AsObject,
+  }
+}
+
 export class ListProjectsResponse extends jspb.Message {
   hasProject(): boolean;
   clearProject(): void;
@@ -231,5 +305,12 @@ export namespace CreateProjectRequest {
     name: string,
     repository?: Repository.AsObject,
   }
+}
+
+export enum StatusType {
+  UNKNOWN = 0,
+  SUCCESS = 1,
+  ERROR = 2,
+  WARNING = 3,
 }
 

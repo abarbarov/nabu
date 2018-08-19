@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
@@ -12,17 +13,19 @@ type nabuGrpcService struct {
 	github    *github.Github
 	terraform *terraformApi
 	store     *store.DataStore
+	builder   *builder.Builder
 }
 
 type terraformApi struct {
 }
 
-func NewNabuGrpcService(s *store.DataStore, g *github.Github) *nabuGrpcService {
+func NewNabuGrpcService(s *store.DataStore, g *github.Github, b *builder.Builder) *nabuGrpcService {
 	github := g
+	builder := b
 	terraform := &terraformApi{}
 	store := s
 
-	return &nabuGrpcService{github, terraform, store}
+	return &nabuGrpcService{github, terraform, store, builder}
 }
 
 func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService_ListProjectsServer) error {
@@ -100,7 +103,6 @@ func (s *nabuGrpcService) Commits(owner, name, branch string) (chan *pb.Commit, 
 
 	for _, c := range commits {
 		go func(c *github.Commit) {
-			//commit, _ := s.GetCommit(id)
 			commit := &pb.Commit{
 				Sha:     c.SHA,
 				Message: c.Message,
@@ -112,4 +114,31 @@ func (s *nabuGrpcService) Commits(owner, name, branch string) (chan *pb.Commit, 
 	}
 
 	return output, nil
+}
+
+func (s *nabuGrpcService) Build(req *pb.BuildRequest, resp pb.NabuService_BuildServer) error {
+	repo, err := s.store.Project(req.ProjectId)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("%v", repo)
+
+	resp.Send(&pb.BuildResponse{
+		Message: &pb.Message{
+			Id:      1,
+			Message: "Build started",
+			Status:  pb.StatusType_SUCCESS,
+		},
+	})
+
+	resp.Send(&pb.BuildResponse{
+		Message: &pb.Message{
+			Id:      2,
+			Message: "Build step 1",
+			Status:  pb.StatusType_SUCCESS,
+		},
+	})
+
+	return nil
 }

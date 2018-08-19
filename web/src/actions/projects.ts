@@ -1,9 +1,12 @@
 import { Action } from 'redux';
 import {
+  BuildRequest,
+  BuildResponse,
   Commit,
   EmptyRequest,
   ListCommitsResponse,
   ListProjectsResponse,
+  Message,
   Project,
   ProjectRequest
 } from '../protobuf/nabu_pb';
@@ -14,8 +17,8 @@ import { NabuService } from '../protobuf/nabu_pb_service';
 export const PROJECTS_INIT = 'PROJECTS_INIT';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 export const ADD_COMMIT = 'ADD_COMMIT';
+export const ADD_BUILD_MESSAGE = 'ADD_BUILD_MESSAGE';
 export const ADD_PROJECT = 'ADD_PROJECT';
-export const BUILD_PROJECT = 'BUILD_PROJECT';
 export const SELECT_PROJECT = 'SELECT_PROJECT';
 
 type AddProject = {
@@ -92,12 +95,36 @@ type ClearMessages = {
 };
 export const clearMessages = (): ClearMessages => ({ type: CLEAR_MESSAGES });
 
-type BuildProject = {
-  type: typeof BUILD_PROJECT,
-  payload: object,
+type AddBuildMessages = {
+  type: typeof ADD_BUILD_MESSAGE,
+  payload: Message,
 };
-export const buildProject = (projectId: number, sha: string): BuildProject => {
-  return ({ type: BUILD_PROJECT, payload: { projectId: projectId, sha: sha } });
+export const addBuildMessage = (message: Message) => ({ type: ADD_BUILD_MESSAGE, payload: message });
+
+export const buildProject = (projectId: number, sha: string) => {
+
+  let buildRequest = new BuildRequest();
+  buildRequest.setProjectId(projectId);
+  buildRequest.setSha(sha);
+
+  return grpcRequest<BuildRequest, BuildResponse>({
+    request: buildRequest,
+    onStart: () => {
+      //TODO: consider remove;
+    },
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+    },
+    host: 'http://localhost:9091',
+    methodDescriptor: NabuService.Build,
+    onMessage: message => {
+      const m = message.getMessage();
+      if (m) {
+        return addBuildMessage(m);
+      }
+      return;
+    }
+  });
 };
 
 
@@ -106,7 +133,8 @@ export type ProjectActionTypes =
   | AddProject
   | AddCommit
   | SelectProject
-  | BuildProject
   | ClearMessages
+  | AddBuildMessages
   | GrpcAction<EmptyRequest, ListProjectsResponse>
+  | GrpcAction<BuildRequest, BuildResponse>
   | GrpcAction<ProjectRequest, ListCommitsResponse>;

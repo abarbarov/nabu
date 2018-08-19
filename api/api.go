@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi"
 	"strings"
 
+	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	"github.com/abarbarov/nabu/store"
 	"github.com/go-chi/cors"
@@ -25,6 +26,7 @@ type Server struct {
 	lock       sync.Mutex
 	Store      *store.DataStore
 	Github     *github.Github
+	Builder    *builder.Builder
 }
 
 // Run the lister and request's router, activate server
@@ -75,7 +77,7 @@ func (s *Server) routes() chi.Router {
 		MaxAge:           300,
 	})
 
-	grpcMiddleware := middleware.NewGrpcWebMiddleware(s.Store, s.Github)
+	grpcMiddleware := middleware.NewGrpcWebMiddleware(s.Store, s.Github, s.Builder)
 
 	router.Use(grpcMiddleware.Handler)
 	router.Use(corsMiddleware.Handler)
