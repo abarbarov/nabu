@@ -122,23 +122,31 @@ func (s *nabuGrpcService) Build(req *pb.BuildRequest, resp pb.NabuService_BuildS
 		return err
 	}
 
-	log.Printf("%v", repo)
+	messages, err := s.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha)
+	defer close(messages)
 
-	resp.Send(&pb.BuildResponse{
-		Message: &pb.Message{
-			Id:      1,
-			Message: "Build started",
-			Status:  pb.StatusType_SUCCESS,
-		},
-	})
-
-	resp.Send(&pb.BuildResponse{
-		Message: &pb.Message{
-			Id:      2,
-			Message: "Build step 1",
-			Status:  pb.StatusType_SUCCESS,
-		},
-	})
+	for message := range messages {
+		resp.Send(&pb.BuildResponse{
+			Message: &pb.Message{
+				Id:      message.Id,
+				Message: message.Text,
+				Status:  convertStatus(message.Status),
+			},
+		})
+	}
 
 	return nil
+}
+
+func convertStatus(status int) pb.StatusType {
+	switch status {
+	case 1:
+		return pb.StatusType_SUCCESS
+	case 2:
+		return pb.StatusType_ERROR
+	case 3:
+		return pb.StatusType_WARNING
+	default:
+		return pb.StatusType_UNKNOWN
+	}
 }
