@@ -109,17 +109,16 @@ export const buildProject = (projectId: number, sha: string) => {
 
   return grpcRequest<BuildRequest, BuildResponse>({
     request: buildRequest,
-    debug: true,
-    onStart: () => {
-      //TODO: consider remove;
-    },
+    // onStart: () => {
+    //   //TODO: consider remove;
+    // },
 
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
     host: 'http://localhost:9091',
     methodDescriptor: NabuService.Build,
-    transport: grpc.WebsocketTransportFactory,
+    // transport: grpc.WebsocketTransportFactory,
     onMessage: message => {
       const m = message.getMessage();
       if (m) {

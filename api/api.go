@@ -39,9 +39,9 @@ func (s *Server) Run(port int) error {
 	s.httpServer = &http.Server{
 		Addr:              fmt.Sprintf(":%d", port),
 		Handler:           router,
-		ReadHeaderTimeout: 5 * time.Second,
-		WriteTimeout:      5 * time.Second,
-		IdleTimeout:       30 * time.Second,
+		ReadHeaderTimeout: 5 * time.Minute,
+		WriteTimeout:      5 * time.Minute,
+		IdleTimeout:       10 * time.Minute,
 	}
 	s.lock.Unlock()
 

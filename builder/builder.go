@@ -27,6 +27,6 @@ func (b *Builder) Build(token, owner, name, branch, sha string) (chan *Message, 
 		return messages, err
 	}
 
-	go func(m *Message) { messages <- m }(&Message{Id: 1, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
+	go func(m *Message) { messages <- m }(&Message{Id: 3, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
 	return messages, nil
 }
