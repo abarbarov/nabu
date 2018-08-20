@@ -11,6 +11,7 @@ require (
 	github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135 // indirect
 	github.com/improbable-eng/grpc-web v0.0.0-20180815125702-77c8f41aef54
 	github.com/jessevdk/go-flags v1.4.0
+	github.com/pkg/errors v0.8.0
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/net v0.0.0-20180816102801-aaf60122140d
 	golang.org/x/oauth2 v0.0.0-20180724155351-3d292e4d0cdc

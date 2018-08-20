@@ -8,7 +8,9 @@ import (
 	"github.com/abarbarov/nabu/store"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"net/http"
+	"time"
 )
 
 type GrpcWebMiddleware struct {
@@ -26,10 +28,13 @@ func (m *GrpcWebMiddleware) Handler(next http.Handler) http.Handler {
 }
 
 func NewGrpcWebMiddleware(store *store.DataStore, gh *github.Github, b *builder.Builder) *GrpcWebMiddleware {
+	svrKeepAlive := &keepalive.ServerParameters{Timeout: 60 * time.Second}
 
-	grpcServer := grpc.NewServer()
-	hackernewsService := nabuGrpc.NewNabuGrpcService(store, gh, b)
-	pb.RegisterNabuServiceServer(grpcServer, hackernewsService)
+	sopts := []grpc.ServerOption{grpc.KeepaliveParams(*svrKeepAlive)}
+
+	grpcServer := grpc.NewServer(sopts...)
+	nabuGrpcService := nabuGrpc.NewNabuGrpcService(store, gh, b)
+	pb.RegisterNabuServiceServer(grpcServer, nabuGrpcService)
 	wrappedGrpc := grpcweb.WrapServer(grpcServer)
 
 	return &GrpcWebMiddleware{wrappedGrpc}

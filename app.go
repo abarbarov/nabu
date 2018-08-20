@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/abarbarov/nabu/api"
+	"github.com/abarbarov/nabu/builder"
+	"github.com/abarbarov/nabu/github"
 	"github.com/abarbarov/nabu/store"
 	"github.com/jessevdk/go-flags"
 	"log"
@@ -55,12 +57,18 @@ func main() {
 }
 
 func Create(opts Opts) (*Application, error) {
-	datastore := &store.DataStore{}
+	ds := &store.DataStore{}
+	gh := &github.Github{}
+	b := &builder.Builder{
+		Github: gh,
+	}
 
 	srv := &api.Server{
 		Version: version,
 		WebRoot: opts.WebRoot,
-		Store:   datastore,
+		Store:   ds,
+		Github:  gh,
+		Builder: b,
 	}
 
 	tch := make(chan struct{})

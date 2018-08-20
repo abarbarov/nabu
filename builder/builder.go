@@ -1,5 +1,10 @@
 package builder
 
+import (
+	"fmt"
+	"github.com/abarbarov/nabu/github"
+)
+
 type Message struct {
 	Id     int64
 	Text   string
@@ -7,24 +12,21 @@ type Message struct {
 }
 
 type Builder struct {
+	Github *github.Github
 }
 
 func (b *Builder) Build(token, owner, name, branch, sha string) (chan *Message, error) {
-	output := make(chan *Message)
+	messages := make(chan *Message)
 
-	m := download()
+	go func(m *Message) { messages <- m }(&Message{Id: 1, Status: 1, Text: "build started"})
 
-	go func(m *Message) {
-		output <- m
-	}(m)
+	zip, err := b.Github.Archive(token, owner, name, branch, sha)
 
-	return output, nil
-}
-
-func download() *Message {
-	return &Message{
-		Id:     2,
-		Status: 1,
-		Text:   "Starting download",
+	if err != nil {
+		go func(m *Message) { messages <- m }(&Message{Id: 2, Status: 2, Text: fmt.Sprintf("%v", err)})
+		return messages, err
 	}
+
+	go func(m *Message) { messages <- m }(&Message{Id: 1, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
+	return messages, nil
 }

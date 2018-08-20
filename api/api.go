@@ -15,7 +15,7 @@ import (
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	"github.com/abarbarov/nabu/store"
-	"github.com/go-chi/cors"
+	//"github.com/go-chi/cors"
 )
 
 type Server struct {
@@ -68,19 +68,19 @@ func (s *Server) Shutdown() {
 func (s *Server) routes() chi.Router {
 	router := chi.NewRouter()
 
-	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-XSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-		MaxAge:           300,
-	})
+	//corsMiddleware := cors.New(cors.Options{
+	//	AllowedOrigins:   []string{"*"},
+	//	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	//	AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-XSRF-Token"},
+	//	ExposedHeaders:   []string{"Link"},
+	//	AllowCredentials: true,
+	//	MaxAge:           300,
+	//})
 
 	grpcMiddleware := middleware.NewGrpcWebMiddleware(s.Store, s.Github, s.Builder)
 
 	router.Use(grpcMiddleware.Handler)
-	router.Use(corsMiddleware.Handler)
+	//router.Use(corsMiddleware.Handler)
 
 	router.Route("/api/v1", func(rapi chi.Router) {
 		rapi.Group(func(ropen chi.Router) {

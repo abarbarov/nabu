@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"fmt"
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
@@ -22,22 +23,21 @@ type terraformApi struct {
 func NewNabuGrpcService(s *store.DataStore, g *github.Github, b *builder.Builder) *nabuGrpcService {
 	github := g
 	builder := b
-	terraform := &terraformApi{}
 	store := s
 
-	return &nabuGrpcService{github, terraform, store, builder}
+	return &nabuGrpcService{github, &terraformApi{}, store, builder}
 }
 
-func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, resp pb.NabuService_ListProjectsServer) error {
+func (s *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuService_ListProjectsServer) error {
 	projects, err := s.Projects()
 	defer close(projects)
 	if err != nil {
 		return err
 	}
 	for project := range projects {
-		resp.Send(&pb.ListProjectsResponse{
-			Project: project,
-		})
+		if err := stream.Send(&pb.ListProjectsResponse{Project: project}); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -94,17 +94,55 @@ func (s *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuServic
 	return nil
 }
 
-func (s *nabuGrpcService) Build(req *pb.BuildRequest, resp pb.NabuService_BuildServer) error {
+func (s *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_BuildServer) error {
 	repo, err := s.store.Project(req.ProjectId)
 	if err != nil {
 		return err
 	}
 
-	messages, err := s.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha)
+	//messages := make(chan *builder.Message)
+	//defer close(messages)
+	//
+	//for i := 0; i < 100; i++ {
+	//	//go func(i int) {
+	//
+	//	if err := stream.Send(&pb.BuildResponse{
+	//		Message: &pb.Message{
+	//			Id:      int64(i),
+	//			Message: "message.Text",
+	//			Status:  convertStatus(2),
+	//		},
+	//	}); err != nil {
+	//		return err
+	//	}
+	//	//messages <- &builder.Message{Id: int64(i), Status: 1, Text: "build started"}
+	//	//}(i)
+	//	time.Sleep(1000 * time.Millisecond)
+	//}
+
+	//
+	//
+	//messages := make(chan *builder.Message)
+	//defer close(messages)
+	//
+	messages, err := s.BuildImpl(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha)
 	defer close(messages)
 
+	//go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: "build started"})
+	//
+	//zip, err := s.github.Archive(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha)
+	//
+	if err != nil {
+		return err
+		//go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 2, Status: 2, Text: fmt.Sprintf("%v", err)})
+	}
+	//
+	//go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
+	////return messages, nil
+	//
+
 	for message := range messages {
-		resp.Send(&pb.BuildResponse{
+		stream.Send(&pb.BuildResponse{
 			Message: &pb.Message{
 				Id:      message.Id,
 				Message: message.Text,
@@ -114,6 +152,22 @@ func (s *nabuGrpcService) Build(req *pb.BuildRequest, resp pb.NabuService_BuildS
 	}
 
 	return nil
+}
+
+func (b *nabuGrpcService) BuildImpl(token, owner, name, branch, sha string) (chan *builder.Message, error) {
+	messages := make(chan *builder.Message)
+
+	go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: "build started"})
+
+	zip, err := b.github.Archive(token, owner, name, branch, sha)
+
+	if err != nil {
+		go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 2, Status: 2, Text: fmt.Sprintf("%v", err)})
+		return messages, err
+	}
+
+	go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
+	return messages, nil
 }
 
 func convertStatus(status int) pb.StatusType {
