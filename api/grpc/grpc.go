@@ -7,6 +7,7 @@ import (
 	"github.com/abarbarov/nabu/store"
 	"golang.org/x/net/context"
 	"log"
+	"time"
 )
 
 type nabuGrpcService struct {
@@ -95,75 +96,43 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 		return err
 	}
 
-	//messages := make(chan *builder.Message)
-	//defer close(messages)
-	//
-	//for i := 0; i < 100; i++ {
-	//	//go func(i int) {
-	//
-	//	if err := stream.Send(&pb.BuildResponse{
-	//		Message: &pb.Message{
-	//			Id:      int64(i),
-	//			Message: "message.Text",
-	//			Status:  convertStatus(2),
-	//		},
-	//	}); err != nil {
-	//		return err
-	//	}
-	//	//messages <- &builder.Message{Id: int64(i), Status: 1, Text: "build started"}
-	//	//}(i)
-	//	time.Sleep(1000 * time.Millisecond)
-	//}
-
-	////
-	////
-	////messages := make(chan *builder.Message)
-	////defer close(messages)
-	////
-	messages, err := ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha)
+	messages := make(chan *builder.Message)
+	go func() {
+		ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha, messages)
+	}()
 	defer close(messages)
-	//
-	//go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: "build started"})
-	////
-	////zip, err := ngs.github.Archive(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha)
-	////
-	//if err != nil {
-	//	return err
-	//	//go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 2, Status: 2, Text: fmt.Sprintf("%v", err)})
-	//}
-	////
-	////go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
-	//////return messages, nil
-	////
-	//
-	for message := range messages {
-		stream.Send(&pb.BuildResponse{
-			Message: &pb.Message{
-				Id:      message.Id,
-				Message: message.Text,
-				Status:  convertStatus(message.Status),
-			},
-		})
+
+	for {
+		select {
+		case message, ok := <-messages:
+			log.Printf("%v", message.Text)
+			if !ok {
+				return nil
+			}
+
+			stream.Send(&pb.BuildResponse{
+				Message: &pb.Message{
+					Id:      1,
+					Message: message.Text,
+					Status:  convertStatus(message.Status),
+				},
+			})
+
+			if message.Close {
+				return nil
+			}
+		default:
+			stream.Send(&pb.BuildResponse{
+				Message: &pb.Message{
+					Id:      10,
+					Message: "...",
+					Status:  pb.StatusType_SUCCESS,
+				},
+			})
+			time.Sleep(1000 * time.Millisecond)
+		}
 	}
-
-	return nil
 }
-
-//func (ngs *nabuGrpcService) BuildImpl(token, owner, name, branch, sha string) (chan *builder.Message, error) {
-//	messages := make(chan *builder.Message)
-//
-//	go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: "build started"})
-//
-//	zip, err := ngs.github.Archive(token, owner, name, branch, sha)
-//
-//	if err != nil {
-//		go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 2, Status: 2, Text: fmt.Sprintf("%v", err)})
-//		return messages, err
-//	}
-//
-//	go func(m *builder.Message) { messages <- m }(&builder.Message{Id: 1, Status: 1, Text: fmt.Sprintf("archive downloaded to %v", zip)})
-//	return messages, nil
-//}
 
 func convertStatus(status int) pb.StatusType {
 	switch status {
