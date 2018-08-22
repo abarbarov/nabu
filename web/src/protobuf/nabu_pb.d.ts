@@ -2,6 +2,7 @@
 // file: protobuf/nabu.proto
 
 import * as jspb from "google-protobuf";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class Project extends jspb.Message {
   getId(): number;
@@ -102,8 +103,10 @@ export class Commit extends jspb.Message {
   getSha(): string;
   setSha(value: string): void;
 
-  getTimestamp(): number;
-  setTimestamp(value: number): void;
+  hasTimestamp(): boolean;
+  clearTimestamp(): void;
+  getTimestamp(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setTimestamp(value?: google_protobuf_timestamp_pb.Timestamp): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Commit.AsObject;
@@ -119,13 +122,18 @@ export namespace Commit {
   export type AsObject = {
     message: string,
     sha: string,
-    timestamp: number,
+    timestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 
 export class Message extends jspb.Message {
   getId(): number;
   setId(value: number): void;
+
+  hasTimestamp(): boolean;
+  clearTimestamp(): void;
+  getTimestamp(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setTimestamp(value?: google_protobuf_timestamp_pb.Timestamp): void;
 
   getMessage(): string;
   setMessage(value: string): void;
@@ -146,6 +154,7 @@ export class Message extends jspb.Message {
 export namespace Message {
   export type AsObject = {
     id: number,
+    timestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     message: string,
     status: StatusType,
   }
@@ -308,5 +317,6 @@ export enum StatusType {
   SUCCESS = 1,
   ERROR = 2,
   WARNING = 3,
+  PENDING = 4,
 }
 

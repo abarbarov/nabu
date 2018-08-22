@@ -12,6 +12,7 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 goog.exportSymbol('proto.protobuf.Branch', null, global);
 goog.exportSymbol('proto.protobuf.BuildRequest', null, global);
 goog.exportSymbol('proto.protobuf.BuildResponse', null, global);
@@ -739,9 +740,9 @@ proto.protobuf.Commit.prototype.toObject = function(opt_includeInstance) {
  */
 proto.protobuf.Commit.toObject = function(includeInstance, msg) {
   var f, obj = {
-    message: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    sha: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    timestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    message: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    sha: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    timestamp: (f = msg.getTimestamp()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -778,16 +779,17 @@ proto.protobuf.Commit.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 2:
+    case 1:
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
-    case 3:
+    case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setSha(value);
       break;
-    case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+    case 3:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setTimestamp(value);
       break;
     default:
@@ -822,69 +824,85 @@ proto.protobuf.Commit.serializeBinaryToWriter = function(message, writer) {
   f = message.getMessage();
   if (f.length > 0) {
     writer.writeString(
-      2,
+      1,
       f
     );
   }
   f = message.getSha();
   if (f.length > 0) {
     writer.writeString(
-      3,
+      2,
       f
     );
   }
   f = message.getTimestamp();
-  if (f !== 0) {
-    writer.writeInt64(
-      4,
-      f
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional string message = 2;
+ * optional string message = 1;
  * @return {string}
  */
 proto.protobuf.Commit.prototype.getMessage = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /** @param {string} value */
 proto.protobuf.Commit.prototype.setMessage = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * optional string sha = 3;
+ * optional string sha = 2;
  * @return {string}
  */
 proto.protobuf.Commit.prototype.getSha = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
 proto.protobuf.Commit.prototype.setSha = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional int64 timestamp = 4;
- * @return {number}
+ * optional google.protobuf.Timestamp timestamp = 3;
+ * @return {?proto.google.protobuf.Timestamp}
  */
 proto.protobuf.Commit.prototype.getTimestamp = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 3));
 };
 
 
-/** @param {number} value */
+/** @param {?proto.google.protobuf.Timestamp|undefined} value */
 proto.protobuf.Commit.prototype.setTimestamp = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+  jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+proto.protobuf.Commit.prototype.clearTimestamp = function() {
+  this.setTimestamp(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.protobuf.Commit.prototype.hasTimestamp = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -936,8 +954,9 @@ proto.protobuf.Message.prototype.toObject = function(opt_includeInstance) {
 proto.protobuf.Message.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    message: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    status: jspb.Message.getFieldWithDefault(msg, 3, 0)
+    timestamp: (f = msg.getTimestamp()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+    message: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    status: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -979,10 +998,15 @@ proto.protobuf.Message.deserializeBinaryFromReader = function(msg, reader) {
       msg.setId(value);
       break;
     case 2:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setTimestamp(value);
+      break;
+    case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
-    case 3:
+    case 4:
       var value = /** @type {!proto.protobuf.StatusType} */ (reader.readEnum());
       msg.setStatus(value);
       break;
@@ -1022,17 +1046,25 @@ proto.protobuf.Message.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getTimestamp();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
   f = message.getMessage();
   if (f.length > 0) {
     writer.writeString(
-      2,
+      3,
       f
     );
   }
   f = message.getStatus();
   if (f !== 0.0) {
     writer.writeEnum(
-      3,
+      4,
       f
     );
   }
@@ -1055,32 +1087,62 @@ proto.protobuf.Message.prototype.setId = function(value) {
 
 
 /**
- * optional string message = 2;
+ * optional google.protobuf.Timestamp timestamp = 2;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.protobuf.Message.prototype.getTimestamp = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 2));
+};
+
+
+/** @param {?proto.google.protobuf.Timestamp|undefined} value */
+proto.protobuf.Message.prototype.setTimestamp = function(value) {
+  jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+proto.protobuf.Message.prototype.clearTimestamp = function() {
+  this.setTimestamp(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.protobuf.Message.prototype.hasTimestamp = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional string message = 3;
  * @return {string}
  */
 proto.protobuf.Message.prototype.getMessage = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /** @param {string} value */
 proto.protobuf.Message.prototype.setMessage = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional StatusType status = 3;
+ * optional StatusType status = 4;
  * @return {!proto.protobuf.StatusType}
  */
 proto.protobuf.Message.prototype.getStatus = function() {
-  return /** @type {!proto.protobuf.StatusType} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {!proto.protobuf.StatusType} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {!proto.protobuf.StatusType} value */
 proto.protobuf.Message.prototype.setStatus = function(value) {
-  jspb.Message.setProto3EnumField(this, 3, value);
+  jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 
@@ -2181,7 +2243,8 @@ proto.protobuf.StatusType = {
   UNKNOWN: 0,
   SUCCESS: 1,
   ERROR: 2,
-  WARNING: 3
+  WARNING: 3,
+  PENDING: 4
 };
 
 goog.object.extend(exports, proto.protobuf);

@@ -5,6 +5,7 @@ import (
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"golang.org/x/net/context"
 	"log"
 	"time"
@@ -97,22 +98,23 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 	}
 
 	messages := make(chan *builder.Message)
-	go func() {
-		ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha, messages)
-	}()
+	go ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha, messages)
 	defer close(messages)
 
 	for {
 		select {
 		case message, ok := <-messages:
-			log.Printf("%v", message.Text)
+			log.Printf("[INFO] %v", message.Text)
 			if !ok {
 				return nil
 			}
 
 			stream.Send(&pb.BuildResponse{
 				Message: &pb.Message{
-					Id:      1,
+					Id: message.Id,
+					Timestamp: &timestamp.Timestamp{
+						Seconds: message.Timestamp.Unix(),
+					},
 					Message: message.Text,
 					Status:  convertStatus(message.Status),
 				},
@@ -124,9 +126,12 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 		default:
 			stream.Send(&pb.BuildResponse{
 				Message: &pb.Message{
-					Id:      10,
-					Message: "...",
-					Status:  pb.StatusType_SUCCESS,
+					Id: 1,
+					Timestamp: &timestamp.Timestamp{
+						Seconds: time.Now().Unix(),
+					},
+					Message: ".",
+					Status:  pb.StatusType_PENDING,
 				},
 			})
 			time.Sleep(1000 * time.Millisecond)

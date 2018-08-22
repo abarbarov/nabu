@@ -109,10 +109,6 @@ export const buildProject = (projectId: number, sha: string) => {
 
   return grpcRequest<BuildRequest, BuildResponse>({
     request: buildRequest,
-    // onStart: () => {
-    //   //TODO: consider remove;
-    // },
-
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },

@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package protobuf;
+import "google/protobuf/timestamp.proto";
 
 message Project {
     int64 id = 1;
@@ -22,9 +23,9 @@ message Branch {
 }
 
 message Commit {
-    string message = 2;
-    string sha = 3;
-    int64 timestamp = 4;
+    string message = 1;
+    string sha = 2;
+    google.protobuf.Timestamp timestamp = 3;
 }
 
 enum StatusType {
@@ -32,12 +33,14 @@ enum StatusType {
     SUCCESS = 1;
     ERROR = 2;
     WARNING = 3;
+    PENDING = 4;
 }
 
 message Message {
     int64 id = 1;
-    string message = 2;
-    StatusType status = 3;
+    google.protobuf.Timestamp timestamp = 2;
+    string message = 3;
+    StatusType status = 4;
 }
 
 service NabuService {

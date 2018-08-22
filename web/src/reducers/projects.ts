@@ -7,7 +7,7 @@ import {
   PROJECTS_INIT,
   SELECT_PROJECT
 } from '../actions/projects';
-import { Commit, Message, Project } from '../protobuf/nabu_pb';
+import { Commit, Message, Project, StatusType } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -16,7 +16,7 @@ export type ProjectState = {
   readonly loading: boolean,
   readonly selectedProject: Project.AsObject | null,
   readonly selectedCommit: Commit.AsObject | null,
-  readonly messages: { [messageId: number]: Message.AsObject },
+  readonly messages: Message.AsObject[],
 };
 
 const initialState = {
@@ -31,6 +31,7 @@ const initialState = {
 
 export default function (state: ProjectState = initialState, action: RootAction): ProjectState {
   console.log(action.type);
+
   switch (action.type) {
 
     case PROJECTS_INIT:
@@ -66,11 +67,20 @@ export default function (state: ProjectState = initialState, action: RootAction)
 
     case ADD_BUILD_MESSAGE:
       const m: Message.AsObject = action.payload.toObject();
+
       if (m && m.message) {
+        console.log(m.id);
+
+        if (m.status == StatusType.PENDING) {
+          if (state.messages[m.id]) {
+            m.message += state.messages[m.id].message;
+          }
+        }
+
         return {
           ...state,
           loading: false,
-          messages: { ...state.messages, [m.id]: m },
+          messages: Object.assign([...state.messages], { [m.id]: m })
         };
       }
       return state;
