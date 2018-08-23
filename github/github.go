@@ -6,7 +6,6 @@ import (
 	"github.com/abarbarov/nabu/tools"
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
-	"os"
 	"path/filepath"
 	"time"
 )
@@ -77,7 +76,7 @@ func (g *Github) Commits(token, owner, name, branch string) (chan *Commit, error
 	return output, nil
 }
 
-func (g *Github) Archive(token, owner, name, branch, sha string) (string, error) {
+func (g *Github) Archive(token, owner, name, branch, sha, downloadsDir string) (string, error) {
 
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
@@ -94,16 +93,7 @@ func (g *Github) Archive(token, owner, name, branch, sha string) (string, error)
 
 	repoUrl := fmt.Sprintf("https://%s%s?login=%s&%s", repo.Host, repo.Path, owner, repo.RawQuery)
 
-	ex, err := os.Executable()
-	if err != nil {
-		return "", err
-	}
-	exPath := filepath.Dir(ex)
-	zipFolder := filepath.Join(exPath, "nabu-builds")
-
-	tools.MakeDirs(zipFolder)
-
-	localZipPath := filepath.Join(zipFolder, fmt.Sprintf("%s.zip", name))
+	localZipPath := filepath.Join(downloadsDir, fmt.Sprintf("%s.zip", name))
 	if err = tools.DownloadFile(localZipPath, repoUrl); err != nil {
 		return "", err
 	}

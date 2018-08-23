@@ -8,6 +8,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"golang.org/x/net/context"
 	"log"
+	"sync/atomic"
 	"time"
 )
 
@@ -101,6 +102,8 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 	go ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha, messages)
 	defer close(messages)
 
+	var ticker int64 = 0
+
 	for {
 		select {
 		case message, ok := <-messages:
@@ -108,6 +111,8 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 			if !ok {
 				return nil
 			}
+
+			atomic.SwapInt64(&ticker, message.Id+1)
 
 			stream.Send(&pb.BuildResponse{
 				Message: &pb.Message{
@@ -124,16 +129,20 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 				return nil
 			}
 		default:
-			stream.Send(&pb.BuildResponse{
-				Message: &pb.Message{
-					Id: 1,
-					Timestamp: &timestamp.Timestamp{
-						Seconds: time.Now().Unix(),
+			id := atomic.LoadInt64(&ticker)
+			if id > 0 {
+				stream.Send(&pb.BuildResponse{
+					Message: &pb.Message{
+						Id: id,
+						Timestamp: &timestamp.Timestamp{
+							Seconds: time.Now().Unix(),
+						},
+						Message: ".",
+						Status:  pb.StatusType_PENDING,
 					},
-					Message: ".",
-					Status:  pb.StatusType_PENDING,
-				},
-			})
+				})
+			}
+
 			time.Sleep(1000 * time.Millisecond)
 		}
 	}

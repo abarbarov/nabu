@@ -7,6 +7,7 @@ import (
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	"github.com/abarbarov/nabu/store"
+	"github.com/abarbarov/nabu/tools"
 	"github.com/jessevdk/go-flags"
 	"log"
 	"os"
@@ -17,9 +18,9 @@ import (
 var version = "unknown"
 
 type Opts struct {
-	Port    int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
-	WebRoot string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web" description:"web root directory"`
-	NabuURL string `long:"url" env:"NABU_URL" default:"dev.nabu.app" required:"true" description:"url to nabu"`
+	Port        int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
+	WebRoot     string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web" description:"web root directory"`
+	BuildOutput string `long:"build-output" env:"NABU_BUILD_OUTPUT" default:"/builds/output" description:"build output root directory"`
 }
 
 type Application struct {
@@ -38,6 +39,12 @@ func main() {
 	}
 
 	log.Print("[INFO] started nabu service")
+
+	err := tools.MakeDirs(opts.BuildOutput)
+
+	if err != nil {
+		log.Fatalf("[ERROR] failed to create dirs, %+v", err)
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() { // catch signal and invoke graceful termination
@@ -60,7 +67,8 @@ func Create(opts Opts) (*Application, error) {
 	ds := &store.DataStore{}
 	gh := &github.Github{}
 	b := &builder.Builder{
-		Github: gh,
+		Github:      gh,
+		BuildOutput: opts.BuildOutput,
 	}
 
 	srv := &api.Server{
