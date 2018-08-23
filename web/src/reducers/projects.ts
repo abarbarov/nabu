@@ -67,9 +67,8 @@ export default function (state: ProjectState = initialState, action: RootAction)
 
     case ADD_BUILD_MESSAGE:
       const m: Message.AsObject = action.payload.toObject();
-
       if (m && m.message) {
-        console.log(m.id);
+        console.log(m);
 
         if (m.status == StatusType.PENDING) {
           if (state.messages[m.id]) {
