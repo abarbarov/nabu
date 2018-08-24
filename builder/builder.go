@@ -2,10 +2,13 @@ package builder
 
 import (
 	"archive/zip"
+	"bytes"
 	"fmt"
 	"github.com/abarbarov/nabu/github"
+	"github.com/pkg/errors"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 )
@@ -19,8 +22,9 @@ type Message struct {
 }
 
 type Builder struct {
-	Github      *github.Github
-	BuildOutput string
+	Github       *github.Github
+	BuildOutput  string
+	GoExecutable string
 }
 
 func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *Message) {
@@ -43,10 +47,19 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 		return
 	}
 
-	outClose(messages, fmt.Sprintf("files unzipped"), 4)
+	outOk(messages, fmt.Sprintf("files unzipped, building application..."), 4)
 
-	//fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
-	//buildPath := filepath.Join(b.BuildOutput, fullName)
+	fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
+	buildPath := filepath.Join(b.BuildOutput, fullName)
+	err = b.vgoBuild(buildPath)
+
+	if err != nil {
+		outErr(messages, fmt.Sprintf("%v", err), 6)
+		return
+	}
+
+	outClose(messages, fmt.Sprintf("app built"), 4)
+
 }
 
 func outOk(messages chan *Message, text string, id int64) {
@@ -134,6 +147,34 @@ func unzipFiles(src, target string) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (b *Builder) vgoBuild(dir string) error {
+
+	args := []string{"build", "./..."}
+	var cmd *exec.Cmd
+
+	cmd = exec.Command(b.GoExecutable, args...)
+
+	env := os.Environ()
+	//goPath, err := filepath.Abs(filepath.Join("..", "data"))
+	//if err != nil {
+	//	return err
+	//}
+	//env = append(env, fmt.Sprintf("GOPATH=%s", goPath))
+	cmd.Env = env
+	cmd.Dir = dir
+
+	stdout := &bytes.Buffer{}
+	stderr := &bytes.Buffer{}
+	cmd.Stdout = stdout
+	cmd.Stderr = stderr
+
+	if err := cmd.Run(); err != nil {
+		return errors.Wrapf(err, "stdout: %s\nstderr:%s\nerror: %v", stdout.String(), stderr.String())
 	}
 
 	return nil
