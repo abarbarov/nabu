@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func DownloadFile(filePath string, url string) (err error) {
@@ -57,4 +58,22 @@ func MakeDirs(dirs ...string) error {
 		}
 	}
 	return nil
+}
+
+func Substr(s string, pos, length int) string {
+	runes := []rune(s)
+	l := pos + length
+	if l > len(runes) {
+		l = len(runes)
+	}
+	return string(runes[pos:l])
+}
+
+func RemoveComments(s string) string {
+	i := strings.Index(s, "#")
+	if i > -1 {
+		return Substr(s, 0, i)
+	}
+
+	return s
 }

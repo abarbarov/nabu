@@ -5,6 +5,7 @@ import (
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
+	"github.com/abarbarov/nabu/tools"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"log"
 	"sync/atomic"
@@ -80,8 +81,8 @@ func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuServ
 	for c := range commits {
 		resp.Send(&pb.ListCommitsResponse{
 			Commit: &pb.Commit{
-				Sha:     c.SHA,
-				Message: c.Message,
+				Sha:     tools.Substr(c.SHA, 0, 8),
+				Message: tools.RemoveComments(c.Message),
 				Timestamp: &timestamp.Timestamp{
 					Seconds: c.Date.Unix(),
 				},
