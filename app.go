@@ -21,12 +21,8 @@ type Opts struct {
 	Port         int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
 	WebRoot      string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web" description:"web root directory"`
 	BuildOutput  string `long:"build-output" env:"NABU_BUILD_OUTPUT" default:"/builds/output" description:"build output root directory"`
-	GoExecutable string `long:"go-executable" env:"NABU_GO_EXEC_PATH" default:"vgo" description:"go executable file"`
+	GoExecutable string `long:"go-executable" env:"NABU_GO_EXEC_PATH" default:"go" description:"go executable file"`
 }
-
-//const GO_EXEC_OSX = "/usr/local/bin/go"
-//const GO_EXEC_WIN = "C:\\Go\\bin\\go"
-//const GO_EXEC_UNIX = "/usr/lib/go-1.10/bin/go"
 
 type Application struct {
 	Opts

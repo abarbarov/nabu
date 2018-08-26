@@ -82,6 +82,9 @@ func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuServ
 			Commit: &pb.Commit{
 				Sha:     c.SHA,
 				Message: c.Message,
+				Timestamp: &timestamp.Timestamp{
+					Seconds: c.Date.Unix(),
+				},
 			},
 		})
 	}

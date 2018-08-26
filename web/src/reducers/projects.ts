@@ -53,7 +53,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
       };
 
     case SELECT_BRANCH:
-      return { ...state, loading: true, branches: {}, selectedBranch: state.branches[action.payload] };
+      return { ...state, loading: true, selectedBranch: state.branches[action.payload.branch] };
 
     case CLEAR_MESSAGES:
       return { ...state, loading: true, messages: [] };

@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"time"
 )
 
@@ -154,19 +155,19 @@ func unzipFiles(src, target string) error {
 
 func (b *Builder) vgoBuild(dir string) error {
 
-	args := []string{"build", "./..."}
+	args := []string{"build", "-o", "application"}
 	var cmd *exec.Cmd
 
 	cmd = exec.Command(b.GoExecutable, args...)
 
 	env := os.Environ()
-	//goPath, err := filepath.Abs(filepath.Join("..", "data"))
-	//if err != nil {
-	//	return err
-	//}
-	//env = append(env, fmt.Sprintf("GOPATH=%s", goPath))
+	if runtime.GOOS == "windows" {
+		env = append(env, fmt.Sprintf("GOOS=%s", "linux"))
+		env = append(env, fmt.Sprintf("GOARCH=%s", "amd64"))
+	}
+
 	cmd.Env = env
-	cmd.Dir = dir
+	cmd.Dir, _ = filepath.Abs(dir)
 
 	stdout := &bytes.Buffer{}
 	stderr := &bytes.Buffer{}
@@ -174,7 +175,7 @@ func (b *Builder) vgoBuild(dir string) error {
 	cmd.Stderr = stderr
 
 	if err := cmd.Run(); err != nil {
-		return errors.Wrapf(err, "stdout: %s\nstderr:%s\nerror: %v", stdout.String(), stderr.String())
+		return errors.Wrapf(err, "stdout: %s\nstderr:%s\nerror: %v", stdout.String(), stderr.String(), err)
 	}
 
 	return nil

@@ -11,6 +11,7 @@ type BranchesListProps = {
 const BranchesList: React.SFC<BranchesListProps> = (props) => {
   return (
     <div>
+      <h5>Branches available</h5>
       {props.branches.map((branch, i) =>
         <div
           style={props.selectedBranch && branch.name === props.selectedBranch.name
@@ -19,13 +20,13 @@ const BranchesList: React.SFC<BranchesListProps> = (props) => {
           }
           key={i}
           onClick={() => {
-            if (branch.id) {
+            if (branch.name) {
               props.onBranchSelect((props.selectedProject || { id: 0 }).id, branch.name);
             }
           }}
         >
           <div style={{ display: 'flex' }}>
-            <div>{branch.name} |</div>
+            <div>{branch.name}</div>
           </div>
         </div>
       )}

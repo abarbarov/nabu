@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
-import ProjectView from './View/ProjectView';
+import CommitsView from './View/CommitsView';
 import BranchesList from './List/BranchesList';
 import { RootAction } from '../../actions';
 import {
@@ -74,7 +74,7 @@ class Projects extends React.Component<ProjectsProps, {}> {
 
           <div>
             {this.props.selectedBranch && this.props.selectedProject
-              ? <ProjectView
+              ? <CommitsView
                 selectedProject={this.props.selectedProject}
                 commits={this.props.commits}
                 selectedCommit={this.props.selectedCommit}
@@ -110,13 +110,11 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(listProjects());
     },
     selectProject: (projectId: number) => {
-      debugger;
       dispatch(selectProject(projectId));
       dispatch(listBranches(projectId));
     },
     selectBranch: (projectId: number, name: string) => {
-      debugger;
-      dispatch(selectBranch(name));
+      dispatch(selectBranch(projectId, name));
       dispatch(listCommits(projectId, name));
     },
     build: (projectId: number, sha: string) => {

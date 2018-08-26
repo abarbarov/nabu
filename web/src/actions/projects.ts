@@ -67,11 +67,13 @@ export const selectProject = (projectId: number): SelectProject => {
 
 type SelectBranch = {
   type: typeof SELECT_BRANCH,
-  payload: string
-
+  payload: {
+    projectId: number,
+    branch: string,
+  }
 };
-export const selectBranch = (branch: string): SelectBranch => {
-  return ({ type: SELECT_BRANCH, payload: branch });
+export const selectBranch = (projectId: number, branch: string): SelectBranch => {
+  return ({ type: SELECT_BRANCH, payload: { projectId: projectId, branch: branch } });
 };
 
 type AddBranch = {
