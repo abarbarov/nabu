@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
+import BranchesList from './List/BranchesList';
 import { RootAction } from '../../actions';
 import {
   buildProject,
@@ -11,7 +12,8 @@ import {
   listBranches,
   listCommits,
   listProjects,
-  selectProject
+  selectProject,
+  selectBranch
 } from '../../actions/projects';
 import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
@@ -24,9 +26,11 @@ type ProjectsProps = {
   loading: boolean,
   error: Error | null,
   selectedProject: Project.AsObject | null,
+  selectedBranch: Branch.AsObject | null,
   selectedCommit: Commit.AsObject | null,
   fetchProjects: () => void,
   selectProject: (id: number) => void,
+  selectBranch: (projectId: number, name: string) => void,
   build: (projectId: number, sha: string) => void,
 };
 
@@ -47,14 +51,29 @@ class Projects extends React.Component<ProjectsProps, {}> {
         <div>
           <button>Add new</button>
         </div>
+        <hr/>
         <div>
           <ProjectList
             selectedProject={this.props.selectedProject}
             projects={this.props.projects}
             onProjectSelect={this.props.selectProject}
           />
+
           <div>
             {this.props.selectedProject
+              ? <BranchesList
+                branches={this.props.branches}
+                selectedProject={this.props.selectedProject}
+                selectedBranch={this.props.selectedBranch}
+                onBranchSelect={this.props.selectBranch}
+              />
+              : null
+            }
+          </div>
+          <hr/>
+
+          <div>
+            {this.props.selectedBranch && this.props.selectedProject
               ? <ProjectView
                 selectedProject={this.props.selectedProject}
                 commits={this.props.commits}
@@ -81,6 +100,7 @@ function mapStateToProps(state: RootState) {
     error: state.projects.error,
     selectedProject: state.projects.selectedProject,
     selectedCommit: state.projects.selectedCommit,
+    selectedBranch: state.projects.selectedBranch,
   };
 }
 
@@ -90,11 +110,14 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(listProjects());
     },
     selectProject: (projectId: number) => {
+      debugger;
       dispatch(selectProject(projectId));
       dispatch(listBranches(projectId));
     },
-    selectBranch: (projectId: number) => {
-      dispatch(listCommits(projectId));
+    selectBranch: (projectId: number, name: string) => {
+      debugger;
+      dispatch(selectBranch(name));
+      dispatch(listCommits(projectId, name));
     },
     build: (projectId: number, sha: string) => {
       dispatch(clearMessages());

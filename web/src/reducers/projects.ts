@@ -1,13 +1,15 @@
 import { RootAction } from '../actions';
 import {
+  ADD_BRANCH,
   ADD_BUILD_MESSAGE,
   ADD_COMMIT,
   ADD_PROJECT,
   CLEAR_MESSAGES,
   PROJECTS_INIT,
+  SELECT_BRANCH,
   SELECT_PROJECT
 } from '../actions/projects';
-import { Commit, Message, Project, Branch, StatusType } from '../protobuf/nabu_pb';
+import { Branch, Commit, Message, Project, StatusType } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -16,6 +18,7 @@ export type ProjectState = {
   readonly error: Error | null,
   readonly loading: boolean,
   readonly selectedProject: Project.AsObject | null,
+  readonly selectedBranch: Branch.AsObject | null,
   readonly selectedCommit: Commit.AsObject | null,
   readonly messages: Message.AsObject[],
 };
@@ -29,6 +32,7 @@ const initialState = {
   loading: false,
   selectedProject: null,
   selectedCommit: null,
+  selectedBranch: null,
 };
 
 export default function (state: ProjectState = initialState, action: RootAction): ProjectState {
@@ -40,7 +44,16 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return { ...state, loading: true };
 
     case SELECT_PROJECT:
-      return { ...state, loading: true, commits: {}, selectedProject: state.projects[action.payload] };
+      return {
+        ...state,
+        loading: true,
+        commits: {},
+        selectedProject: state.projects[action.payload],
+        selectedBranch: null
+      };
+
+    case SELECT_BRANCH:
+      return { ...state, loading: true, branches: {}, selectedBranch: state.branches[action.payload] };
 
     case CLEAR_MESSAGES:
       return { ...state, loading: true, messages: [] };
@@ -52,6 +65,17 @@ export default function (state: ProjectState = initialState, action: RootAction)
           ...state,
           loading: false,
           projects: { ...state.projects, [project.id]: project },
+        };
+      }
+      return state;
+
+    case ADD_BRANCH:
+      const branch: Branch.AsObject = action.payload.toObject();
+      if (branch && branch.name) {
+        return {
+          ...state,
+          loading: false,
+          branches: { ...state.branches, [branch.name]: branch },
         };
       }
       return state;

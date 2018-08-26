@@ -1,0 +1,36 @@
+import * as React from 'react';
+import { Branch, Project } from '../../../protobuf/nabu_pb';
+
+type BranchesListProps = {
+  branches: Branch.AsObject[],
+  selectedProject: Project.AsObject | null,
+  selectedBranch: Branch.AsObject | null,
+  onBranchSelect: (projectId: number, name: string) => void
+};
+
+const BranchesList: React.SFC<BranchesListProps> = (props) => {
+  return (
+    <div>
+      {props.branches.map((branch, i) =>
+        <div
+          style={props.selectedBranch && branch.name === props.selectedBranch.name
+            ? { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' }
+            : {}
+          }
+          key={i}
+          onClick={() => {
+            if (branch.id) {
+              props.onBranchSelect((props.selectedProject || { id: 0 }).id, branch.name);
+            }
+          }}
+        >
+          <div style={{ display: 'flex' }}>
+            <div>{branch.name} |</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default BranchesList;

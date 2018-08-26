@@ -11,7 +11,8 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
   return (
     <div>
       {props.projects.map((project, i) =>
-        <div style={props.selectedProject && project.id === props.selectedProject.id
+        <div
+          style={props.selectedProject && project.id === props.selectedProject.id
             ? {'backgroundColor': 'rgba(0, 0, 0, 0.08)'}
             : {}
           }
@@ -20,8 +21,9 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
             if (project.id) {
               props.onProjectSelect(project.id);
             }
-          }}>
-          <div style={{display: "flex"}}>
+          }}
+        >
+          <div style={{display: 'flex'}}>
             <div>{project.id} | </div>
             <div>{project.title} | </div>
             <div>{project.repository}</div>

@@ -6,7 +6,6 @@ import (
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"golang.org/x/net/context"
 	"log"
 	"sync/atomic"
 	"time"
@@ -41,39 +40,37 @@ func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuSer
 	return nil
 }
 
-func (ngs *nabuGrpcService) CreateProject(ctx context.Context, req *pb.CreateProjectRequest) (*pb.ListProjectsResponse, error) {
-	return &pb.ListProjectsResponse{}, nil
-}
-
-func (ngs *nabuGrpcService) Projects() (chan *pb.Project, error) {
-	output := make(chan *pb.Project)
-
-	projects, err := ngs.store.Projects()
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	for _, p := range projects {
-		go func(p *store.Project) {
-			project := &pb.Project{
-				Id:         p.Id,
-				Title:      p.Title,
-				Repository: p.Repository.Name,
-			}
-
-			output <- project
-		}(p)
-	}
-
-	return output, nil
-}
-
-func (ngs *nabuGrpcService) ListCommits(req *pb.ProjectRequest, resp pb.NabuService_ListCommitsServer) error {
-	repo, err := ngs.store.Project(req.Id)
+func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuService_ListBranchesServer) error {
+	repo, err := ngs.store.Project(req.RepoId)
 	if err != nil {
 		return err
 	}
 
-	commits, err := ngs.github.Commits("d14813a8df45fa3d136e3fd6690a49b780268978", repo.Repository.Owner, repo.Repository.Name, "master")
+	branches, err := ngs.github.Branches("d14813a8df45fa3d136e3fd6690a49b780268978", repo.Repository.Owner, repo.Repository.Name)
+	defer close(branches)
+
+	if err != nil {
+		return err
+	}
+
+	for c := range branches {
+		stream.Send(&pb.ListBranchesResponse{
+			Branch: &pb.Branch{
+				Name: c.Name,
+			},
+		})
+	}
+
+	return nil
+}
+
+func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuService_ListCommitsServer) error {
+	repo, err := ngs.store.Project(req.RepoId)
+	if err != nil {
+		return err
+	}
+
+	commits, err := ngs.github.Commits("d14813a8df45fa3d136e3fd6690a49b780268978", repo.Repository.Owner, repo.Repository.Name, req.BranchName)
 	defer close(commits)
 
 	if err != nil {
@@ -146,6 +143,28 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 			time.Sleep(1000 * time.Millisecond)
 		}
 	}
+}
+
+func (ngs *nabuGrpcService) Projects() (chan *pb.Project, error) {
+	output := make(chan *pb.Project)
+
+	projects, err := ngs.store.Projects()
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, p := range projects {
+		go func(p *store.Project) {
+			project := &pb.Project{
+				Id:         p.Id,
+				Title:      p.Title,
+				Repository: p.Repository.Name,
+			}
+
+			output <- project
+		}(p)
+	}
+
+	return output, nil
 }
 
 func convertStatus(status int) pb.StatusType {

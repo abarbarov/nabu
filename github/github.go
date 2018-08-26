@@ -10,21 +10,23 @@ import (
 	"time"
 )
 
-type Branch struct {
-	Name string
-}
-
 type Commit struct {
 	Message string
 	SHA     string
 	Date    time.Time
 }
 
+type Branch struct {
+	Name string
+}
+
 type Github struct {
 }
 
-func (g *Github) Branches(token, owner, name string) (data []*Branch, err error) {
+func (g *Github) Branches(token, owner, name string) (chan *Branch, error) {
+	output := make(chan *Branch)
 
+	// TODO: use context with cancel
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	oauth := oauth2.NewClient(ctx, ts)
@@ -33,18 +35,18 @@ func (g *Github) Branches(token, owner, name string) (data []*Branch, err error)
 	branches, _, err := client.Repositories.ListBranches(context.Background(), owner, name, nil)
 
 	if err != nil {
-		return nil, err
+		return output, err
 	}
 
-	for _, element := range branches {
-		elem := &Branch{
-			*element.Name,
-		}
-
-		data = append(data, elem)
+	for _, branch := range branches {
+		go func(b *github.Branch) {
+			output <- &Branch{
+				Name: *b.Name,
+			}
+		}(branch)
 	}
 
-	return data, nil
+	return output, nil
 }
 
 func (g *Github) Commits(token, owner, name, branch string) (chan *Commit, error) {
@@ -63,13 +65,12 @@ func (g *Github) Commits(token, owner, name, branch string) (chan *Commit, error
 	}
 
 	for _, commit := range commits {
-		go func(commit *github.RepositoryCommit) {
-			c := &Commit{
-				*commit.Commit.Message,
-				*commit.SHA,
-				*commit.Commit.Author.Date,
+		go func(c *github.RepositoryCommit) {
+			output <- &Commit{
+				Message: *c.Commit.Message,
+				SHA:     *c.SHA,
+				Date:    *c.Commit.Author.Date,
 			}
-			output <- c
 		}(commit)
 	}
 

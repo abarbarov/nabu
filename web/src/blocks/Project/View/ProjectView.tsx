@@ -12,7 +12,7 @@ const ProjectView: React.SFC<ProjectViewProps> = (props) => {
   return (
     <div style={{ border: '1px solid red' }}>
 
-      <h5>Commits available</h5>
+      <h5>Branches available</h5>
 
       {props.commits.map((commit, i) =>
         <div
