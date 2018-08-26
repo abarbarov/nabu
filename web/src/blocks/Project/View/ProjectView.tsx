@@ -11,12 +11,15 @@ type ProjectViewProps = {
 const ProjectView: React.SFC<ProjectViewProps> = (props) => {
   return (
     <div style={{ border: '1px solid red' }}>
+
       <h5>Commits available</h5>
 
       {props.commits.map((commit, i) =>
         <div
-          style={props.selectedCommit && commit.sha === props.selectedCommit.sha ? { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' } : {}}
-          key={i}>
+          style={props.selectedCommit && commit.sha === props.selectedCommit.sha ?
+            { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' } : {}}
+          key={i}
+        >
           <div style={{ display: 'flex' }}>
             <div>[{commit.timestamp || 'timestamp'}]|</div>
             <div>{commit.sha} |</div>

@@ -5,13 +5,21 @@ import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
 import ProjectView from './View/ProjectView';
 import { RootAction } from '../../actions';
-import { clearMessages, listCommits, listProjects, selectProject, buildProject } from '../../actions/projects';
-import { Commit, Message, Project } from '../../protobuf/nabu_pb';
+import {
+  buildProject,
+  clearMessages,
+  listBranches,
+  listCommits,
+  listProjects,
+  selectProject
+} from '../../actions/projects';
+import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
 
 type ProjectsProps = {
   projects: Project.AsObject[],
   commits: Commit.AsObject[],
+  branches: Branch.AsObject[],
   messages: Message.AsObject[],
   loading: boolean,
   error: Error | null,
@@ -67,6 +75,7 @@ function mapStateToProps(state: RootState) {
   return {
     projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
     commits: Object.keys(state.projects.commits).map(key => state.projects.commits[key]),
+    branches: Object.keys(state.projects.branches).map(key => state.projects.branches[key]),
     messages: Object.keys(state.projects.messages).map(key => state.projects.messages[parseInt(key, 10)]),
     loading: state.projects.loading,
     error: state.projects.error,
@@ -82,6 +91,9 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
     },
     selectProject: (projectId: number) => {
       dispatch(selectProject(projectId));
+      dispatch(listBranches(projectId));
+    },
+    selectBranch: (projectId: number) => {
       dispatch(listCommits(projectId));
     },
     build: (projectId: number, sha: string) => {

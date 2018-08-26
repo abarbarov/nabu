@@ -7,11 +7,12 @@ import {
   PROJECTS_INIT,
   SELECT_PROJECT
 } from '../actions/projects';
-import { Commit, Message, Project, StatusType } from '../protobuf/nabu_pb';
+import { Commit, Message, Project, Branch, StatusType } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
   readonly commits: { [commitId: string]: Commit.AsObject },
+  readonly branches: { [brancName: string]: Branch.AsObject }
   readonly error: Error | null,
   readonly loading: boolean,
   readonly selectedProject: Project.AsObject | null,
@@ -22,6 +23,7 @@ export type ProjectState = {
 const initialState = {
   projects: {},
   commits: {},
+  branches: {},
   messages: [],
   error: null,
   loading: false,
@@ -70,7 +72,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
       if (m && m.message) {
         console.log(m);
 
-        if (m.status == StatusType.PENDING) {
+        if (m.status === StatusType.PENDING) {
           if (state.messages[m.id]) {
             m.message += state.messages[m.id].message;
           }

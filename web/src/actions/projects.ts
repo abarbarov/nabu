@@ -90,6 +90,30 @@ export const listCommits = (projectId: number) => {
   });
 };
 
+export const listBranches = (projectId: number) => {
+
+  let projectRequest = new ProjectRequest();
+  projectRequest.setId(projectId);
+
+  return grpcRequest<ProjectRequest, ListCommitsResponse>({
+    request: projectRequest,
+    onStart: () => selectProject(projectId),
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+    },
+    host: 'http://localhost:9091',
+    methodDescriptor: NabuService.ListCommits,
+    onMessage: message => {
+      const commit = message.getCommit();
+      if (commit) {
+        return addCommit(commit);
+      }
+      return;
+    }
+  });
+};
+
+
 type ClearMessages = {
   type: typeof CLEAR_MESSAGES,
 };

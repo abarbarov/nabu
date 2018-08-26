@@ -228,6 +228,28 @@ export namespace ListProjectsResponse {
   }
 }
 
+export class ListBranchesResponse extends jspb.Message {
+  hasBranch(): boolean;
+  clearBranch(): void;
+  getBranch(): Branch | undefined;
+  setBranch(value?: Branch): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ListBranchesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: ListBranchesResponse): ListBranchesResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ListBranchesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ListBranchesResponse;
+  static deserializeBinaryFromReader(message: ListBranchesResponse, reader: jspb.BinaryReader): ListBranchesResponse;
+}
+
+export namespace ListBranchesResponse {
+  export type AsObject = {
+    branch?: Branch.AsObject,
+  }
+}
+
 export class ListCommitsResponse extends jspb.Message {
   hasCommit(): boolean;
   clearCommit(): void;
@@ -266,49 +288,47 @@ export namespace EmptyRequest {
   }
 }
 
-export class ProjectRequest extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
+export class BranchRequest extends jspb.Message {
+  getRepoId(): number;
+  setRepoId(value: number): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ProjectRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: ProjectRequest): ProjectRequest.AsObject;
+  toObject(includeInstance?: boolean): BranchRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: BranchRequest): BranchRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: ProjectRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ProjectRequest;
-  static deserializeBinaryFromReader(message: ProjectRequest, reader: jspb.BinaryReader): ProjectRequest;
+  static serializeBinaryToWriter(message: BranchRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): BranchRequest;
+  static deserializeBinaryFromReader(message: BranchRequest, reader: jspb.BinaryReader): BranchRequest;
 }
 
-export namespace ProjectRequest {
+export namespace BranchRequest {
   export type AsObject = {
-    id: number,
+    repoId: number,
   }
 }
 
-export class CreateProjectRequest extends jspb.Message {
-  getName(): string;
-  setName(value: string): void;
+export class CommitsRequest extends jspb.Message {
+  getRepoId(): number;
+  setRepoId(value: number): void;
 
-  hasRepository(): boolean;
-  clearRepository(): void;
-  getRepository(): Repository | undefined;
-  setRepository(value?: Repository): void;
+  getBranchName(): string;
+  setBranchName(value: string): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CreateProjectRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CreateProjectRequest): CreateProjectRequest.AsObject;
+  toObject(includeInstance?: boolean): CommitsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CommitsRequest): CommitsRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: CreateProjectRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CreateProjectRequest;
-  static deserializeBinaryFromReader(message: CreateProjectRequest, reader: jspb.BinaryReader): CreateProjectRequest;
+  static serializeBinaryToWriter(message: CommitsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CommitsRequest;
+  static deserializeBinaryFromReader(message: CommitsRequest, reader: jspb.BinaryReader): CommitsRequest;
 }
 
-export namespace CreateProjectRequest {
+export namespace CommitsRequest {
   export type AsObject = {
-    name: string,
-    repository?: Repository.AsObject,
+    repoId: number,
+    branchName: string,
   }
 }
 

@@ -14,16 +14,17 @@ var global = Function('return this')();
 
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 goog.exportSymbol('proto.protobuf.Branch', null, global);
+goog.exportSymbol('proto.protobuf.BranchRequest', null, global);
 goog.exportSymbol('proto.protobuf.BuildRequest', null, global);
 goog.exportSymbol('proto.protobuf.BuildResponse', null, global);
 goog.exportSymbol('proto.protobuf.Commit', null, global);
-goog.exportSymbol('proto.protobuf.CreateProjectRequest', null, global);
+goog.exportSymbol('proto.protobuf.CommitsRequest', null, global);
 goog.exportSymbol('proto.protobuf.EmptyRequest', null, global);
+goog.exportSymbol('proto.protobuf.ListBranchesResponse', null, global);
 goog.exportSymbol('proto.protobuf.ListCommitsResponse', null, global);
 goog.exportSymbol('proto.protobuf.ListProjectsResponse', null, global);
 goog.exportSymbol('proto.protobuf.Message', null, global);
 goog.exportSymbol('proto.protobuf.Project', null, global);
-goog.exportSymbol('proto.protobuf.ProjectRequest', null, global);
 goog.exportSymbol('proto.protobuf.Repository', null, global);
 goog.exportSymbol('proto.protobuf.StatusType', null, global);
 
@@ -1644,6 +1645,165 @@ proto.protobuf.ListProjectsResponse.prototype.hasProject = function() {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.protobuf.ListBranchesResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.protobuf.ListBranchesResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.protobuf.ListBranchesResponse.displayName = 'proto.protobuf.ListBranchesResponse';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.protobuf.ListBranchesResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.protobuf.ListBranchesResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.protobuf.ListBranchesResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.protobuf.ListBranchesResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    branch: (f = msg.getBranch()) && proto.protobuf.Branch.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.protobuf.ListBranchesResponse}
+ */
+proto.protobuf.ListBranchesResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.protobuf.ListBranchesResponse;
+  return proto.protobuf.ListBranchesResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.protobuf.ListBranchesResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.protobuf.ListBranchesResponse}
+ */
+proto.protobuf.ListBranchesResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.protobuf.Branch;
+      reader.readMessage(value,proto.protobuf.Branch.deserializeBinaryFromReader);
+      msg.setBranch(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.protobuf.ListBranchesResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.protobuf.ListBranchesResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.protobuf.ListBranchesResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.protobuf.ListBranchesResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getBranch();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.protobuf.Branch.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional Branch branch = 1;
+ * @return {?proto.protobuf.Branch}
+ */
+proto.protobuf.ListBranchesResponse.prototype.getBranch = function() {
+  return /** @type{?proto.protobuf.Branch} */ (
+    jspb.Message.getWrapperField(this, proto.protobuf.Branch, 1));
+};
+
+
+/** @param {?proto.protobuf.Branch|undefined} value */
+proto.protobuf.ListBranchesResponse.prototype.setBranch = function(value) {
+  jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+proto.protobuf.ListBranchesResponse.prototype.clearBranch = function() {
+  this.setBranch(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.protobuf.ListBranchesResponse.prototype.hasBranch = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.protobuf.ListCommitsResponse = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -1919,12 +2079,12 @@ proto.protobuf.EmptyRequest.serializeBinaryToWriter = function(message, writer) 
  * @extends {jspb.Message}
  * @constructor
  */
-proto.protobuf.ProjectRequest = function(opt_data) {
+proto.protobuf.BranchRequest = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.protobuf.ProjectRequest, jspb.Message);
+goog.inherits(proto.protobuf.BranchRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.protobuf.ProjectRequest.displayName = 'proto.protobuf.ProjectRequest';
+  proto.protobuf.BranchRequest.displayName = 'proto.protobuf.BranchRequest';
 }
 
 
@@ -1939,8 +2099,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     for transitional soy proto support: http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.protobuf.ProjectRequest.prototype.toObject = function(opt_includeInstance) {
-  return proto.protobuf.ProjectRequest.toObject(opt_includeInstance, this);
+proto.protobuf.BranchRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.protobuf.BranchRequest.toObject(opt_includeInstance, this);
 };
 
 
@@ -1949,13 +2109,13 @@ proto.protobuf.ProjectRequest.prototype.toObject = function(opt_includeInstance)
  * @param {boolean|undefined} includeInstance Whether to include the JSPB
  *     instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.protobuf.ProjectRequest} msg The msg instance to transform.
+ * @param {!proto.protobuf.BranchRequest} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.protobuf.ProjectRequest.toObject = function(includeInstance, msg) {
+proto.protobuf.BranchRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0)
+    repoId: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -1969,23 +2129,23 @@ proto.protobuf.ProjectRequest.toObject = function(includeInstance, msg) {
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.protobuf.ProjectRequest}
+ * @return {!proto.protobuf.BranchRequest}
  */
-proto.protobuf.ProjectRequest.deserializeBinary = function(bytes) {
+proto.protobuf.BranchRequest.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.protobuf.ProjectRequest;
-  return proto.protobuf.ProjectRequest.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.protobuf.BranchRequest;
+  return proto.protobuf.BranchRequest.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.protobuf.ProjectRequest} msg The message object to deserialize into.
+ * @param {!proto.protobuf.BranchRequest} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.protobuf.ProjectRequest}
+ * @return {!proto.protobuf.BranchRequest}
  */
-proto.protobuf.ProjectRequest.deserializeBinaryFromReader = function(msg, reader) {
+proto.protobuf.BranchRequest.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -1994,7 +2154,7 @@ proto.protobuf.ProjectRequest.deserializeBinaryFromReader = function(msg, reader
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setId(value);
+      msg.setRepoId(value);
       break;
     default:
       reader.skipField();
@@ -2009,9 +2169,9 @@ proto.protobuf.ProjectRequest.deserializeBinaryFromReader = function(msg, reader
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.protobuf.ProjectRequest.prototype.serializeBinary = function() {
+proto.protobuf.BranchRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.protobuf.ProjectRequest.serializeBinaryToWriter(this, writer);
+  proto.protobuf.BranchRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -2019,13 +2179,13 @@ proto.protobuf.ProjectRequest.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.protobuf.ProjectRequest} message
+ * @param {!proto.protobuf.BranchRequest} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.protobuf.ProjectRequest.serializeBinaryToWriter = function(message, writer) {
+proto.protobuf.BranchRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getRepoId();
   if (f !== 0) {
     writer.writeInt64(
       1,
@@ -2036,16 +2196,16 @@ proto.protobuf.ProjectRequest.serializeBinaryToWriter = function(message, writer
 
 
 /**
- * optional int64 id = 1;
+ * optional int64 repo_id = 1;
  * @return {number}
  */
-proto.protobuf.ProjectRequest.prototype.getId = function() {
+proto.protobuf.BranchRequest.prototype.getRepoId = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.protobuf.ProjectRequest.prototype.setId = function(value) {
+proto.protobuf.BranchRequest.prototype.setRepoId = function(value) {
   jspb.Message.setProto3IntField(this, 1, value);
 };
 
@@ -2061,12 +2221,12 @@ proto.protobuf.ProjectRequest.prototype.setId = function(value) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.protobuf.CreateProjectRequest = function(opt_data) {
+proto.protobuf.CommitsRequest = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.protobuf.CreateProjectRequest, jspb.Message);
+goog.inherits(proto.protobuf.CommitsRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.protobuf.CreateProjectRequest.displayName = 'proto.protobuf.CreateProjectRequest';
+  proto.protobuf.CommitsRequest.displayName = 'proto.protobuf.CommitsRequest';
 }
 
 
@@ -2081,8 +2241,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     for transitional soy proto support: http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.protobuf.CreateProjectRequest.prototype.toObject = function(opt_includeInstance) {
-  return proto.protobuf.CreateProjectRequest.toObject(opt_includeInstance, this);
+proto.protobuf.CommitsRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.protobuf.CommitsRequest.toObject(opt_includeInstance, this);
 };
 
 
@@ -2091,14 +2251,14 @@ proto.protobuf.CreateProjectRequest.prototype.toObject = function(opt_includeIns
  * @param {boolean|undefined} includeInstance Whether to include the JSPB
  *     instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.protobuf.CreateProjectRequest} msg The msg instance to transform.
+ * @param {!proto.protobuf.CommitsRequest} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.protobuf.CreateProjectRequest.toObject = function(includeInstance, msg) {
+proto.protobuf.CommitsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    repository: (f = msg.getRepository()) && proto.protobuf.Repository.toObject(includeInstance, f)
+    repoId: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    branchName: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -2112,23 +2272,23 @@ proto.protobuf.CreateProjectRequest.toObject = function(includeInstance, msg) {
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.protobuf.CreateProjectRequest}
+ * @return {!proto.protobuf.CommitsRequest}
  */
-proto.protobuf.CreateProjectRequest.deserializeBinary = function(bytes) {
+proto.protobuf.CommitsRequest.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.protobuf.CreateProjectRequest;
-  return proto.protobuf.CreateProjectRequest.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.protobuf.CommitsRequest;
+  return proto.protobuf.CommitsRequest.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.protobuf.CreateProjectRequest} msg The message object to deserialize into.
+ * @param {!proto.protobuf.CommitsRequest} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.protobuf.CreateProjectRequest}
+ * @return {!proto.protobuf.CommitsRequest}
  */
-proto.protobuf.CreateProjectRequest.deserializeBinaryFromReader = function(msg, reader) {
+proto.protobuf.CommitsRequest.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -2136,13 +2296,12 @@ proto.protobuf.CreateProjectRequest.deserializeBinaryFromReader = function(msg, 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setRepoId(value);
       break;
     case 2:
-      var value = new proto.protobuf.Repository;
-      reader.readMessage(value,proto.protobuf.Repository.deserializeBinaryFromReader);
-      msg.setRepository(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setBranchName(value);
       break;
     default:
       reader.skipField();
@@ -2157,9 +2316,9 @@ proto.protobuf.CreateProjectRequest.deserializeBinaryFromReader = function(msg, 
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.protobuf.CreateProjectRequest.prototype.serializeBinary = function() {
+proto.protobuf.CommitsRequest.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.protobuf.CreateProjectRequest.serializeBinaryToWriter(this, writer);
+  proto.protobuf.CommitsRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -2167,72 +2326,56 @@ proto.protobuf.CreateProjectRequest.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.protobuf.CreateProjectRequest} message
+ * @param {!proto.protobuf.CommitsRequest} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.protobuf.CreateProjectRequest.serializeBinaryToWriter = function(message, writer) {
+proto.protobuf.CommitsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getName();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getRepoId();
+  if (f !== 0) {
+    writer.writeInt64(
       1,
       f
     );
   }
-  f = message.getRepository();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getBranchName();
+  if (f.length > 0) {
+    writer.writeString(
       2,
-      f,
-      proto.protobuf.Repository.serializeBinaryToWriter
+      f
     );
   }
 };
 
 
 /**
- * optional string name = 1;
+ * optional int64 repo_id = 1;
+ * @return {number}
+ */
+proto.protobuf.CommitsRequest.prototype.getRepoId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/** @param {number} value */
+proto.protobuf.CommitsRequest.prototype.setRepoId = function(value) {
+  jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional string branch_name = 2;
  * @return {string}
  */
-proto.protobuf.CreateProjectRequest.prototype.getName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+proto.protobuf.CommitsRequest.prototype.getBranchName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.protobuf.CreateProjectRequest.prototype.setName = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional Repository repository = 2;
- * @return {?proto.protobuf.Repository}
- */
-proto.protobuf.CreateProjectRequest.prototype.getRepository = function() {
-  return /** @type{?proto.protobuf.Repository} */ (
-    jspb.Message.getWrapperField(this, proto.protobuf.Repository, 2));
-};
-
-
-/** @param {?proto.protobuf.Repository|undefined} value */
-proto.protobuf.CreateProjectRequest.prototype.setRepository = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
-};
-
-
-proto.protobuf.CreateProjectRequest.prototype.clearRepository = function() {
-  this.setRepository(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {!boolean}
- */
-proto.protobuf.CreateProjectRequest.prototype.hasRepository = function() {
-  return jspb.Message.getField(this, 2) != null;
+proto.protobuf.CommitsRequest.prototype.setBranchName = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

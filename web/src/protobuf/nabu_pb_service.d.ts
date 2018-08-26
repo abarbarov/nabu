@@ -4,15 +4,6 @@
 import * as protobuf_nabu_pb from "../protobuf/nabu_pb";
 import {grpc} from "grpc-web-client";
 
-type NabuServiceCreateProject = {
-  readonly methodName: string;
-  readonly service: typeof NabuService;
-  readonly requestStream: false;
-  readonly responseStream: false;
-  readonly requestType: typeof protobuf_nabu_pb.CreateProjectRequest;
-  readonly responseType: typeof protobuf_nabu_pb.ListProjectsResponse;
-};
-
 type NabuServiceListProjects = {
   readonly methodName: string;
   readonly service: typeof NabuService;
@@ -22,12 +13,21 @@ type NabuServiceListProjects = {
   readonly responseType: typeof protobuf_nabu_pb.ListProjectsResponse;
 };
 
+type NabuServiceListBranches = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.BranchRequest;
+  readonly responseType: typeof protobuf_nabu_pb.ListBranchesResponse;
+};
+
 type NabuServiceListCommits = {
   readonly methodName: string;
   readonly service: typeof NabuService;
   readonly requestStream: false;
   readonly responseStream: true;
-  readonly requestType: typeof protobuf_nabu_pb.ProjectRequest;
+  readonly requestType: typeof protobuf_nabu_pb.CommitsRequest;
   readonly responseType: typeof protobuf_nabu_pb.ListCommitsResponse;
 };
 
@@ -42,8 +42,8 @@ type NabuServiceBuild = {
 
 export class NabuService {
   static readonly serviceName: string;
-  static readonly CreateProject: NabuServiceCreateProject;
   static readonly ListProjects: NabuServiceListProjects;
+  static readonly ListBranches: NabuServiceListBranches;
   static readonly ListCommits: NabuServiceListCommits;
   static readonly Build: NabuServiceBuild;
 }
@@ -63,17 +63,9 @@ export class NabuServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
-  createProject(
-    requestMessage: protobuf_nabu_pb.CreateProjectRequest,
-    metadata: grpc.Metadata,
-    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.ListProjectsResponse|null) => void
-  ): void;
-  createProject(
-    requestMessage: protobuf_nabu_pb.CreateProjectRequest,
-    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.ListProjectsResponse|null) => void
-  ): void;
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
-  listCommits(requestMessage: protobuf_nabu_pb.ProjectRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
+  listBranches(requestMessage: protobuf_nabu_pb.BranchRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListBranchesResponse>;
+  listCommits(requestMessage: protobuf_nabu_pb.CommitsRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
   build(requestMessage: protobuf_nabu_pb.BuildRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.BuildResponse>;
 }
 

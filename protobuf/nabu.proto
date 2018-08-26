@@ -44,9 +44,9 @@ message Message {
 }
 
 service NabuService {
-    rpc CreateProject (CreateProjectRequest) returns (ListProjectsResponse);
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
-    rpc ListCommits (ProjectRequest) returns (stream ListCommitsResponse);
+    rpc ListBranches (BranchRequest) returns (stream ListBranchesResponse);
+    rpc ListCommits (CommitsRequest) returns (stream ListCommitsResponse);
     rpc Build (BuildRequest) returns (stream BuildResponse);
 }
 
@@ -63,6 +63,10 @@ message ListProjectsResponse {
     Project project = 1;
 }
 
+message ListBranchesResponse {
+    Branch branch = 1;
+}
+
 message ListCommitsResponse {
     Commit commit = 1;
 }
@@ -70,11 +74,11 @@ message ListCommitsResponse {
 message EmptyRequest {
 }
 
-message ProjectRequest {
-    int64 id = 1;
+message BranchRequest {
+    int64 repo_id = 1;
 }
 
-message CreateProjectRequest {
-    string name = 1;
-    Repository repository = 2;
+message CommitsRequest {
+    int64 repo_id = 1;
+    string branch_name = 2;
 }
