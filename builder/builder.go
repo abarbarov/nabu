@@ -6,14 +6,20 @@ import (
 	"fmt"
 	"github.com/abarbarov/nabu/github"
 	"github.com/pkg/errors"
+	"github.com/pkg/sftp"
+	"golang.org/x/crypto/ssh"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 )
+
+const PACKET_SIZE = 1 << 15
 
 type Message struct {
 	Id        int64
@@ -83,7 +89,35 @@ func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
 		return
 	}
 
-	outClose(messages, fmt.Sprintf("[INFO] app copied"), 6)
+	sshConfig := &ssh.ClientConfig{
+		User: "dev",
+		Auth: []ssh.AuthMethod{
+			PrivateKeyFile(),
+		},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+
+	connection, err := ssh.Dial("tcp", "95.216.163.61:22", sshConfig)
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] ssh connection failed: %+v", err), 6)
+		return
+	}
+	defer connection.Close()
+
+	if err := copyOverSSH(connection, outZip); err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] copy to remote server failed: %+v", err), 8)
+		return
+	}
+
+	out, err := extractZipOverSSH(connection, outZip)
+
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] copy to remote server failed: %+v", err), 10)
+		return
+	}
+	outOk(messages, fmt.Sprintf("[INFO] %+v", out), 10)
+
+	outClose(messages, fmt.Sprintf("[INFO] app copied"), 12)
 }
 
 func (b *Builder) vgoBuild(dir string) error {
@@ -203,6 +237,7 @@ func unzipFiles(src, target string) error {
 
 	return nil
 }
+
 func zipFiles(folders []string, files []string, target string) error {
 	ziparchive, err := os.Create(target)
 	if err != nil {
@@ -248,6 +283,7 @@ func zipFiles(folders []string, files []string, target string) error {
 			} else {
 				header.Method = zip.Deflate
 			}
+			header.Name = filepath.ToSlash(header.Name)
 
 			writer, err := zipWriter.CreateHeader(header)
 			if err != nil {
@@ -307,4 +343,80 @@ func zipFiles(folders []string, files []string, target string) error {
 	}
 
 	return nil
+}
+
+func PrivateKeyFile() ssh.AuthMethod {
+	buffer, err := ioutil.ReadFile("/Users/abarbarov/.ssh/id_rsa")
+	if err != nil {
+		return nil
+	}
+
+	key, err := ssh.ParsePrivateKey(buffer)
+	if err != nil {
+		return nil
+	}
+	return ssh.PublicKeys(key)
+}
+
+func copyOverSSH(connection *ssh.Client, localZipFilePath string) error {
+	session, err := connection.NewSession()
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+
+	// open an SFTP session over an existing ssh connection.
+	sftpClient, err := sftp.NewClient(connection, sftp.MaxPacket(PACKET_SIZE))
+	if err != nil {
+		return err
+	}
+	defer sftpClient.Close()
+
+	remoteZip := filepath.Base(localZipFilePath)
+
+	localFile, err := os.Open(localZipFilePath)
+	if err != nil {
+		return err
+	}
+	defer localFile.Close()
+
+	remoteFile, err := sftpClient.Create(fmt.Sprintf("/home/dev/%s", remoteZip))
+	if err != nil {
+		return err
+	}
+	defer remoteFile.Close()
+
+	if _, err = io.Copy(remoteFile, localFile); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func extractZipOverSSH(connection *ssh.Client, localZip string) (string, error) {
+	remoteZip := filepath.Base(localZip)
+	fileWithoutExt := strings.TrimSuffix(remoteZip, path.Ext(remoteZip))
+
+	return execSSH(connection, fmt.Sprintf("cd /home/dev && unzip -o %[1]s.zip -d %[1]s", fileWithoutExt))
+}
+
+func execSSH(connection *ssh.Client, cmd string) (string, error) {
+	session, err := connection.NewSession()
+	if err != nil {
+		return "", err
+	}
+
+	defer session.Close()
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	session.Stdout = &stdout
+	session.Stderr = &stderr
+
+	if err := session.Run(cmd); err != nil {
+		return "", errors.Errorf("stdout: %s\nstderr:%s\nerror: %v", stdout.String(), stderr.String(), err)
+	}
+
+	return fmt.Sprintf("%s\n%s", stdout.String(), stderr.String()), nil
 }
