@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { Commit, Project } from '../../../protobuf/nabu_pb';
-import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
+import { Branch, Commit, Project } from '../../../protobuf/nabu_pb';
 
 type ProjectViewProps = {
   selectedProject: Project.AsObject,
+  selectedBranch: Branch.AsObject,
   selectedCommit: Commit.AsObject | null,
   commits: Commit.AsObject[],
-  onBuild: (projectid: number, sha: string) => void
+  onBuild: (projectid: number, branch: string, sha: string) => void
+  onCopy: (projectid: number, sha: string) => void
 };
 
 const CommitsView: React.SFC<ProjectViewProps> = (props) => {
-  function getDate(timestamp: Timestamp.AsObject | undefined) {
-    if (timestamp) {
-      return new Date(timestamp.seconds * 1000).toISOString();
+  function getDate(c: Commit.AsObject | undefined) {
+    if (c && c.timestamp) {
+      return new Date(c.timestamp.seconds * 1000).toISOString();
     }
 
     return '';
@@ -41,10 +42,15 @@ const CommitsView: React.SFC<ProjectViewProps> = (props) => {
           key={i}
         >
           <div style={{ display: 'flex' }}>
-            <div>[{getDate(commit.timestamp)}] |</div>
+            <div>[{getDate(commit)}] |</div>
             <div>{commit.sha} |</div>
             <div>{commit.message}</div>
-            <button type="button" onClick={() => props.onBuild(props.selectedProject.id, commit.sha)}>Build</button>
+            <button
+              type="button"
+              onClick={() => props.onBuild(props.selectedProject.id, props.selectedBranch.name, commit.sha)}
+            >Build
+            </button>
+            <button type="button" onClick={() => props.onCopy(props.selectedProject.id, commit.sha)}>Copy</button>
           </div>
         </div>
       )}

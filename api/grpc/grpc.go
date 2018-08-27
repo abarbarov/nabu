@@ -100,7 +100,7 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 	}
 
 	messages := make(chan *builder.Message)
-	go ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, "master", req.Sha, messages)
+	go ngs.builder.Build(repo.Repository.Token, repo.Repository.Owner, repo.Repository.Name, req.Branch, req.Sha, messages)
 	defer close(messages)
 
 	var ticker int64 = 0
@@ -115,7 +115,7 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 
 			atomic.SwapInt64(&ticker, message.Id+1)
 
-			stream.Send(&pb.BuildResponse{
+			stream.Send(&pb.MessageResponse{
 				Message: &pb.Message{
 					Id: message.Id,
 					Timestamp: &timestamp.Timestamp{
@@ -132,7 +132,7 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 		default:
 			id := atomic.LoadInt64(&ticker)
 			if id > 0 {
-				stream.Send(&pb.BuildResponse{
+				stream.Send(&pb.MessageResponse{
 					Message: &pb.Message{
 						Id: id,
 						Timestamp: &timestamp.Timestamp{
@@ -169,6 +169,62 @@ func (ngs *nabuGrpcService) Projects() (chan *pb.Project, error) {
 	}
 
 	return output, nil
+}
+
+func (ngs *nabuGrpcService) Copy(req *pb.CopyRequest, stream pb.NabuService_CopyServer) error {
+	repo, err := ngs.store.Project(req.ProjectId)
+	if err != nil {
+		return err
+	}
+
+	messages := make(chan *builder.Message)
+	go ngs.builder.Copy(repo.Repository.Owner, repo.Repository.Name, req.Sha, messages)
+	defer close(messages)
+
+	var ticker int64 = 0
+
+	for {
+		select {
+		case message, ok := <-messages:
+			log.Printf("[INFO] %v", message.Text)
+			if !ok {
+				return nil
+			}
+
+			atomic.SwapInt64(&ticker, message.Id+1)
+
+			stream.Send(&pb.MessageResponse{
+				Message: &pb.Message{
+					Id: message.Id,
+					Timestamp: &timestamp.Timestamp{
+						Seconds: message.Timestamp.Unix(),
+					},
+					Message: message.Text,
+					Status:  convertStatus(message.Status),
+				},
+			})
+
+			if message.Close {
+				return nil
+			}
+		default:
+			id := atomic.LoadInt64(&ticker)
+			if id > 0 {
+				stream.Send(&pb.MessageResponse{
+					Message: &pb.Message{
+						Id: id,
+						Timestamp: &timestamp.Timestamp{
+							Seconds: time.Now().Unix(),
+						},
+						Message: ".",
+						Status:  pb.StatusType_PENDING,
+					},
+				})
+			}
+
+			time.Sleep(1000 * time.Millisecond)
+		}
+	}
 }
 
 func convertStatus(status int) pb.StatusType {

@@ -17,7 +17,6 @@ message Repository {
 }
 
 message Branch {
-    int64 id = 1;
     string name = 2;
     repeated Commit commits = 3;
 }
@@ -47,16 +46,23 @@ service NabuService {
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
     rpc ListBranches (BranchRequest) returns (stream ListBranchesResponse);
     rpc ListCommits (CommitsRequest) returns (stream ListCommitsResponse);
-    rpc Build (BuildRequest) returns (stream BuildResponse);
+    rpc Build (BuildRequest) returns (stream MessageResponse);
+    rpc Copy (CopyRequest) returns (stream MessageResponse);
 }
 
 message BuildRequest {
     int64 project_id = 1;
-    string sha = 2;
+    string branch = 2;
+    string sha = 3;
 }
 
-message BuildResponse {
+message MessageResponse {
     Message message = 1;
+}
+
+message CopyRequest {
+    int64 project_id = 1;
+    string sha = 2;
 }
 
 message ListProjectsResponse {

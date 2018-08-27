@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -30,37 +31,87 @@ type Builder struct {
 
 func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *Message) {
 
-	outOk(messages, "build started", 0)
+	outOk(messages, "[INFO] build started", 0)
 
 	zip, err := b.Github.Archive(token, owner, name, branch, sha, b.BuildOutput)
 
 	if err != nil {
-		outErr(messages, fmt.Sprintf("%v", err), 1)
+		outErr(messages, fmt.Sprintf("[ERR] %v", err), 1)
 		return
 	}
 
-	outOk(messages, fmt.Sprintf("archive downloaded to %v", zip), 2)
+	outOk(messages, fmt.Sprintf("[INFO] archive downloaded to %v", zip), 2)
 
 	err = unzipFiles(zip, b.BuildOutput)
 
 	if err != nil {
-		outErr(messages, fmt.Sprintf("%v", err), 4)
+		outErr(messages, fmt.Sprintf("[ERR] %v", err), 4)
 		return
 	}
 
-	outOk(messages, fmt.Sprintf("files unzipped, building application..."), 4)
+	outOk(messages, fmt.Sprintf("[INFO] files unzipped, building application..."), 4)
 
 	fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
 	buildPath := filepath.Join(b.BuildOutput, fullName)
 	err = b.vgoBuild(buildPath)
 
 	if err != nil {
-		outErr(messages, fmt.Sprintf("%v", err), 6)
+		outErr(messages, fmt.Sprintf("[ERR] %v", err), 6)
 		return
 	}
 
-	outClose(messages, fmt.Sprintf("app built"), 6)
+	outClose(messages, fmt.Sprintf("[INFO] app built"), 6)
 
+}
+
+func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
+
+	outOk(messages, "[INFO] copying started...", 0)
+
+	fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
+	buildPath := filepath.Join(b.BuildOutput, fullName)
+	folders := []string{filepath.Join(buildPath, "static"), filepath.Join(buildPath, "data")}
+	executable := filepath.Join(buildPath, "application")
+	outZip := filepath.Join(buildPath, fmt.Sprintf("out-%s.zip", sha))
+
+	outOk(messages, fmt.Sprintf("[INFO] zipping to %s", outZip), 2)
+
+	err := zipFiles(folders, []string{executable}, outZip)
+
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] zipping failed: %+v", err), 4)
+		return
+	}
+
+	outClose(messages, fmt.Sprintf("[INFO] app copied"), 6)
+}
+
+func (b *Builder) vgoBuild(dir string) error {
+
+	args := []string{"build", "-o", "application"}
+	var cmd *exec.Cmd
+
+	cmd = exec.Command(b.GoExecutable, args...)
+
+	env := os.Environ()
+	if runtime.GOOS == "windows" {
+		env = append(env, fmt.Sprintf("GOOS=%s", "linux"))
+		env = append(env, fmt.Sprintf("GOARCH=%s", "amd64"))
+	}
+
+	cmd.Env = env
+	cmd.Dir, _ = filepath.Abs(dir)
+
+	stdout := &bytes.Buffer{}
+	stderr := &bytes.Buffer{}
+	cmd.Stdout = stdout
+	cmd.Stderr = stderr
+
+	if err := cmd.Run(); err != nil {
+		return errors.Wrapf(err, "stdout: %s\nstderr:%s\nerror: %v", stdout.String(), stderr.String(), err)
+	}
+
+	return nil
 }
 
 func outOk(messages chan *Message, text string, id int64) {
@@ -152,30 +203,107 @@ func unzipFiles(src, target string) error {
 
 	return nil
 }
+func zipFiles(folders []string, files []string, target string) error {
+	ziparchive, err := os.Create(target)
+	if err != nil {
+		return err
+	}
+	defer ziparchive.Close()
 
-func (b *Builder) vgoBuild(dir string) error {
+	zipWriter := zip.NewWriter(ziparchive)
+	defer zipWriter.Close()
 
-	args := []string{"build", "-o", "application"}
-	var cmd *exec.Cmd
+	for _, source := range folders {
 
-	cmd = exec.Command(b.GoExecutable, args...)
+		info, err := os.Stat(source)
+		if os.IsNotExist(err) {
+			continue
+		}
 
-	env := os.Environ()
-	if runtime.GOOS == "windows" {
-		env = append(env, fmt.Sprintf("GOOS=%s", "linux"))
-		env = append(env, fmt.Sprintf("GOARCH=%s", "amd64"))
+		if err != nil {
+			return err
+		}
+
+		var baseDir string
+		if info.IsDir() {
+			baseDir = filepath.Base(source)
+		}
+
+		filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
+			header, err := zip.FileInfoHeader(info)
+			if err != nil {
+				return err
+			}
+
+			if baseDir != "" {
+				header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
+			}
+
+			if info.IsDir() {
+				header.Name += "/"
+			} else {
+				header.Method = zip.Deflate
+			}
+
+			writer, err := zipWriter.CreateHeader(header)
+			if err != nil {
+				return err
+			}
+
+			if info.IsDir() {
+				return nil
+			}
+
+			file, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+			defer file.Close()
+			_, err = io.Copy(writer, file)
+			return err
+		})
 	}
 
-	cmd.Env = env
-	cmd.Dir, _ = filepath.Abs(dir)
+	if err != nil {
+		return err
+	}
 
-	stdout := &bytes.Buffer{}
-	stderr := &bytes.Buffer{}
-	cmd.Stdout = stdout
-	cmd.Stderr = stderr
+	// Add files to zip
+	for _, file := range files {
 
-	if err := cmd.Run(); err != nil {
-		return errors.Wrapf(err, "stdout: %s\nstderr:%s\nerror: %v", stdout.String(), stderr.String(), err)
+		zipfile, err := os.Open(file)
+		if err != nil {
+			continue
+			//return err
+		}
+		defer zipfile.Close()
+
+		// Get the file information
+		info, err := zipfile.Stat()
+		if err != nil {
+			return err
+		}
+
+		header, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		// Change to deflate to gain better compression
+		header.Method = zip.Deflate
+
+		writer, err := zipWriter.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(writer, zipfile)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -3,14 +3,15 @@ import {
   Branch,
   BranchRequest,
   BuildRequest,
-  BuildResponse,
   Commit,
   CommitsRequest,
+  CopyRequest,
   EmptyRequest,
   ListBranchesResponse,
   ListCommitsResponse,
   ListProjectsResponse,
   Message,
+  MessageResponse,
   Project
 } from '../protobuf/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
@@ -145,20 +146,44 @@ type AddBuildMessages = {
 };
 export const addBuildMessage = (message: Message) => ({ type: ADD_BUILD_MESSAGE, payload: message });
 
-export const buildProject = (projectId: number, sha: string) => {
+export const buildProject = (projectId: number, branch: string, sha: string) => {
 
-  let buildRequest = new BuildRequest();
-  buildRequest.setProjectId(projectId);
-  buildRequest.setSha(sha);
+  let req = new BuildRequest();
+  req.setProjectId(projectId);
+  req.setBranch(branch);
+  req.setSha(sha);
 
-  return grpcRequest<BuildRequest, BuildResponse>({
-    request: buildRequest,
+  return grpcRequest<BuildRequest, MessageResponse>({
+    request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
     host: 'http://localhost:9091',
     methodDescriptor: NabuService.Build,
     // transport: grpc.WebsocketTransportFactory,
+    onMessage: message => {
+      const m = message.getMessage();
+      if (m) {
+        return addBuildMessage(m);
+      }
+      return;
+    }
+  });
+};
+
+export const copyProject = (projectId: number, sha: string) => {
+
+  let req = new CopyRequest();
+  req.setProjectId(projectId);
+  req.setSha(sha);
+
+  return grpcRequest<CopyRequest, MessageResponse>({
+    request: req,
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+    },
+    host: 'http://localhost:9091',
+    methodDescriptor: NabuService.Copy,
     onMessage: message => {
       const m = message.getMessage();
       if (m) {
@@ -181,4 +206,5 @@ export type ProjectActionTypes =
   | GrpcAction<EmptyRequest, ListProjectsResponse>
   | GrpcAction<BranchRequest, ListBranchesResponse>
   | GrpcAction<CommitsRequest, ListCommitsResponse>
-  | GrpcAction<BuildRequest, BuildResponse>;
+  | GrpcAction<BuildRequest, MessageResponse>
+  | GrpcAction<CopyRequest, MessageResponse>;

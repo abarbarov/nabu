@@ -9,11 +9,12 @@ import { RootAction } from '../../actions';
 import {
   buildProject,
   clearMessages,
+  copyProject,
   listBranches,
   listCommits,
   listProjects,
-  selectProject,
-  selectBranch
+  selectBranch,
+  selectProject
 } from '../../actions/projects';
 import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
@@ -31,7 +32,8 @@ type ProjectsProps = {
   fetchProjects: () => void,
   selectProject: (id: number) => void,
   selectBranch: (projectId: number, name: string) => void,
-  build: (projectId: number, sha: string) => void,
+  build: (projectId: number, branch: string, sha: string) => void,
+  copy: (projectId: number, sha: string) => void,
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -76,9 +78,11 @@ class Projects extends React.Component<ProjectsProps, {}> {
             {this.props.selectedBranch && this.props.selectedProject
               ? <CommitsView
                 selectedProject={this.props.selectedProject}
+                selectedBranch={this.props.selectedBranch}
                 commits={this.props.commits}
                 selectedCommit={this.props.selectedCommit}
                 onBuild={this.props.build}
+                onCopy={this.props.copy}
               />
               : null
             }
@@ -117,9 +121,13 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(selectBranch(projectId, name));
       dispatch(listCommits(projectId, name));
     },
-    build: (projectId: number, sha: string) => {
+    build: (projectId: number, branch: string, sha: string) => {
       dispatch(clearMessages());
-      dispatch(buildProject(projectId, sha));
+      dispatch(buildProject(projectId, branch, sha));
+    },
+    copy: (projectId: number, sha: string) => {
+      dispatch(clearMessages());
+      dispatch(copyProject(projectId, sha));
     }
   };
 }

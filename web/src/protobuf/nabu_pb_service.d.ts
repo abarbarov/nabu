@@ -37,7 +37,16 @@ type NabuServiceBuild = {
   readonly requestStream: false;
   readonly responseStream: true;
   readonly requestType: typeof protobuf_nabu_pb.BuildRequest;
-  readonly responseType: typeof protobuf_nabu_pb.BuildResponse;
+  readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
+};
+
+type NabuServiceCopy = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.CopyRequest;
+  readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
 };
 
 export class NabuService {
@@ -46,6 +55,7 @@ export class NabuService {
   static readonly ListBranches: NabuServiceListBranches;
   static readonly ListCommits: NabuServiceListCommits;
   static readonly Build: NabuServiceBuild;
+  static readonly Copy: NabuServiceCopy;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -66,6 +76,7 @@ export class NabuServiceClient {
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
   listBranches(requestMessage: protobuf_nabu_pb.BranchRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListBranchesResponse>;
   listCommits(requestMessage: protobuf_nabu_pb.CommitsRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
-  build(requestMessage: protobuf_nabu_pb.BuildRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.BuildResponse>;
+  build(requestMessage: protobuf_nabu_pb.BuildRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
+  copy(requestMessage: protobuf_nabu_pb.CopyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
 }
 

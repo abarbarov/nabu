@@ -67,9 +67,6 @@ export namespace Repository {
 }
 
 export class Branch extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
-
   getName(): string;
   setName(value: string): void;
 
@@ -90,7 +87,6 @@ export class Branch extends jspb.Message {
 
 export namespace Branch {
   export type AsObject = {
-    id: number,
     name: string,
     commitsList: Array<Commit.AsObject>,
   }
@@ -164,6 +160,9 @@ export class BuildRequest extends jspb.Message {
   getProjectId(): number;
   setProjectId(value: number): void;
 
+  getBranch(): string;
+  setBranch(value: string): void;
+
   getSha(): string;
   setSha(value: string): void;
 
@@ -180,29 +179,54 @@ export class BuildRequest extends jspb.Message {
 export namespace BuildRequest {
   export type AsObject = {
     projectId: number,
+    branch: string,
     sha: string,
   }
 }
 
-export class BuildResponse extends jspb.Message {
+export class MessageResponse extends jspb.Message {
   hasMessage(): boolean;
   clearMessage(): void;
   getMessage(): Message | undefined;
   setMessage(value?: Message): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): BuildResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: BuildResponse): BuildResponse.AsObject;
+  toObject(includeInstance?: boolean): MessageResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: MessageResponse): MessageResponse.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: BuildResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): BuildResponse;
-  static deserializeBinaryFromReader(message: BuildResponse, reader: jspb.BinaryReader): BuildResponse;
+  static serializeBinaryToWriter(message: MessageResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): MessageResponse;
+  static deserializeBinaryFromReader(message: MessageResponse, reader: jspb.BinaryReader): MessageResponse;
 }
 
-export namespace BuildResponse {
+export namespace MessageResponse {
   export type AsObject = {
     message?: Message.AsObject,
+  }
+}
+
+export class CopyRequest extends jspb.Message {
+  getProjectId(): number;
+  setProjectId(value: number): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CopyRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CopyRequest): CopyRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: CopyRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CopyRequest;
+  static deserializeBinaryFromReader(message: CopyRequest, reader: jspb.BinaryReader): CopyRequest;
+}
+
+export namespace CopyRequest {
+  export type AsObject = {
+    projectId: number,
+    sha: string,
   }
 }
 
