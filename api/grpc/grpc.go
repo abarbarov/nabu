@@ -81,7 +81,7 @@ func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuServ
 	for c := range commits {
 		resp.Send(&pb.ListCommitsResponse{
 			Commit: &pb.Commit{
-				Sha:     tools.Substr(c.SHA, 0, 8),
+				Sha:     c.SHA,
 				Message: tools.RemoveComments(c.Message),
 				Timestamp: &timestamp.Timestamp{
 					Seconds: c.Date.Unix(),

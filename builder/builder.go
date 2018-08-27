@@ -59,7 +59,7 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 		return
 	}
 
-	outClose(messages, fmt.Sprintf("app built"), 4)
+	outClose(messages, fmt.Sprintf("app built"), 6)
 
 }
 
