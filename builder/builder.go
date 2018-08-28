@@ -66,8 +66,19 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 		return
 	}
 
-	outClose(messages, fmt.Sprintf("[INFO] app built"), 6)
+	folders := []string{filepath.Join(buildPath, "static"), filepath.Join(buildPath, "data")}
+	executable := filepath.Join(buildPath, "application")
+	outZip := filepath.Join(buildPath, fmt.Sprintf("out-%s.zip", sha))
+	outOk(messages, fmt.Sprintf("[INFO] zipping to %s", outZip), 6)
 
+	err = zipFiles(folders, []string{executable}, outZip)
+
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] zipping failed: %+v", err), 8)
+		return
+	}
+
+	outClose(messages, fmt.Sprintf("[INFO] app built"), 8)
 }
 
 func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
@@ -76,18 +87,7 @@ func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
 
 	fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
 	buildPath := filepath.Join(b.BuildOutput, fullName)
-	folders := []string{filepath.Join(buildPath, "static"), filepath.Join(buildPath, "data")}
-	executable := filepath.Join(buildPath, "application")
 	outZip := filepath.Join(buildPath, fmt.Sprintf("out-%s.zip", sha))
-
-	outOk(messages, fmt.Sprintf("[INFO] zipping to %s", outZip), 2)
-
-	err := zipFiles(folders, []string{executable}, outZip)
-
-	if err != nil {
-		outErr(messages, fmt.Sprintf("[ERR] zipping failed: %+v", err), 4)
-		return
-	}
 
 	sshConfig := &ssh.ClientConfig{
 		User: "dev",
@@ -239,13 +239,13 @@ func unzipFiles(src, target string) error {
 }
 
 func zipFiles(folders []string, files []string, target string) error {
-	ziparchive, err := os.Create(target)
+	zipArchive, err := os.Create(target)
 	if err != nil {
 		return err
 	}
-	defer ziparchive.Close()
+	defer zipArchive.Close()
 
-	zipWriter := zip.NewWriter(ziparchive)
+	zipWriter := zip.NewWriter(zipArchive)
 	defer zipWriter.Close()
 
 	for _, source := range folders {
