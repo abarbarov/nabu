@@ -33,11 +33,11 @@
     passHostHeader = true
     [frontends.frontend-nabu.routes]
       [frontends.frontend-nabu.routes.route0]
-        rule = "Host:nabu.app"
+        rule = "Host:nabu.app,live.nabu.app"
 
   [frontends.frontend-barbarov]
     backend = "backend-barbarov"
     passHostHeader = true
     [frontends.frontend-barbarov.routes]
       [frontends.frontend-barbarov.routes.route0]
-        rule = "Host:barbarov.app"
+        rule = "Host:barbarov.com"

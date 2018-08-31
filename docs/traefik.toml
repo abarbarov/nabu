@@ -33,9 +33,8 @@ acmeLogging=true
 #    delayBeforeCheck = 0
 
   [[acme.domains]]
-    main = "*.nabu.app"
+    main = "nabu.app"
     sans = ["nabu.app", "live.nabu.app"]
 
   [[acme.domains]]
-    main = "*.barbarov.com"
-    sans = ["barbarov.com", "blog.barbarov.com"]
+    main = "barbarov.com"
