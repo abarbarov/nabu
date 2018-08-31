@@ -1,0 +1,25 @@
+[entryPoints]
+  [entryPoints.http]
+  address = ":8080"
+
+[frontends]
+
+  [frontends.frontend1]
+  backend = "backend1"
+    [frontends.frontend1.routes.test_1]
+    rule = "Host: Traefik.localhost"
+
+  [frontends.frontend2]
+  backend = "backend2"
+    [frontends.frontend2.routes.test_1]
+    rule = "Host: apache.localhost"
+
+[backends]
+
+  [backends.backend1]
+    [backends.backend1.servers.server1]
+    url = "http://127.0.0.1:9001"
+
+  [backends.backend2]
+    [backends.backend2.servers.server1]
+    url = "http://127.0.0.1:9002"

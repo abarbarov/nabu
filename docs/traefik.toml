@@ -1,0 +1,55 @@
+logLevel = "DEBUG"
+defaultEntryPoints = ["http"]
+[entryPoints]
+    [entryPoints.http]
+    address = ":80"
+[file]
+filename = "./rules.toml"
+watch = true
+
+------------------------------------------------------------------------------------------------------------------------
+
+logLevel = "DEBUG"
+defaultEntryPoints = ["http"]
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+[acme]
+email = "afanasy.barbarov@hotmail.com"
+storage = "acme.json"
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+entryPoint = "https"
+  [acme.httpChallenge]
+  entryPoint = "http"
+
+[[acme.domains]]
+  main = "nabu.app"
+
+[backends]
+
+  [backends.backend1]
+    [backends.backend1.servers]
+      [backends.backend1.servers.server0]
+        url = "http://127.0.0.1:9001"
+        weight = 1
+      [backends.backend1.servers.server1]
+        url = "http://127.0.0.1:9002"
+        weight = 2
+    [backends.backend1.maxconn]
+       amount = 10
+       extractorfunc = "client.ip"
+    [backends.backend1.loadbalancer.stickiness]
+
+[frontends]
+
+  [frontends.frontend1]
+    entryPoints = ["http"]
+    backend = "backend1"
+    passHostHeader = true
+    [frontends.frontend1.routes]
+      [frontends.frontend1.routes.route0]
+        rule = "Host:nabu.app"
