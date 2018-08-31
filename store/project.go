@@ -45,6 +45,18 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Name:  "nabu",
 			Owner: "abarbarov",
+			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+		},
+	})
+
+	projects = append(projects, &Project{
+		Id:    4,
+		Title: "boilerplate",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "boilerplate",
+			Owner: "abarbarov",
+			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
 	})
 

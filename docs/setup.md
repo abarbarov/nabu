@@ -10,3 +10,6 @@ curl -L https://raw.githubusercontent.com/containous/traefik/master/traefik.samp
 2. create systemd traefik service.
 
 95.216.163.61
+
+NAMECHEAP_API_USER
+NAMECHEAP_API_KEY

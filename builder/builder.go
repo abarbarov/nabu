@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/abarbarov/nabu/github"
+	"github.com/abarbarov/nabu/tools"
 	"github.com/pkg/errors"
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
@@ -35,6 +36,25 @@ type Builder struct {
 	GoExecutable string
 }
 
+func findFullName(output, name string) (string, error) {
+	fullName := ""
+	err := filepath.Walk(output, func(path string, info os.FileInfo, err error) error {
+		//files = append(files, path)
+		if info.IsDir() {
+			if strings.HasPrefix(info.Name(), name) {
+				fullName = info.Name()
+				return io.EOF
+			}
+		}
+		return nil
+	})
+
+	if err == io.EOF {
+		err = nil
+	}
+	return fullName, err
+}
+
 func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *Message) {
 
 	outOk(messages, "[INFO] build started", 0)
@@ -56,8 +76,13 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 	}
 
 	outOk(messages, fmt.Sprintf("[INFO] files unzipped, building application..."), 4)
+	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", owner, name, tools.Substr(sha, 0, 7)))
 
-	fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] Cannot find unzipped folder %v", err), 6)
+		return
+	}
+
 	buildPath := filepath.Join(b.BuildOutput, fullName)
 	err = b.vgoBuild(buildPath)
 

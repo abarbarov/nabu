@@ -1,25 +1,43 @@
-[entryPoints]
-  [entryPoints.http]
-  address = ":8080"
+[backends]
+
+  [backends.backend-nabu]
+    [backends.backend-nabu.servers]
+      [backends.backend-nabu.servers.server-blue]
+        url = "http://127.0.0.1:10001"
+        weight = 1
+      [backends.backend-nabu.servers.server-green]
+        url = "http://127.0.0.1:10002"
+        weight = 2
+    [backends.backend-nabu.maxconn]
+       amount = 10
+       extractorfunc = "client.ip"
+    [backends.backend-nabu.loadbalancer.stickiness]
+
+  [backends.backend-barbarov]
+    [backends.backend-barbarov.servers]
+      [backends.backend-barbarov.servers.server-blue]
+        url = "http://127.0.0.1:10101"
+        weight = 1
+      [backends.backend-barbarov.servers.server-green]
+        url = "http://127.0.0.1:10102"
+        weight = 2
+    [backends.backend-barbarov.maxconn]
+       amount = 10
+       extractorfunc = "client.ip"
+    [backends.backend-barbarov.loadbalancer.stickiness]
 
 [frontends]
 
-  [frontends.frontend1]
-  backend = "backend1"
-    [frontends.frontend1.routes.test_1]
-    rule = "Host: Traefik.localhost"
+  [frontends.frontend-nabu]
+    backend = "backend-nabu"
+    passHostHeader = true
+    [frontends.frontend-nabu.routes]
+      [frontends.frontend-nabu.routes.route0]
+        rule = "Host:nabu.app"
 
-  [frontends.frontend2]
-  backend = "backend2"
-    [frontends.frontend2.routes.test_1]
-    rule = "Host: apache.localhost"
-
-[backends]
-
-  [backends.backend1]
-    [backends.backend1.servers.server1]
-    url = "http://127.0.0.1:9001"
-
-  [backends.backend2]
-    [backends.backend2.servers.server1]
-    url = "http://127.0.0.1:9002"
+  [frontends.frontend-barbarov]
+    backend = "backend-barbarov"
+    passHostHeader = true
+    [frontends.frontend-barbarov.routes]
+      [frontends.frontend-barbarov.routes.route0]
+        rule = "Host:barbarov.app"
