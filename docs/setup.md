@@ -175,7 +175,73 @@ WatchdogSec=1s
 WantedBy=multi-user.target
 ``
 ###7. Create apps
+1. make foldera /apps/nabu and /apps/barbarov
+2. create service /lib/systemd/system/barbarov.{blue, green}.service
+3. create service /lib/systemd/system/nabu.{blue, green}.service
+```
+[Unit]
+Description=barbarov blue service
 
+[Service]
+Type=notify
+ExecStart=/apps/barbarov/blue/app -port=:10101
+Restart=always
+WatchdogSec=1s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+[Unit]
+Description=barbarov green service
+
+[Service]
+Type=notify
+ExecStart=/apps/barbarov/green/app -port=:10102
+Restart=always
+WatchdogSec=1s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+[Unit]
+Description=nabu blue service
+
+[Service]
+Type=notify
+ExecStart=/apps/nabu/blue/app -port=:10001
+Restart=always
+WatchdogSec=1s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+```
+[Unit]
+Description=nabu green service
+
+[Service]
+Type=notify
+ExecStart=/apps/nabu/green/app -port=:10002
+Restart=always
+WatchdogSec=1s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### enable services
+```
+sudo systemctl enable barbarov.blue.service
+sudo systemctl enable barbarov.green.service
+sudo systemctl enable nabu.blue.service
+sudo systemctl enable nabu.green.service
+```
 95.216.163.61
 
 NAMECHEAP_API_USER
