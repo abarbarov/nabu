@@ -15,7 +15,7 @@ defaultEntryPoints = ["https","http"]
   [entryPoints.https.tls]
 
 [file]
-  filename = "./rules.toml"
+  filename = "/etc/traefik-rules.toml"
   watch = true
 
 [acme]

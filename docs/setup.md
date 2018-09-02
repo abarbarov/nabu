@@ -73,7 +73,7 @@ defaultEntryPoints = ["https","http"]
   [entryPoints.https.tls]
 
 [file]
-  filename = "./rules.toml"
+  filename = "/etc/traefik-rules.toml"
   watch = true
 
 [acme]
@@ -97,7 +97,7 @@ acmeLogging=true
   [[acme.domains]]
     main = "barbarov.com"
 ```
-###4. Create rules.toml config
+###4. Create traefik-rules.toml config
 ```
 [backends]
 
@@ -144,7 +144,9 @@ acmeLogging=true
         rule = "Host:barbarov.com"
 
 ```
-###5. create systemd traefik service.
+###5. create systemd traefik service at /lib/systemd/system/traefik.service
+1. copy traefik to /usr/bin/traefik
+2. copy traefik.toml and traefik-rules.toml to /etc
 ```
 [Unit]
 Description=Traefik
@@ -159,6 +161,19 @@ WatchdogSec=1s
 WantedBy=multi-user.target
 ```
 ###6. Install traefik service
+``
+[Unit]
+Description=Traefik
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/traefik --configFile=/etc/traefik.toml
+Restart=always
+WatchdogSec=1s
+
+[Install]
+WantedBy=multi-user.target
+``
 ###7. Create apps
 
 95.216.163.61
