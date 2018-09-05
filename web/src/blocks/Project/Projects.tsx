@@ -14,7 +14,8 @@ import {
   listCommits,
   listProjects,
   selectBranch,
-  selectProject
+  selectProject,
+  installProject
 } from '../../actions/projects';
 import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
@@ -34,6 +35,7 @@ type ProjectsProps = {
   selectBranch: (projectId: number, name: string) => void,
   build: (projectId: number, branch: string, sha: string) => void,
   copy: (projectId: number, sha: string) => void,
+  install: (projectId: number, sha: string, color: string) => void,
 };
 
 class Projects extends React.Component<ProjectsProps, {}> {
@@ -83,6 +85,7 @@ class Projects extends React.Component<ProjectsProps, {}> {
                 selectedCommit={this.props.selectedCommit}
                 onBuild={this.props.build}
                 onCopy={this.props.copy}
+                onInstall={this.props.install}
               />
               : null
             }
@@ -114,10 +117,12 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(listProjects());
     },
     selectProject: (projectId: number) => {
+      dispatch(clearMessages());
       dispatch(selectProject(projectId));
       dispatch(listBranches(projectId));
     },
     selectBranch: (projectId: number, name: string) => {
+      dispatch(clearMessages());
       dispatch(selectBranch(projectId, name));
       dispatch(listCommits(projectId, name));
     },
@@ -128,6 +133,10 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
     copy: (projectId: number, sha: string) => {
       dispatch(clearMessages());
       dispatch(copyProject(projectId, sha));
+    },
+    install: (projectId: number, sha: string, color: string) => {
+      dispatch(clearMessages());
+      dispatch(installProject(projectId, sha, color));
     }
   };
 }

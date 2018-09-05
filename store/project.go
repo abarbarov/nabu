@@ -4,6 +4,8 @@ type Project struct {
 	Id         int64
 	Title      string
 	Repository *Repository
+	Exec       string
+	Dir        string
 }
 
 type Repository struct {
@@ -25,6 +27,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
+		Exec: "firstfile.%s.service",
+		Dir:  "/apps/firstfile/%s",
 	})
 
 	projects = append(projects, &Project{
@@ -36,6 +40,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
+		Exec: "firstfile.%s.service",
+		Dir:  "/apps/firstfile/%s",
 	})
 
 	projects = append(projects, &Project{
@@ -47,6 +53,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
+		Exec: "nabu.%s.service",
+		Dir:  "/apps/nabu/%s",
 	})
 
 	projects = append(projects, &Project{
@@ -58,6 +66,21 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
 		},
+		Exec: "nabu.%s.service",
+		Dir:  "/apps/nabu/%s",
+	})
+
+	projects = append(projects, &Project{
+		Id:    5,
+		Title: "barbarov.com",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "barbarov.com",
+			Owner: "abarbarov",
+			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+		},
+		Exec: "barbarov.%s.service",
+		Dir:  "/apps/barbarov/%s",
 	})
 
 	return projects, nil

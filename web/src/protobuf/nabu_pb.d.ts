@@ -156,6 +156,66 @@ export namespace Message {
   }
 }
 
+export class EmptyRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): EmptyRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: EmptyRequest): EmptyRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: EmptyRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): EmptyRequest;
+  static deserializeBinaryFromReader(message: EmptyRequest, reader: jspb.BinaryReader): EmptyRequest;
+}
+
+export namespace EmptyRequest {
+  export type AsObject = {
+  }
+}
+
+export class BranchRequest extends jspb.Message {
+  getRepoId(): number;
+  setRepoId(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): BranchRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: BranchRequest): BranchRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: BranchRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): BranchRequest;
+  static deserializeBinaryFromReader(message: BranchRequest, reader: jspb.BinaryReader): BranchRequest;
+}
+
+export namespace BranchRequest {
+  export type AsObject = {
+    repoId: number,
+  }
+}
+
+export class CommitsRequest extends jspb.Message {
+  getRepoId(): number;
+  setRepoId(value: number): void;
+
+  getBranchName(): string;
+  setBranchName(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CommitsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CommitsRequest): CommitsRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: CommitsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CommitsRequest;
+  static deserializeBinaryFromReader(message: CommitsRequest, reader: jspb.BinaryReader): CommitsRequest;
+}
+
+export namespace CommitsRequest {
+  export type AsObject = {
+    repoId: number,
+    branchName: string,
+  }
+}
+
 export class BuildRequest extends jspb.Message {
   getProjectId(): number;
   setProjectId(value: number): void;
@@ -184,28 +244,6 @@ export namespace BuildRequest {
   }
 }
 
-export class MessageResponse extends jspb.Message {
-  hasMessage(): boolean;
-  clearMessage(): void;
-  getMessage(): Message | undefined;
-  setMessage(value?: Message): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): MessageResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: MessageResponse): MessageResponse.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: MessageResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): MessageResponse;
-  static deserializeBinaryFromReader(message: MessageResponse, reader: jspb.BinaryReader): MessageResponse;
-}
-
-export namespace MessageResponse {
-  export type AsObject = {
-    message?: Message.AsObject,
-  }
-}
-
 export class CopyRequest extends jspb.Message {
   getProjectId(): number;
   setProjectId(value: number): void;
@@ -227,6 +265,56 @@ export namespace CopyRequest {
   export type AsObject = {
     projectId: number,
     sha: string,
+  }
+}
+
+export class InstallRequest extends jspb.Message {
+  getProjectId(): number;
+  setProjectId(value: number): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  getColor(): string;
+  setColor(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): InstallRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: InstallRequest): InstallRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: InstallRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): InstallRequest;
+  static deserializeBinaryFromReader(message: InstallRequest, reader: jspb.BinaryReader): InstallRequest;
+}
+
+export namespace InstallRequest {
+  export type AsObject = {
+    projectId: number,
+    sha: string,
+    color: string,
+  }
+}
+
+export class MessageResponse extends jspb.Message {
+  hasMessage(): boolean;
+  clearMessage(): void;
+  getMessage(): Message | undefined;
+  setMessage(value?: Message): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): MessageResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: MessageResponse): MessageResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: MessageResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): MessageResponse;
+  static deserializeBinaryFromReader(message: MessageResponse, reader: jspb.BinaryReader): MessageResponse;
+}
+
+export namespace MessageResponse {
+  export type AsObject = {
+    message?: Message.AsObject,
   }
 }
 
@@ -293,66 +381,6 @@ export class ListCommitsResponse extends jspb.Message {
 export namespace ListCommitsResponse {
   export type AsObject = {
     commit?: Commit.AsObject,
-  }
-}
-
-export class EmptyRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): EmptyRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: EmptyRequest): EmptyRequest.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: EmptyRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): EmptyRequest;
-  static deserializeBinaryFromReader(message: EmptyRequest, reader: jspb.BinaryReader): EmptyRequest;
-}
-
-export namespace EmptyRequest {
-  export type AsObject = {
-  }
-}
-
-export class BranchRequest extends jspb.Message {
-  getRepoId(): number;
-  setRepoId(value: number): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): BranchRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: BranchRequest): BranchRequest.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: BranchRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): BranchRequest;
-  static deserializeBinaryFromReader(message: BranchRequest, reader: jspb.BinaryReader): BranchRequest;
-}
-
-export namespace BranchRequest {
-  export type AsObject = {
-    repoId: number,
-  }
-}
-
-export class CommitsRequest extends jspb.Message {
-  getRepoId(): number;
-  setRepoId(value: number): void;
-
-  getBranchName(): string;
-  setBranchName(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CommitsRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: CommitsRequest): CommitsRequest.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: CommitsRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CommitsRequest;
-  static deserializeBinaryFromReader(message: CommitsRequest, reader: jspb.BinaryReader): CommitsRequest;
-}
-
-export namespace CommitsRequest {
-  export type AsObject = {
-    repoId: number,
-    branchName: string,
   }
 }
 

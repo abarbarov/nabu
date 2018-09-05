@@ -3,6 +3,7 @@ import {
   Branch,
   BranchRequest,
   BuildRequest,
+  InstallRequest,
   Commit,
   CommitsRequest,
   CopyRequest,
@@ -194,6 +195,30 @@ export const copyProject = (projectId: number, sha: string) => {
   });
 };
 
+export const installProject = (projectId: number, sha: string, color: string) => {
+
+  let req = new InstallRequest();
+  req.setProjectId(projectId);
+  req.setColor(color);
+  req.setSha(sha);
+
+  return grpcRequest<InstallRequest, MessageResponse>({
+    request: req,
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+    },
+    host: 'http://localhost:9091',
+    methodDescriptor: NabuService.Install,
+    onMessage: message => {
+      const m = message.getMessage();
+      if (m) {
+        return addBuildMessage(m);
+      }
+      return;
+    }
+  });
+};
+
 export type ProjectActionTypes =
   | AddProject
   | ListProjectsInit
@@ -207,4 +232,5 @@ export type ProjectActionTypes =
   | GrpcAction<BranchRequest, ListBranchesResponse>
   | GrpcAction<CommitsRequest, ListCommitsResponse>
   | GrpcAction<BuildRequest, MessageResponse>
+  | GrpcAction<InstallRequest, MessageResponse>
   | GrpcAction<CopyRequest, MessageResponse>;

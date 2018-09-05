@@ -8,6 +8,7 @@ type ProjectViewProps = {
   commits: Commit.AsObject[],
   onBuild: (projectid: number, branch: string, sha: string) => void
   onCopy: (projectid: number, sha: string) => void
+  onInstall: (projectid: number, sha: string, color: string) => void
 };
 
 const CommitsView: React.SFC<ProjectViewProps> = (props) => {
@@ -51,6 +52,12 @@ const CommitsView: React.SFC<ProjectViewProps> = (props) => {
             >Build
             </button>
             <button type="button" onClick={() => props.onCopy(props.selectedProject.id, commit.sha)}>Copy</button>
+            <button type="button" onClick={() => props.onInstall(props.selectedProject.id, commit.sha, 'blue')}>install
+              blue
+            </button>
+            <button type="button" onClick={() => props.onInstall(props.selectedProject.id, commit.sha, 'green')}>install
+              green
+            </button>
           </div>
         </div>
       )}

@@ -53,7 +53,7 @@ func (x StatusType) String() string {
 	return proto.EnumName(StatusType_name, int32(x))
 }
 func (StatusType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{0}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{0}
 }
 
 type Project struct {
@@ -69,7 +69,7 @@ func (m *Project) Reset()         { *m = Project{} }
 func (m *Project) String() string { return proto.CompactTextString(m) }
 func (*Project) ProtoMessage()    {}
 func (*Project) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{0}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{0}
 }
 func (m *Project) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Project.Unmarshal(m, b)
@@ -124,7 +124,7 @@ func (m *Repository) Reset()         { *m = Repository{} }
 func (m *Repository) String() string { return proto.CompactTextString(m) }
 func (*Repository) ProtoMessage()    {}
 func (*Repository) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{1}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{1}
 }
 func (m *Repository) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Repository.Unmarshal(m, b)
@@ -184,7 +184,7 @@ func (m *Branch) Reset()         { *m = Branch{} }
 func (m *Branch) String() string { return proto.CompactTextString(m) }
 func (*Branch) ProtoMessage()    {}
 func (*Branch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{2}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{2}
 }
 func (m *Branch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Branch.Unmarshal(m, b)
@@ -231,7 +231,7 @@ func (m *Commit) Reset()         { *m = Commit{} }
 func (m *Commit) String() string { return proto.CompactTextString(m) }
 func (*Commit) ProtoMessage()    {}
 func (*Commit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{3}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{3}
 }
 func (m *Commit) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Commit.Unmarshal(m, b)
@@ -286,7 +286,7 @@ func (m *Message) Reset()         { *m = Message{} }
 func (m *Message) String() string { return proto.CompactTextString(m) }
 func (*Message) ProtoMessage()    {}
 func (*Message) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{4}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{4}
 }
 func (m *Message) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Message.Unmarshal(m, b)
@@ -334,6 +334,120 @@ func (m *Message) GetStatus() StatusType {
 	return StatusType_UNKNOWN
 }
 
+type EmptyRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *EmptyRequest) Reset()         { *m = EmptyRequest{} }
+func (m *EmptyRequest) String() string { return proto.CompactTextString(m) }
+func (*EmptyRequest) ProtoMessage()    {}
+func (*EmptyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{5}
+}
+func (m *EmptyRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EmptyRequest.Unmarshal(m, b)
+}
+func (m *EmptyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EmptyRequest.Marshal(b, m, deterministic)
+}
+func (dst *EmptyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EmptyRequest.Merge(dst, src)
+}
+func (m *EmptyRequest) XXX_Size() int {
+	return xxx_messageInfo_EmptyRequest.Size(m)
+}
+func (m *EmptyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_EmptyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EmptyRequest proto.InternalMessageInfo
+
+type BranchRequest struct {
+	RepoId               int64    `protobuf:"varint,1,opt,name=repo_id,json=repoId,proto3" json:"repo_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *BranchRequest) Reset()         { *m = BranchRequest{} }
+func (m *BranchRequest) String() string { return proto.CompactTextString(m) }
+func (*BranchRequest) ProtoMessage()    {}
+func (*BranchRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{6}
+}
+func (m *BranchRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BranchRequest.Unmarshal(m, b)
+}
+func (m *BranchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BranchRequest.Marshal(b, m, deterministic)
+}
+func (dst *BranchRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BranchRequest.Merge(dst, src)
+}
+func (m *BranchRequest) XXX_Size() int {
+	return xxx_messageInfo_BranchRequest.Size(m)
+}
+func (m *BranchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_BranchRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BranchRequest proto.InternalMessageInfo
+
+func (m *BranchRequest) GetRepoId() int64 {
+	if m != nil {
+		return m.RepoId
+	}
+	return 0
+}
+
+type CommitsRequest struct {
+	RepoId               int64    `protobuf:"varint,1,opt,name=repo_id,json=repoId,proto3" json:"repo_id,omitempty"`
+	BranchName           string   `protobuf:"bytes,2,opt,name=branch_name,json=branchName,proto3" json:"branch_name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CommitsRequest) Reset()         { *m = CommitsRequest{} }
+func (m *CommitsRequest) String() string { return proto.CompactTextString(m) }
+func (*CommitsRequest) ProtoMessage()    {}
+func (*CommitsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{7}
+}
+func (m *CommitsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CommitsRequest.Unmarshal(m, b)
+}
+func (m *CommitsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CommitsRequest.Marshal(b, m, deterministic)
+}
+func (dst *CommitsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommitsRequest.Merge(dst, src)
+}
+func (m *CommitsRequest) XXX_Size() int {
+	return xxx_messageInfo_CommitsRequest.Size(m)
+}
+func (m *CommitsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CommitsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CommitsRequest proto.InternalMessageInfo
+
+func (m *CommitsRequest) GetRepoId() int64 {
+	if m != nil {
+		return m.RepoId
+	}
+	return 0
+}
+
+func (m *CommitsRequest) GetBranchName() string {
+	if m != nil {
+		return m.BranchName
+	}
+	return ""
+}
+
 type BuildRequest struct {
 	ProjectId            int64    `protobuf:"varint,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
 	Branch               string   `protobuf:"bytes,2,opt,name=branch,proto3" json:"branch,omitempty"`
@@ -347,7 +461,7 @@ func (m *BuildRequest) Reset()         { *m = BuildRequest{} }
 func (m *BuildRequest) String() string { return proto.CompactTextString(m) }
 func (*BuildRequest) ProtoMessage()    {}
 func (*BuildRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{5}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{8}
 }
 func (m *BuildRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BuildRequest.Unmarshal(m, b)
@@ -388,44 +502,6 @@ func (m *BuildRequest) GetSha() string {
 	return ""
 }
 
-type MessageResponse struct {
-	Message              *Message `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *MessageResponse) Reset()         { *m = MessageResponse{} }
-func (m *MessageResponse) String() string { return proto.CompactTextString(m) }
-func (*MessageResponse) ProtoMessage()    {}
-func (*MessageResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{6}
-}
-func (m *MessageResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_MessageResponse.Unmarshal(m, b)
-}
-func (m *MessageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_MessageResponse.Marshal(b, m, deterministic)
-}
-func (dst *MessageResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MessageResponse.Merge(dst, src)
-}
-func (m *MessageResponse) XXX_Size() int {
-	return xxx_messageInfo_MessageResponse.Size(m)
-}
-func (m *MessageResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MessageResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MessageResponse proto.InternalMessageInfo
-
-func (m *MessageResponse) GetMessage() *Message {
-	if m != nil {
-		return m.Message
-	}
-	return nil
-}
-
 type CopyRequest struct {
 	ProjectId            int64    `protobuf:"varint,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
 	Sha                  string   `protobuf:"bytes,2,opt,name=sha,proto3" json:"sha,omitempty"`
@@ -438,7 +514,7 @@ func (m *CopyRequest) Reset()         { *m = CopyRequest{} }
 func (m *CopyRequest) String() string { return proto.CompactTextString(m) }
 func (*CopyRequest) ProtoMessage()    {}
 func (*CopyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{7}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{9}
 }
 func (m *CopyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CopyRequest.Unmarshal(m, b)
@@ -472,6 +548,98 @@ func (m *CopyRequest) GetSha() string {
 	return ""
 }
 
+type InstallRequest struct {
+	ProjectId            int64    `protobuf:"varint,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Sha                  string   `protobuf:"bytes,2,opt,name=sha,proto3" json:"sha,omitempty"`
+	Color                string   `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *InstallRequest) Reset()         { *m = InstallRequest{} }
+func (m *InstallRequest) String() string { return proto.CompactTextString(m) }
+func (*InstallRequest) ProtoMessage()    {}
+func (*InstallRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{10}
+}
+func (m *InstallRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InstallRequest.Unmarshal(m, b)
+}
+func (m *InstallRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InstallRequest.Marshal(b, m, deterministic)
+}
+func (dst *InstallRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InstallRequest.Merge(dst, src)
+}
+func (m *InstallRequest) XXX_Size() int {
+	return xxx_messageInfo_InstallRequest.Size(m)
+}
+func (m *InstallRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_InstallRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InstallRequest proto.InternalMessageInfo
+
+func (m *InstallRequest) GetProjectId() int64 {
+	if m != nil {
+		return m.ProjectId
+	}
+	return 0
+}
+
+func (m *InstallRequest) GetSha() string {
+	if m != nil {
+		return m.Sha
+	}
+	return ""
+}
+
+func (m *InstallRequest) GetColor() string {
+	if m != nil {
+		return m.Color
+	}
+	return ""
+}
+
+type MessageResponse struct {
+	Message              *Message `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MessageResponse) Reset()         { *m = MessageResponse{} }
+func (m *MessageResponse) String() string { return proto.CompactTextString(m) }
+func (*MessageResponse) ProtoMessage()    {}
+func (*MessageResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{11}
+}
+func (m *MessageResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MessageResponse.Unmarshal(m, b)
+}
+func (m *MessageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MessageResponse.Marshal(b, m, deterministic)
+}
+func (dst *MessageResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MessageResponse.Merge(dst, src)
+}
+func (m *MessageResponse) XXX_Size() int {
+	return xxx_messageInfo_MessageResponse.Size(m)
+}
+func (m *MessageResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MessageResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MessageResponse proto.InternalMessageInfo
+
+func (m *MessageResponse) GetMessage() *Message {
+	if m != nil {
+		return m.Message
+	}
+	return nil
+}
+
 type ListProjectsResponse struct {
 	Project              *Project `protobuf:"bytes,1,opt,name=project,proto3" json:"project,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -483,7 +651,7 @@ func (m *ListProjectsResponse) Reset()         { *m = ListProjectsResponse{} }
 func (m *ListProjectsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListProjectsResponse) ProtoMessage()    {}
 func (*ListProjectsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{8}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{12}
 }
 func (m *ListProjectsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProjectsResponse.Unmarshal(m, b)
@@ -521,7 +689,7 @@ func (m *ListBranchesResponse) Reset()         { *m = ListBranchesResponse{} }
 func (m *ListBranchesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListBranchesResponse) ProtoMessage()    {}
 func (*ListBranchesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{9}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{13}
 }
 func (m *ListBranchesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListBranchesResponse.Unmarshal(m, b)
@@ -559,7 +727,7 @@ func (m *ListCommitsResponse) Reset()         { *m = ListCommitsResponse{} }
 func (m *ListCommitsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCommitsResponse) ProtoMessage()    {}
 func (*ListCommitsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{10}
+	return fileDescriptor_nabu_72b8cc9baa02fe0c, []int{14}
 }
 func (m *ListCommitsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCommitsResponse.Unmarshal(m, b)
@@ -586,135 +754,22 @@ func (m *ListCommitsResponse) GetCommit() *Commit {
 	return nil
 }
 
-type EmptyRequest struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *EmptyRequest) Reset()         { *m = EmptyRequest{} }
-func (m *EmptyRequest) String() string { return proto.CompactTextString(m) }
-func (*EmptyRequest) ProtoMessage()    {}
-func (*EmptyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{11}
-}
-func (m *EmptyRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EmptyRequest.Unmarshal(m, b)
-}
-func (m *EmptyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EmptyRequest.Marshal(b, m, deterministic)
-}
-func (dst *EmptyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EmptyRequest.Merge(dst, src)
-}
-func (m *EmptyRequest) XXX_Size() int {
-	return xxx_messageInfo_EmptyRequest.Size(m)
-}
-func (m *EmptyRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_EmptyRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_EmptyRequest proto.InternalMessageInfo
-
-type BranchRequest struct {
-	RepoId               int64    `protobuf:"varint,1,opt,name=repo_id,json=repoId,proto3" json:"repo_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *BranchRequest) Reset()         { *m = BranchRequest{} }
-func (m *BranchRequest) String() string { return proto.CompactTextString(m) }
-func (*BranchRequest) ProtoMessage()    {}
-func (*BranchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{12}
-}
-func (m *BranchRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BranchRequest.Unmarshal(m, b)
-}
-func (m *BranchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BranchRequest.Marshal(b, m, deterministic)
-}
-func (dst *BranchRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BranchRequest.Merge(dst, src)
-}
-func (m *BranchRequest) XXX_Size() int {
-	return xxx_messageInfo_BranchRequest.Size(m)
-}
-func (m *BranchRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_BranchRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BranchRequest proto.InternalMessageInfo
-
-func (m *BranchRequest) GetRepoId() int64 {
-	if m != nil {
-		return m.RepoId
-	}
-	return 0
-}
-
-type CommitsRequest struct {
-	RepoId               int64    `protobuf:"varint,1,opt,name=repo_id,json=repoId,proto3" json:"repo_id,omitempty"`
-	BranchName           string   `protobuf:"bytes,2,opt,name=branch_name,json=branchName,proto3" json:"branch_name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *CommitsRequest) Reset()         { *m = CommitsRequest{} }
-func (m *CommitsRequest) String() string { return proto.CompactTextString(m) }
-func (*CommitsRequest) ProtoMessage()    {}
-func (*CommitsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_nabu_1ad696e413764e89, []int{13}
-}
-func (m *CommitsRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CommitsRequest.Unmarshal(m, b)
-}
-func (m *CommitsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CommitsRequest.Marshal(b, m, deterministic)
-}
-func (dst *CommitsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommitsRequest.Merge(dst, src)
-}
-func (m *CommitsRequest) XXX_Size() int {
-	return xxx_messageInfo_CommitsRequest.Size(m)
-}
-func (m *CommitsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_CommitsRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CommitsRequest proto.InternalMessageInfo
-
-func (m *CommitsRequest) GetRepoId() int64 {
-	if m != nil {
-		return m.RepoId
-	}
-	return 0
-}
-
-func (m *CommitsRequest) GetBranchName() string {
-	if m != nil {
-		return m.BranchName
-	}
-	return ""
-}
-
 func init() {
 	proto.RegisterType((*Project)(nil), "protobuf.Project")
 	proto.RegisterType((*Repository)(nil), "protobuf.Repository")
 	proto.RegisterType((*Branch)(nil), "protobuf.Branch")
 	proto.RegisterType((*Commit)(nil), "protobuf.Commit")
 	proto.RegisterType((*Message)(nil), "protobuf.Message")
-	proto.RegisterType((*BuildRequest)(nil), "protobuf.BuildRequest")
-	proto.RegisterType((*MessageResponse)(nil), "protobuf.MessageResponse")
-	proto.RegisterType((*CopyRequest)(nil), "protobuf.CopyRequest")
-	proto.RegisterType((*ListProjectsResponse)(nil), "protobuf.ListProjectsResponse")
-	proto.RegisterType((*ListBranchesResponse)(nil), "protobuf.ListBranchesResponse")
-	proto.RegisterType((*ListCommitsResponse)(nil), "protobuf.ListCommitsResponse")
 	proto.RegisterType((*EmptyRequest)(nil), "protobuf.EmptyRequest")
 	proto.RegisterType((*BranchRequest)(nil), "protobuf.BranchRequest")
 	proto.RegisterType((*CommitsRequest)(nil), "protobuf.CommitsRequest")
+	proto.RegisterType((*BuildRequest)(nil), "protobuf.BuildRequest")
+	proto.RegisterType((*CopyRequest)(nil), "protobuf.CopyRequest")
+	proto.RegisterType((*InstallRequest)(nil), "protobuf.InstallRequest")
+	proto.RegisterType((*MessageResponse)(nil), "protobuf.MessageResponse")
+	proto.RegisterType((*ListProjectsResponse)(nil), "protobuf.ListProjectsResponse")
+	proto.RegisterType((*ListBranchesResponse)(nil), "protobuf.ListBranchesResponse")
+	proto.RegisterType((*ListCommitsResponse)(nil), "protobuf.ListCommitsResponse")
 	proto.RegisterEnum("protobuf.StatusType", StatusType_name, StatusType_value)
 }
 
@@ -735,6 +790,7 @@ type NabuServiceClient interface {
 	ListCommits(ctx context.Context, in *CommitsRequest, opts ...grpc.CallOption) (NabuService_ListCommitsClient, error)
 	Build(ctx context.Context, in *BuildRequest, opts ...grpc.CallOption) (NabuService_BuildClient, error)
 	Copy(ctx context.Context, in *CopyRequest, opts ...grpc.CallOption) (NabuService_CopyClient, error)
+	Install(ctx context.Context, in *InstallRequest, opts ...grpc.CallOption) (NabuService_InstallClient, error)
 }
 
 type nabuServiceClient struct {
@@ -905,6 +961,38 @@ func (x *nabuServiceCopyClient) Recv() (*MessageResponse, error) {
 	return m, nil
 }
 
+func (c *nabuServiceClient) Install(ctx context.Context, in *InstallRequest, opts ...grpc.CallOption) (NabuService_InstallClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_NabuService_serviceDesc.Streams[5], "/protobuf.NabuService/Install", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &nabuServiceInstallClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type NabuService_InstallClient interface {
+	Recv() (*MessageResponse, error)
+	grpc.ClientStream
+}
+
+type nabuServiceInstallClient struct {
+	grpc.ClientStream
+}
+
+func (x *nabuServiceInstallClient) Recv() (*MessageResponse, error) {
+	m := new(MessageResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // NabuServiceServer is the server API for NabuService service.
 type NabuServiceServer interface {
 	ListProjects(*EmptyRequest, NabuService_ListProjectsServer) error
@@ -912,6 +1000,7 @@ type NabuServiceServer interface {
 	ListCommits(*CommitsRequest, NabuService_ListCommitsServer) error
 	Build(*BuildRequest, NabuService_BuildServer) error
 	Copy(*CopyRequest, NabuService_CopyServer) error
+	Install(*InstallRequest, NabuService_InstallServer) error
 }
 
 func RegisterNabuServiceServer(s *grpc.Server, srv NabuServiceServer) {
@@ -1023,6 +1112,27 @@ func (x *nabuServiceCopyServer) Send(m *MessageResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _NabuService_Install_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(InstallRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(NabuServiceServer).Install(m, &nabuServiceInstallServer{stream})
+}
+
+type NabuService_InstallServer interface {
+	Send(*MessageResponse) error
+	grpc.ServerStream
+}
+
+type nabuServiceInstallServer struct {
+	grpc.ServerStream
+}
+
+func (x *nabuServiceInstallServer) Send(m *MessageResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _NabuService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "protobuf.NabuService",
 	HandlerType: (*NabuServiceServer)(nil),
@@ -1053,53 +1163,60 @@ var _NabuService_serviceDesc = grpc.ServiceDesc{
 			Handler:       _NabuService_Copy_Handler,
 			ServerStreams: true,
 		},
+		{
+			StreamName:    "Install",
+			Handler:       _NabuService_Install_Handler,
+			ServerStreams: true,
+		},
 	},
 	Metadata: "protobuf/nabu.proto",
 }
 
-func init() { proto.RegisterFile("protobuf/nabu.proto", fileDescriptor_nabu_1ad696e413764e89) }
+func init() { proto.RegisterFile("protobuf/nabu.proto", fileDescriptor_nabu_72b8cc9baa02fe0c) }
 
-var fileDescriptor_nabu_1ad696e413764e89 = []byte{
-	// 649 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x5f, 0x6f, 0xd3, 0x3e,
-	0x14, 0xfd, 0xa5, 0xe9, 0xda, 0xf5, 0x66, 0xbf, 0x12, 0xbc, 0xb1, 0x85, 0x4a, 0xfb, 0x23, 0x3f,
-	0x45, 0x63, 0xea, 0xa6, 0xf2, 0x82, 0x10, 0x1a, 0xb0, 0x52, 0xb1, 0x32, 0xc8, 0x26, 0x77, 0xd3,
-	0x1e, 0xa7, 0xb4, 0x35, 0x5b, 0x60, 0x69, 0x42, 0xec, 0x20, 0xed, 0xb3, 0xf0, 0xfd, 0xf8, 0x1c,
-	0xc8, 0xb1, 0x9d, 0xa4, 0x4d, 0x35, 0xc1, 0x9b, 0xef, 0xbd, 0xc7, 0xc7, 0xc7, 0xe7, 0xde, 0x0b,
-	0xeb, 0x71, 0x12, 0xf1, 0x68, 0x9c, 0x7e, 0x3d, 0x9c, 0xf9, 0xe3, 0xb4, 0x9b, 0x45, 0x68, 0x55,
-	0x27, 0x3b, 0xbb, 0xb7, 0x51, 0x74, 0x7b, 0x4f, 0x0f, 0x73, 0x14, 0x0f, 0x42, 0xca, 0xb8, 0x1f,
-	0xc6, 0x12, 0x8a, 0xcf, 0xa1, 0x79, 0x91, 0x44, 0xdf, 0xe8, 0x84, 0xa3, 0x36, 0xd4, 0x82, 0xa9,
-	0x63, 0xec, 0x19, 0xae, 0x49, 0x6a, 0xc1, 0x14, 0x6d, 0xc0, 0x0a, 0x0f, 0xf8, 0x3d, 0x75, 0x6a,
-	0x7b, 0x86, 0xdb, 0x22, 0x32, 0x40, 0x3b, 0x00, 0x09, 0x8d, 0x23, 0x16, 0xf0, 0x28, 0x79, 0x70,
-	0xcc, 0xac, 0x54, 0xca, 0xe0, 0x18, 0x80, 0xe4, 0x51, 0x85, 0x13, 0x41, 0x7d, 0xe6, 0x87, 0x9a,
-	0x32, 0x3b, 0x23, 0x1b, 0xcc, 0xef, 0x54, 0x53, 0x89, 0x23, 0x3a, 0x80, 0xd5, 0x71, 0xe2, 0xcf,
-	0x26, 0x77, 0x94, 0x39, 0xf5, 0x3d, 0xd3, 0xb5, 0x7a, 0x76, 0x57, 0xff, 0xa0, 0x7b, 0x92, 0x55,
-	0x48, 0x8e, 0xc0, 0xa7, 0xd0, 0x90, 0xb9, 0xa5, 0xec, 0xfb, 0xd0, 0x9c, 0x44, 0x61, 0x18, 0x70,
-	0xe6, 0x98, 0x8b, 0x54, 0xfd, 0xac, 0x40, 0x34, 0x00, 0xcf, 0xa0, 0x21, 0x53, 0xc8, 0x81, 0x66,
-	0x48, 0x19, 0xf3, 0x6f, 0x69, 0x26, 0xbe, 0x45, 0x74, 0x28, 0xd4, 0xb2, 0x3b, 0x5f, 0x3d, 0x21,
-	0x8e, 0xe8, 0x15, 0xb4, 0x72, 0x57, 0xb3, 0x5f, 0x58, 0xbd, 0x4e, 0x57, 0xfa, 0x5e, 0x3c, 0x75,
-	0xa9, 0x11, 0xa4, 0x00, 0xe3, 0x5f, 0x06, 0x34, 0xbf, 0x28, 0xde, 0x45, 0xa7, 0xe6, 0x58, 0x6b,
-	0xff, 0xc0, 0x5a, 0xd6, 0x6e, 0xce, 0x6b, 0x3f, 0x80, 0x06, 0xe3, 0x3e, 0x4f, 0x85, 0xab, 0x86,
-	0xdb, 0xee, 0x6d, 0x14, 0x4c, 0xa3, 0x2c, 0x7f, 0xf9, 0x10, 0x53, 0xa2, 0x30, 0xf8, 0x1a, 0xd6,
-	0x4e, 0xd2, 0xe0, 0x7e, 0x4a, 0xe8, 0x8f, 0x94, 0x32, 0x8e, 0xb6, 0x01, 0x62, 0x39, 0x2a, 0x37,
-	0xb9, 0xd2, 0x96, 0xca, 0x0c, 0xa7, 0x68, 0x13, 0x1a, 0xb2, 0x25, 0xca, 0x1b, 0x15, 0x69, 0xc3,
-	0xcc, 0xdc, 0x30, 0x7c, 0x0c, 0x4f, 0xd4, 0xaf, 0x09, 0x65, 0x71, 0x34, 0x63, 0x14, 0xbd, 0x98,
-	0xf7, 0xdb, 0xea, 0x3d, 0x2d, 0xa4, 0x69, 0xac, 0x46, 0xe0, 0x63, 0xb0, 0xfa, 0x51, 0xfc, 0xf0,
-	0x97, 0xba, 0x2a, 0x0d, 0xc3, 0x7d, 0xd8, 0xf8, 0x1c, 0x30, 0xae, 0xe6, 0x9e, 0x95, 0x45, 0xa8,
-	0x6b, 0x55, 0x11, 0x0a, 0x4c, 0x34, 0x02, 0xbf, 0x93, 0x24, 0x27, 0x6a, 0x0a, 0x73, 0x12, 0x37,
-	0xb7, 0x41, 0x72, 0x54, 0x27, 0x57, 0xd5, 0xf1, 0x5b, 0x58, 0x17, 0x0c, 0x72, 0xe2, 0xe6, 0x08,
-	0xe4, 0x3c, 0x56, 0x09, 0xd4, 0xbc, 0xaa, 0x3a, 0x6e, 0xc3, 0xda, 0x20, 0x8c, 0xb9, 0x36, 0x02,
-	0xbb, 0xf0, 0xbf, 0x7a, 0x42, 0x39, 0xb3, 0x05, 0x4d, 0xb1, 0x99, 0x85, 0x2d, 0x0d, 0x11, 0x0e,
-	0xa7, 0xf8, 0x13, 0xb4, 0xf3, 0x67, 0x1f, 0x87, 0xa2, 0x5d, 0xb0, 0xa4, 0xde, 0x9b, 0xd2, 0x6a,
-	0x81, 0x4c, 0x79, 0x7e, 0x48, 0xf7, 0xcf, 0x00, 0x8a, 0xe1, 0x41, 0x16, 0x34, 0xaf, 0xbc, 0x33,
-	0xef, 0xfc, 0xda, 0xb3, 0xff, 0x13, 0xc1, 0xe8, 0xaa, 0xdf, 0x1f, 0x8c, 0x46, 0xb6, 0x81, 0x5a,
-	0xb0, 0x32, 0x20, 0xe4, 0x9c, 0xd8, 0x35, 0x91, 0xbf, 0x7e, 0x4f, 0xbc, 0xa1, 0xf7, 0xd1, 0x36,
-	0x45, 0x70, 0x31, 0xf0, 0x3e, 0x88, 0xa0, 0xde, 0xfb, 0x5d, 0x03, 0xcb, 0xf3, 0xc7, 0xe9, 0x88,
-	0x26, 0x3f, 0x83, 0x09, 0x45, 0xa7, 0xb0, 0x56, 0x6e, 0x15, 0xda, 0x2c, 0xcc, 0x28, 0x7f, 0xbd,
-	0xb3, 0x53, 0xe4, 0x97, 0xb5, 0xf6, 0xc8, 0x40, 0x43, 0xc9, 0xa4, 0xfb, 0x85, 0xb6, 0x2a, 0x7d,
-	0x59, 0x4e, 0xb5, 0xd8, 0xe0, 0x23, 0x03, 0x9d, 0x82, 0x55, 0x6a, 0x1c, 0x72, 0x16, 0x1b, 0xa4,
-	0x4d, 0xed, 0x6c, 0xcf, 0x53, 0x2d, 0x74, 0xfa, 0xc8, 0x40, 0x6f, 0x60, 0x25, 0x5b, 0xb1, 0xf2,
-	0xbf, 0xca, 0x3b, 0xd7, 0x79, 0x5e, 0x5d, 0x83, 0xe2, 0xf6, 0x6b, 0xa8, 0x8b, 0x3d, 0x40, 0xcf,
-	0xca, 0x02, 0xf2, 0xbd, 0x78, 0xf4, 0xee, 0xb8, 0x91, 0xd5, 0x5e, 0xfe, 0x09, 0x00, 0x00, 0xff,
-	0xff, 0x61, 0x06, 0xf1, 0xe1, 0x40, 0x06, 0x00, 0x00,
+var fileDescriptor_nabu_72b8cc9baa02fe0c = []byte{
+	// 679 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0xdb, 0x6e, 0xd3, 0x40,
+	0x10, 0x86, 0x71, 0x9c, 0xc6, 0xcd, 0xb8, 0x84, 0xb0, 0x2d, 0xad, 0x89, 0xd4, 0x83, 0xf6, 0x2a,
+	0x2a, 0x55, 0x5a, 0x85, 0x1b, 0x84, 0x50, 0x29, 0x0d, 0x11, 0x0d, 0x05, 0xb7, 0xda, 0xb4, 0xca,
+	0x65, 0xe5, 0x24, 0x4b, 0x6b, 0x88, 0x63, 0xe3, 0xdd, 0x20, 0xe5, 0x59, 0x78, 0x01, 0x1e, 0x13,
+	0xad, 0x77, 0xd7, 0x76, 0xe2, 0xaa, 0x1c, 0xee, 0x3c, 0x07, 0x7f, 0x1e, 0xff, 0x33, 0x3f, 0xac,
+	0x47, 0x71, 0xc8, 0xc3, 0xe1, 0xec, 0xcb, 0xe1, 0xd4, 0x1b, 0xce, 0x5a, 0x49, 0x84, 0x56, 0x75,
+	0xb2, 0xb1, 0x7b, 0x1b, 0x86, 0xb7, 0x13, 0x7a, 0x98, 0x76, 0x71, 0x3f, 0xa0, 0x8c, 0x7b, 0x41,
+	0x24, 0x5b, 0xf1, 0x05, 0x58, 0x97, 0x71, 0xf8, 0x95, 0x8e, 0x38, 0xaa, 0x41, 0xc9, 0x1f, 0x3b,
+	0xc6, 0x9e, 0xd1, 0x34, 0x49, 0xc9, 0x1f, 0xa3, 0x0d, 0x58, 0xe1, 0x3e, 0x9f, 0x50, 0xa7, 0xb4,
+	0x67, 0x34, 0xab, 0x44, 0x06, 0x68, 0x07, 0x20, 0xa6, 0x51, 0xc8, 0x7c, 0x1e, 0xc6, 0x73, 0xc7,
+	0x4c, 0x4a, 0xb9, 0x0c, 0x8e, 0x00, 0x48, 0x1a, 0x15, 0x98, 0x08, 0xca, 0x53, 0x2f, 0xd0, 0xc8,
+	0xe4, 0x19, 0xd5, 0xc1, 0xfc, 0x46, 0x35, 0x4a, 0x3c, 0xa2, 0x03, 0x58, 0x1d, 0xc6, 0xde, 0x74,
+	0x74, 0x47, 0x99, 0x53, 0xde, 0x33, 0x9b, 0x76, 0xbb, 0xde, 0xd2, 0x7f, 0xd0, 0x3a, 0x4d, 0x2a,
+	0x24, 0xed, 0xc0, 0x67, 0x50, 0x91, 0xb9, 0x7b, 0xe9, 0xfb, 0x60, 0x8d, 0xc2, 0x20, 0xf0, 0x39,
+	0x73, 0xcc, 0x65, 0x54, 0x27, 0x29, 0x10, 0xdd, 0x80, 0xa7, 0x50, 0x91, 0x29, 0xe4, 0x80, 0x15,
+	0x50, 0xc6, 0xbc, 0x5b, 0x9a, 0x0c, 0x5f, 0x25, 0x3a, 0x14, 0xd3, 0xb2, 0x3b, 0x4f, 0x7d, 0x42,
+	0x3c, 0xa2, 0x57, 0x50, 0x4d, 0x55, 0x4d, 0xfe, 0xc2, 0x6e, 0x37, 0x5a, 0x52, 0xf7, 0xec, 0x53,
+	0x57, 0xba, 0x83, 0x64, 0xcd, 0xf8, 0xa7, 0x01, 0xd6, 0x67, 0xc5, 0x5d, 0x56, 0x6a, 0x81, 0x5a,
+	0xfa, 0x07, 0x6a, 0x7e, 0x76, 0x73, 0x71, 0xf6, 0x03, 0xa8, 0x30, 0xee, 0xf1, 0x99, 0x50, 0xd5,
+	0x68, 0xd6, 0xda, 0x1b, 0x19, 0xa9, 0x9f, 0xe4, 0xaf, 0xe6, 0x11, 0x25, 0xaa, 0x07, 0xd7, 0x60,
+	0xad, 0x1b, 0x44, 0x7c, 0x4e, 0xe8, 0xf7, 0x19, 0x65, 0x1c, 0x37, 0xe1, 0xb1, 0xd2, 0x5e, 0x26,
+	0xd0, 0x16, 0x58, 0x62, 0xf1, 0x37, 0xe9, 0xdc, 0x15, 0x11, 0xf6, 0xc6, 0xf8, 0x23, 0xd4, 0xa4,
+	0x8e, 0xec, 0x4f, 0xad, 0x68, 0x17, 0x6c, 0xb9, 0xc8, 0x9b, 0xdc, 0xe6, 0x40, 0xa6, 0x5c, 0x2f,
+	0xa0, 0x78, 0x00, 0x6b, 0xa7, 0x33, 0x7f, 0x32, 0xd6, 0xa4, 0x6d, 0x80, 0x48, 0x1e, 0x6c, 0x06,
+	0xab, 0xaa, 0x4c, 0x6f, 0x8c, 0x36, 0xa1, 0x22, 0x5f, 0x56, 0x28, 0x15, 0xe9, 0xb5, 0x99, 0xe9,
+	0xda, 0xf0, 0x31, 0xd8, 0x9d, 0x30, 0x9a, 0xff, 0x25, 0xb7, 0xb0, 0x76, 0x3c, 0x80, 0x5a, 0x6f,
+	0xca, 0xb8, 0x37, 0x99, 0xfc, 0x2f, 0x42, 0x38, 0x6c, 0x14, 0x4e, 0xc2, 0x58, 0x8d, 0x25, 0x03,
+	0x7c, 0x0c, 0x4f, 0xd4, 0x51, 0x10, 0xca, 0xa2, 0x70, 0xca, 0x28, 0x7a, 0xb1, 0x78, 0x8e, 0x76,
+	0xfb, 0x69, 0xb6, 0x39, 0xdd, 0xab, 0x3b, 0x70, 0x07, 0x36, 0x3e, 0xf9, 0x8c, 0x2b, 0x5b, 0xb3,
+	0x3c, 0x44, 0x0d, 0x53, 0x84, 0xa8, 0x66, 0xa2, 0x3b, 0xf0, 0x89, 0x84, 0x9c, 0x2a, 0x93, 0xa5,
+	0x90, 0x66, 0xaa, 0xaf, 0x64, 0x14, 0x8d, 0xa9, 0xea, 0xf8, 0x2d, 0xac, 0x0b, 0x42, 0x7a, 0x08,
+	0x19, 0x40, 0xda, 0xad, 0x08, 0x50, 0x76, 0x54, 0xf5, 0xfd, 0x73, 0x80, 0xec, 0x2a, 0x91, 0x0d,
+	0xd6, 0xb5, 0x7b, 0xee, 0x5e, 0x0c, 0xdc, 0xfa, 0x23, 0x11, 0xf4, 0xaf, 0x3b, 0x9d, 0x6e, 0xbf,
+	0x5f, 0x37, 0x50, 0x15, 0x56, 0xba, 0x84, 0x5c, 0x90, 0x7a, 0x49, 0xe4, 0x07, 0xef, 0x88, 0xdb,
+	0x73, 0x3f, 0xd4, 0x4d, 0x11, 0x5c, 0x76, 0xdd, 0xf7, 0x22, 0x28, 0xb7, 0x7f, 0x99, 0x60, 0xbb,
+	0xde, 0x70, 0xd6, 0xa7, 0xf1, 0x0f, 0x7f, 0x44, 0xd1, 0x19, 0xac, 0xe5, 0x45, 0x42, 0x9b, 0xd9,
+	0x18, 0xf9, 0xa3, 0x6f, 0xec, 0x64, 0xf9, 0xfb, 0x44, 0x3d, 0x32, 0x50, 0x4f, 0x92, 0xb4, 0x52,
+	0x68, 0xab, 0xa0, 0xc8, 0xfd, 0xa8, 0x65, 0x69, 0x8f, 0x0c, 0x74, 0x06, 0x76, 0x4e, 0x32, 0xe4,
+	0x2c, 0x4b, 0xa3, 0xed, 0xd4, 0xd8, 0x5e, 0x44, 0x2d, 0x69, 0x7c, 0x64, 0xa0, 0x37, 0xb0, 0x92,
+	0xb8, 0x26, 0xff, 0x5f, 0x79, 0x1b, 0x35, 0x9e, 0x17, 0x0f, 0x28, 0x7b, 0xfb, 0x35, 0x94, 0x85,
+	0x35, 0xd0, 0xb3, 0xfc, 0x00, 0xa9, 0x55, 0x1e, 0x7e, 0xf7, 0x04, 0x2c, 0x65, 0x8b, 0xfc, 0xfc,
+	0x8b, 0x4e, 0x79, 0x90, 0x30, 0xac, 0x24, 0xb5, 0x97, 0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0xe4,
+	0x58, 0x2e, 0x12, 0xdb, 0x06, 0x00, 0x00,
 }

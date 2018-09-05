@@ -48,33 +48,7 @@ service NabuService {
     rpc ListCommits (CommitsRequest) returns (stream ListCommitsResponse);
     rpc Build (BuildRequest) returns (stream MessageResponse);
     rpc Copy (CopyRequest) returns (stream MessageResponse);
-}
-
-message BuildRequest {
-    int64 project_id = 1;
-    string branch = 2;
-    string sha = 3;
-}
-
-message MessageResponse {
-    Message message = 1;
-}
-
-message CopyRequest {
-    int64 project_id = 1;
-    string sha = 2;
-}
-
-message ListProjectsResponse {
-    Project project = 1;
-}
-
-message ListBranchesResponse {
-    Branch branch = 1;
-}
-
-message ListCommitsResponse {
-    Commit commit = 1;
+    rpc Install (InstallRequest) returns (stream MessageResponse);
 }
 
 message EmptyRequest {
@@ -87,4 +61,37 @@ message BranchRequest {
 message CommitsRequest {
     int64 repo_id = 1;
     string branch_name = 2;
+}
+
+message BuildRequest {
+    int64 project_id = 1;
+    string branch = 2;
+    string sha = 3;
+}
+
+message CopyRequest {
+    int64 project_id = 1;
+    string sha = 2;
+}
+
+message InstallRequest {
+    int64 project_id = 1;
+    string sha = 2;
+    string color = 3;
+}
+
+message MessageResponse {
+    Message message = 1;
+}
+
+message ListProjectsResponse {
+    Project project = 1;
+}
+
+message ListBranchesResponse {
+    Branch branch = 1;
+}
+
+message ListCommitsResponse {
+    Commit commit = 1;
 }

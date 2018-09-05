@@ -110,7 +110,7 @@ func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
 
 	outOk(messages, "[INFO] copying started...", 0)
 
-	fullName := fmt.Sprintf("%s-%s-%s", owner, name, sha)
+	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", owner, name, tools.Substr(sha, 0, 7)))
 	buildPath := filepath.Join(b.BuildOutput, fullName)
 	outZip := filepath.Join(buildPath, fmt.Sprintf("out-%s.zip", sha))
 
@@ -143,6 +143,72 @@ func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
 	outOk(messages, fmt.Sprintf("[INFO] %+v", out), 10)
 
 	outClose(messages, fmt.Sprintf("[INFO] app copied"), 12)
+}
+
+func (b *Builder) Install(owner, name, sha, color, exec, dir string, messages chan *Message) {
+
+	outOk(messages, fmt.Sprintf("[INFO] installing %s-%s started...", sha, color), 0)
+
+	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", owner, name, tools.Substr(sha, 0, 7)))
+	staticAssetsPath := filepath.Join(b.BuildOutput, fullName, "static")
+
+	remoteBuildDir := fmt.Sprintf("/home/dev/out-%s", sha)
+	remoteServiceDir := fmt.Sprintf(dir, color)
+	serviceName := fmt.Sprintf(exec, color)
+
+	stop := fmt.Sprintf("sudo systemctl stop %s", serviceName)
+	cpStatic := fmt.Sprintf("sudo cp -R %s/static %s", remoteBuildDir, remoteServiceDir)
+	cpExecutable := fmt.Sprintf("sudo cp %s/application %s/app", remoteBuildDir, remoteServiceDir)
+	restart := fmt.Sprintf("sudo systemctl restart %s", serviceName)
+
+	sshConfig := &ssh.ClientConfig{
+		User: "dev",
+		Auth: []ssh.AuthMethod{
+			PrivateKeyFile(),
+		},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+
+	connection, err := ssh.Dial("tcp", "95.216.163.61:22", sshConfig)
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] ssh connection failed: %+v", err), 2)
+		return
+	}
+	defer connection.Close()
+
+	// 1
+	if _, err := execSSH(connection, stop); err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] stopping service failed: %+v", err), 4)
+		return
+	}
+
+	outOk(messages, fmt.Sprintf("[INFO] service stopped"), 4)
+
+	// 2
+	if _, err := execSSH(connection, cpExecutable); err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] copying executable failed: %+v", err), 6)
+		return
+	}
+	outOk(messages, fmt.Sprintf("[INFO] executable copied"), 6)
+
+	// 3
+	if _, err := os.Stat(staticAssetsPath); err == nil {
+		// copy assets only exists
+		if _, err := execSSH(connection, cpStatic); err != nil {
+			outErr(messages, fmt.Sprintf("[ERR] copying static assets failed: %+v", err), 6)
+			return
+		}
+
+		outOk(messages, fmt.Sprintf("[INFO] assets copied"), 6)
+	}
+
+	// 4
+	if _, err := execSSH(connection, restart); err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] restart failed: %+v", err), 10)
+		return
+	}
+
+	outClose(messages, fmt.Sprintf("[INFO] service restarted"), 12)
 }
 
 func (b *Builder) vgoBuild(dir string) error {
