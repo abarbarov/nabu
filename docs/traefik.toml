@@ -38,3 +38,6 @@ acmeLogging=true
 
   [[acme.domains]]
     main = "barbarov.com"
+
+  [[acme.domains]]
+    main = "test.firstfile.ru"

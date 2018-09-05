@@ -26,6 +26,19 @@
        extractorfunc = "client.ip"
     [backends.backend-barbarov.loadbalancer.stickiness]
 
+  [backends.backend-firstfile]
+    [backends.backend-firstfile.servers]
+      [backends.backend-firstfile.servers.server-blue]
+        url = "http://127.0.0.1:10201"
+        weight = 1
+      [backends.backend-firstfile.servers.server-green]
+        url = "http://127.0.0.1:10202"
+        weight = 2
+    [backends.backend-firstfile.maxconn]
+       amount = 10
+       extractorfunc = "client.ip"
+    [backends.backend-firstfile.loadbalancer.stickiness]
+
 [frontends]
 
   [frontends.frontend-nabu]
@@ -41,3 +54,10 @@
     [frontends.frontend-barbarov.routes]
       [frontends.frontend-barbarov.routes.route0]
         rule = "Host:barbarov.com"
+
+  [frontends.frontend-firstfile]
+    backend = "backend-firstfile"
+    passHostHeader = true
+    [frontends.frontend-firstfile.routes]
+      [frontends.frontend-firstfile.routes.route0]
+        rule = "Host:test.firstfile.ru"

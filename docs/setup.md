@@ -305,6 +305,11 @@ sudo systemctl enable barbarov.blue.service
 sudo systemctl enable barbarov.green.service
 sudo systemctl enable nabu.blue.service
 sudo systemctl enable nabu.green.service
+
+sudo systemctl start barbarov.blue.service
+sudo systemctl start barbarov.green.service
+sudo systemctl start nabu.blue.service
+sudo systemctl start nabu.green.service
 ```
 95.216.163.61
 
