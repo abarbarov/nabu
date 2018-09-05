@@ -181,12 +181,28 @@ WantedBy=multi-user.target
 ```
 [Unit]
 Description=barbarov blue service
+ConditionPathExists=/apps/barbarov/blue
+After=network.target
 
 [Service]
-Type=notify
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+WorkingDirectory=/apps/barbarov/blue
 ExecStart=/apps/barbarov/blue/app -port=:10101
-Restart=always
-WatchdogSec=1s
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/barbarovblue
+ExecStartPre=/bin/chown syslog:adm /var/log/barbarovblue
+ExecStartPre=/bin/chmod 755 /var/log/barbarovblue
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=barbarovblue
 
 [Install]
 WantedBy=multi-user.target
@@ -195,12 +211,28 @@ WantedBy=multi-user.target
 ```
 [Unit]
 Description=barbarov green service
+ConditionPathExists=/apps/barbarov/green
+After=network.target
 
 [Service]
-Type=notify
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+WorkingDirectory=/apps/barbarov/green
 ExecStart=/apps/barbarov/green/app -port=:10102
-Restart=always
-WatchdogSec=1s
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/barbarovgreen
+ExecStartPre=/bin/chown syslog:adm /var/log/barbarovgreen
+ExecStartPre=/bin/chmod 755 /var/log/barbarovgreen
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=barbarovgreen
 
 [Install]
 WantedBy=multi-user.target
@@ -209,12 +241,28 @@ WantedBy=multi-user.target
 ```
 [Unit]
 Description=nabu blue service
+ConditionPathExists=/apps/nabu/blue
+After=network.target
 
 [Service]
-Type=notify
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+WorkingDirectory=/apps/nabu/blue
 ExecStart=/apps/nabu/blue/app -port=:10001
-Restart=always
-WatchdogSec=1s
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/nabublue
+ExecStartPre=/bin/chown syslog:adm /var/log/nabublue
+ExecStartPre=/bin/chmod 755 /var/log/nabublue
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nabublue
 
 [Install]
 WantedBy=multi-user.target
@@ -224,12 +272,28 @@ WantedBy=multi-user.target
 ```
 [Unit]
 Description=nabu green service
+ConditionPathExists=/apps/nabu/green
+After=network.target
 
 [Service]
-Type=notify
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+WorkingDirectory=/apps/nabu/green
 ExecStart=/apps/nabu/green/app -port=:10002
-Restart=always
-WatchdogSec=1s
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/nabugreen
+ExecStartPre=/bin/chown syslog:adm /var/log/nabugreen
+ExecStartPre=/bin/chmod 755 /var/log/nabugreen
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nabugreen
 
 [Install]
 WantedBy=multi-user.target
