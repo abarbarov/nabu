@@ -62,7 +62,7 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 	zip, err := b.Github.Archive(token, owner, name, branch, sha, b.BuildOutput)
 
 	if err != nil {
-		outErr(messages, fmt.Sprintf("[ERR] %v", err), 1)
+		outErr(messages, fmt.Sprintf("[ERR] %v", err), 2)
 		return
 	}
 
@@ -94,16 +94,16 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 	folders := []string{filepath.Join(buildPath, "static"), filepath.Join(buildPath, "data")}
 	executable := filepath.Join(buildPath, "application")
 	outZip := filepath.Join(buildPath, fmt.Sprintf("out-%s.zip", sha))
-	outOk(messages, fmt.Sprintf("[INFO] zipping to %s", outZip), 6)
+	outOk(messages, fmt.Sprintf("[INFO] zipping to %s", outZip), 8)
 
 	err = zipFiles(folders, []string{executable}, outZip)
 
 	if err != nil {
-		outErr(messages, fmt.Sprintf("[ERR] zipping failed: %+v", err), 8)
+		outErr(messages, fmt.Sprintf("[ERR] zipping failed: %+v", err), 10)
 		return
 	}
 
-	outClose(messages, fmt.Sprintf("[INFO] app built"), 8)
+	outClose(messages, fmt.Sprintf("[INFO] app built"), 10)
 }
 
 func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
