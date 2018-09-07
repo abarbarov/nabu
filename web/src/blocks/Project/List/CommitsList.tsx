@@ -11,7 +11,7 @@ type ProjectViewProps = {
   onInstall: (projectid: number, sha: string, color: string) => void
 };
 
-const CommitsView: React.SFC<ProjectViewProps> = (props) => {
+const CommitsList: React.SFC<ProjectViewProps> = (props) => {
   function getDate(c: Commit.AsObject | undefined) {
     if (c && c.timestamp) {
       return new Date(c.timestamp.seconds * 1000).toISOString();
@@ -66,4 +66,4 @@ const CommitsView: React.SFC<ProjectViewProps> = (props) => {
   );
 };
 
-export default CommitsView;
+export default CommitsList;

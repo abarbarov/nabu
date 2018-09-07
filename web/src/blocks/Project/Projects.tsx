@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store';
 import ProjectList from './List/ProjectList';
-import CommitsView from './View/CommitsView';
+import CommitsList from './List/CommitsList';
 import BranchesList from './List/BranchesList';
 import { RootAction } from '../../actions';
 import {
@@ -79,7 +79,7 @@ class Projects extends React.Component<ProjectsProps, {}> {
 
           <div>
             {this.props.selectedBranch && this.props.selectedProject
-              ? <CommitsView
+              ? <CommitsList
                 selectedProject={this.props.selectedProject}
                 selectedBranch={this.props.selectedBranch}
                 commits={this.props.commits}

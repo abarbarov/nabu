@@ -39,6 +39,11 @@
        extractorfunc = "client.ip"
     [backends.backend-firstfile.loadbalancer.stickiness]
 
+  [backends.backend-svoerazvitie]
+    [backends.backend-svoerazvitie.servers]
+      [backends.backend-svoerazvitie.servers.server-blue]
+        url = "http://127.0.0.1:10301"
+
 [frontends]
 
   [frontends.frontend-nabu]
@@ -61,3 +66,10 @@
     [frontends.frontend-firstfile.routes]
       [frontends.frontend-firstfile.routes.route0]
         rule = "Host:test.firstfile.ru"
+
+  [frontends.frontend-svoerazvitie]
+    backend = "backend-svoerazvitie"
+    passHostHeader = true
+    [frontends.frontend-svoerazvitie.routes]
+      [frontends.frontend-svoerazvitie.routes.route0]
+        rule = "Host:svoerazvitie.com,www.svoerazvitie.com"

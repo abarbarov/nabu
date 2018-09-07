@@ -12,6 +12,10 @@ defaultEntryPoints = ["https","http"]
 
   [entryPoints.https]
   address = ":443"
+      [entryPoints.https.redirect]
+      regex = "^https://www.svoerazvitie.com/(.*)"
+      replacement = "https://svoerazvitie.com/$1"
+      permanent = true
   [entryPoints.https.tls]
 
 [file]
@@ -41,3 +45,7 @@ acmeLogging=true
 
   [[acme.domains]]
     main = "test.firstfile.ru"
+
+  [[acme.domains]]
+    main = "svoerazvitie.com"
+    sans = ["svoerazvitie.com", "www.svoerazvitie.com"]
