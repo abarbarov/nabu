@@ -14,6 +14,7 @@ const BranchesList: React.SFC<BranchesListProps> = (props) => {
       <h5>Branches available</h5>
       {props.branches.map((branch, i) =>
         <div
+          className="branches_item"
           style={props.selectedBranch && branch.name === props.selectedBranch.name
             ? { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' }
             : {}

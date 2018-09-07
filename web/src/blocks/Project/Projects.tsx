@@ -19,6 +19,7 @@ import {
 } from '../../actions/projects';
 import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
+import './Project.css';
 
 type ProjectsProps = {
   projects: Project.AsObject[],
@@ -46,7 +47,7 @@ class Projects extends React.Component<ProjectsProps, {}> {
 
   render() {
     return (
-      <div>
+      <div className="projects">
         <div>Next Awesome Build Unit</div>
 
         <div>

@@ -9,11 +9,12 @@ type ProjectListProps = {
 
 const ProjectList: React.SFC<ProjectListProps> = (props) => {
   return (
-    <div>
+    <div className="projects">
       {props.projects.map((project, i) =>
         <div
+          className="projects_item"
           style={props.selectedProject && project.id === props.selectedProject.id
-            ? {'backgroundColor': 'rgba(0, 0, 0, 0.08)'}
+            ? { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' }
             : {}
           }
           key={i}
@@ -23,11 +24,9 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
             }
           }}
         >
-          <div style={{display: 'flex'}}>
-            <div>{project.id} | </div>
-            <div>{project.title} | </div>
-            <div>{project.repository}</div>
-          </div>
+          <div>{project.id}</div>
+          <div>| {project.title}</div>
+          <div>| {project.repository}</div>
         </div>
       )}
     </div>

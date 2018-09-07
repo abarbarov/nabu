@@ -38,14 +38,15 @@ const CommitsView: React.SFC<ProjectViewProps> = (props) => {
         return 0;
       }).map((commit, i) =>
         <div
+          className="commits_item"
           style={props.selectedCommit && commit.sha === props.selectedCommit.sha ?
             { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' } : {}}
           key={i}
         >
-          <div style={{ display: 'flex' }}>
-            <div>[{getDate(commit)}] |</div>
-            <div>{commit.sha} |</div>
-            <div>{commit.message}</div>
+          <div>[{getDate(commit)}]</div>
+          <div>| {commit.sha}</div>
+          <div>| {commit.message}</div>
+          <div>
             <button
               type="button"
               onClick={() => props.onBuild(props.selectedProject.id, props.selectedBranch.name, commit.sha)}

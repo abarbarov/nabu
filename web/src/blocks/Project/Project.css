@@ -1,0 +1,39 @@
+.projects {
+    padding: 10px 0;
+    color: black;
+    margin: 1em;
+}
+
+.projects_item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 0 10px;
+}
+
+.projects_item:hover {
+    background-color: #f4e1d2;
+    color: black;
+}
+
+
+.branches_item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 10px;
+}
+
+.branches_item:hover {
+    background-color: #f4e1d2;
+    color: black;
+}
+
+.commits_item {
+    display: grid;
+    grid-template-columns: 1fr 2fr 3fr 2fr;
+    padding: 0 10px;
+}
+
+.commits_item:hover {
+    background-color: #f4e1d2;
+    color: black;
+}
