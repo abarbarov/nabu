@@ -8,25 +8,32 @@ import (
 
 func TestGithub_Commits(t *testing.T) {
 	gh := Github{}
-	ghtoken := "d14813a8df45fa3d136e3fd6690a49b780268978"
+	ghtoken := "dc374e4fc6a6c4912bb7599aaf4b138f0d942227"
 	commits, err := gh.Commits(ghtoken, "abarbarov", "trademark.web", "master")
 
 	require.Nil(t, err)
-	assert.NotEqual(t, 0, len(commits))
+	commitsAvailable := 0
+	for range commits {
+		commitsAvailable++
+		close(commits)
+	}
+
+	assert.NotEqual(t, 0, commitsAvailable)
 }
 
 func TestGithub_Branches(t *testing.T) {
 	gh := Github{}
-	ghtoken := "d14813a8df45fa3d136e3fd6690a49b780268978"
+	ghtoken := "dc374e4fc6a6c4912bb7599aaf4b138f0d942227"
 	branches, err := gh.Branches(ghtoken, "abarbarov", "trademark.web")
 
 	require.Nil(t, err)
 	assert.NotEqual(t, 0, len(branches))
 
 	hasMasterBranch := false
-	for _, b := range branches {
+	for b := range branches {
 		if b.Name == "master" {
 			hasMasterBranch = true
+			close(branches)
 		}
 	}
 

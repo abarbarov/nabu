@@ -25,7 +25,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Name:  "trademark.web",
 			Owner: "abarbarov",
-			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
 		Exec: "firstfile.%s.service",
 		Dir:  "/apps/firstfile/%s",
@@ -38,7 +38,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Name:  "trademark.web",
 			Owner: "abarbarov",
-			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
 		Exec: "firstfile.%s.service",
 		Dir:  "/apps/firstfile/%s",
@@ -51,7 +51,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Name:  "nabu",
 			Owner: "abarbarov",
-			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
 		Exec: "nabu.%s.service",
 		Dir:  "/apps/nabu/%s",
@@ -64,7 +64,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Name:  "boilerplate",
 			Owner: "abarbarov",
-			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
 		Exec: "nabu.%s.service",
 		Dir:  "/apps/nabu/%s",
@@ -77,10 +77,23 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Id:    1,
 			Name:  "barbarov.com",
 			Owner: "abarbarov",
-			Token: "d14813a8df45fa3d136e3fd6690a49b780268978",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
 		Exec: "barbarov.%s.service",
 		Dir:  "/apps/barbarov/%s",
+	})
+
+	projects = append(projects, &Project{
+		Id:    6,
+		Title: "svoerazvitie.com",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "svoerazvitie.com",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Exec: "svoerazvitie.%s.service",
+		Dir:  "/apps/svoerazvitie/%s",
 	})
 
 	return projects, nil

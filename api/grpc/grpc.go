@@ -47,7 +47,7 @@ func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuSe
 		return err
 	}
 
-	branches, err := ngs.github.Branches("d14813a8df45fa3d136e3fd6690a49b780268978", proj.Repository.Owner, proj.Repository.Name)
+	branches, err := ngs.github.Branches(proj.Repository.Token, proj.Repository.Owner, proj.Repository.Name)
 	defer close(branches)
 
 	if err != nil {
@@ -71,7 +71,7 @@ func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuServ
 		return err
 	}
 
-	commits, err := ngs.github.Commits("d14813a8df45fa3d136e3fd6690a49b780268978", proj.Repository.Owner, proj.Repository.Name, req.BranchName)
+	commits, err := ngs.github.Commits(proj.Repository.Token, proj.Repository.Owner, proj.Repository.Name, req.BranchName)
 	defer close(commits)
 
 	if err != nil {
