@@ -13,8 +13,8 @@
 .projects_item:hover {
     background-color: #f4e1d2;
     color: black;
+    cursor: pointer;
 }
-
 
 .branches_item {
     display: grid;
@@ -25,12 +25,14 @@
 .branches_item:hover {
     background-color: #f4e1d2;
     color: black;
+    cursor: pointer;
 }
 
 .commits_item {
     display: grid;
     grid-template-columns: 1fr 2fr 3fr 2fr;
     padding: 0 10px;
+    cursor: pointer;
 }
 
 .commits_item:hover {

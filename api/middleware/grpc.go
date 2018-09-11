@@ -26,10 +26,10 @@ func (m *GrpcWebMiddleware) Handler(next http.Handler) http.Handler {
 }
 
 func NewGrpcWebMiddleware(store *store.DataStore, gh *github.Github, b *builder.Builder) *GrpcWebMiddleware {
-	grpcServer := grpc.NewServer()
+	s := grpc.NewServer()
 	nabuGrpcService := nabuGrpc.NewNabuGrpcService(store, gh, b)
-	pb.RegisterNabuServiceServer(grpcServer, nabuGrpcService)
-	wrappedGrpc := grpcweb.WrapServer(grpcServer)
+	pb.RegisterNabuServiceServer(s, nabuGrpcService)
+	wrappedGrpc := grpcweb.WrapServer(s)
 
 	return &GrpcWebMiddleware{wrappedGrpc}
 }

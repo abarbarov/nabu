@@ -48,12 +48,20 @@ export default function (state: ProjectState = initialState, action: RootAction)
         ...state,
         loading: true,
         commits: {},
+        branches: {},
+        messages: [],
         selectedProject: state.projects[action.payload],
         selectedBranch: null
       };
 
     case SELECT_BRANCH:
-      return { ...state, loading: true, selectedBranch: state.branches[action.payload.branch] };
+      return {
+        ...state,
+        loading: true,
+        messages: [],
+        commits: {},
+        selectedBranch: state.branches[action.payload.branch]
+      };
 
     case CLEAR_MESSAGES:
       return { ...state, loading: true, messages: [] };

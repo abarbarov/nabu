@@ -15,7 +15,7 @@ import {
   listProjects,
   selectBranch,
   selectProject,
-  installProject
+  installProject,
 } from '../../actions/projects';
 import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
 import Logs from '../Log/Log';
@@ -118,12 +118,10 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(listProjects());
     },
     selectProject: (projectId: number) => {
-      dispatch(clearMessages());
       dispatch(selectProject(projectId));
       dispatch(listBranches(projectId));
     },
     selectBranch: (projectId: number, name: string) => {
-      dispatch(clearMessages());
       dispatch(selectBranch(projectId, name));
       dispatch(listCommits(projectId, name));
     },
