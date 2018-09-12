@@ -6,24 +6,22 @@ import mod1 from '../Example/_mod1/Example_mod1';
 import mod2 from '../Example/_mod2/Example_mod2';
 import Example from '../Example/Example';
 
-import './App.css';
-import Header from './Header/App-Header';
-import { Link } from 'react-router-dom';
+import './Register.css';
 
-export interface IAppProps {
+export interface IRegisterProps {
   path: string;
 }
 
-export interface IAppState {
+export interface IRegisterState {
   title: string;
 }
 
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
-export default class App extends Block<IAppProps, IAppState> {
-  public block = 'App';
+export default class Register extends Block<IRegisterProps, IRegisterState> {
+  public block = 'Register';
 
-  constructor(props: IAppProps) {
+  constructor(props: IRegisterProps) {
     super(props);
 
     this.state = {
@@ -32,21 +30,17 @@ export default class App extends Block<IAppProps, IAppState> {
   }
 
   public componentDidMount() {
-    this.setState({ title: 'Welcome to BEM in the TypeScript world' });
+    this.setState({ title: 'Welcome to LOGIN page' });
   }
 
   public content() {
     return (
       <Fragment>
-        <Header title={this.state.title}/>
         <ExampleWithMods mod1={true}/>
         <ExampleWithMods mod1={true} mod2={true}/>
-        <Bem block="App" elem="Intro">
-
+        <Bem block="Login" elem="Intro">
+          REGISTER<br/>
           To get started, edit <code>{this.props.path}</code> and save to reload.
-          <Link to={`/login`}>LOGIN</Link>
-          <br/>
-          <Link to={`/register`}>REGISTER</Link>
         </Bem>
       </Fragment>
     );
