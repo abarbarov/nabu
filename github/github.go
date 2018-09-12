@@ -23,11 +23,13 @@ type Branch struct {
 type Github struct {
 }
 
-func (g *Github) Branches(token, owner, name string) (chan *Branch, error) {
-	output := make(chan *Branch)
+func (g *Github) Branches(token, owner, name string) ([]*Branch, error) {
+	var ctx context.Context
+	var cancel context.CancelFunc
 
-	// TODO: use context with cancel
-	ctx := context.Background()
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	oauth := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(oauth)
@@ -35,25 +37,24 @@ func (g *Github) Branches(token, owner, name string) (chan *Branch, error) {
 	branches, _, err := client.Repositories.ListBranches(context.Background(), owner, name, nil)
 
 	if err != nil {
-		return output, err
+		return nil, err
 	}
 
+	var output []*Branch
 	for _, branch := range branches {
-		go func(b *github.Branch) {
-			output <- &Branch{
-				Name: *b.Name,
-			}
-		}(branch)
+		output = append(output, &Branch{Name: *branch.Name})
 	}
 
 	return output, nil
 }
 
-func (g *Github) Commits(token, owner, name, branch string) (chan *Commit, error) {
-	output := make(chan *Commit)
+func (g *Github) Commits(token, owner, name, branch string) ([]*Commit, error) {
+	var ctx context.Context
+	var cancel context.CancelFunc
 
-	// TODO: use context with cancel
-	ctx := context.Background()
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	oauth := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(oauth)
@@ -61,17 +62,16 @@ func (g *Github) Commits(token, owner, name, branch string) (chan *Commit, error
 	commits, _, err := client.Repositories.ListCommits(context.Background(), owner, name, &github.CommitsListOptions{SHA: branch})
 
 	if err != nil {
-		return output, err
+		return nil, err
 	}
 
-	for _, commit := range commits {
-		go func(c *github.RepositoryCommit) {
-			output <- &Commit{
-				Message: *c.Commit.Message,
-				SHA:     *c.SHA,
-				Date:    *c.Commit.Author.Date,
-			}
-		}(commit)
+	var output []*Commit
+	for _, c := range commits {
+		output = append(output, &Commit{
+			Message: *c.Commit.Message,
+			SHA:     *c.SHA,
+			Date:    *c.Commit.Author.Date,
+		})
 	}
 
 	return output, nil

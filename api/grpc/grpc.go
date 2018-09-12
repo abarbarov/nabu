@@ -13,22 +13,20 @@ import (
 )
 
 type nabuGrpcService struct {
-	github    *github.Github
-	terraform *terraformApi
-	store     *store.DataStore
-	builder   *builder.Builder
-}
-
-type terraformApi struct {
+	github  *github.Github
+	store   *store.DataStore
+	builder *builder.Builder
 }
 
 func NewNabuGrpcService(store *store.DataStore, github *github.Github, builder *builder.Builder) *nabuGrpcService {
-	return &nabuGrpcService{github, &terraformApi{}, store, builder}
+	return &nabuGrpcService{github, store, builder}
 }
 
 func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuService_ListProjectsServer) error {
+
 	projects, err := ngs.Projects()
 	defer close(projects)
+
 	if err != nil {
 		return err
 	}
@@ -48,18 +46,21 @@ func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuSe
 	}
 
 	branches, err := ngs.github.Branches(proj.Repository.Token, proj.Repository.Owner, proj.Repository.Name)
-	defer close(branches)
 
 	if err != nil {
 		return err
 	}
 
-	for c := range branches {
-		stream.Send(&pb.ListBranchesResponse{
+	for _, c := range branches {
+		err = stream.Send(&pb.ListBranchesResponse{
 			Branch: &pb.Branch{
 				Name: c.Name,
 			},
 		})
+
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -72,13 +73,12 @@ func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuServ
 	}
 
 	commits, err := ngs.github.Commits(proj.Repository.Token, proj.Repository.Owner, proj.Repository.Name, req.BranchName)
-	defer close(commits)
 
 	if err != nil {
 		return err
 	}
 
-	for c := range commits {
+	for _, c := range commits {
 		resp.Send(&pb.ListCommitsResponse{
 			Commit: &pb.Commit{
 				Sha:     c.SHA,
