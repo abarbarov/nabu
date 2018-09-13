@@ -4,10 +4,11 @@ import { Provider } from 'react-redux';
 import store from './store';
 import App from './blocks/App/App';
 import Login from './blocks/Login/Login';
+import Projects from './blocks/Projects/Projects';
 import Register from './blocks/Register/Register';
 import './blocks/Page/Page.css';
-// import Projects from './blocks/Project/Projects';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+// import Projects from './blocks/Project/Projects';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Route exact={true} path="/" component={App}/>
         <Route path="/login" component={Login}/>
         <Route path="/register" component={Register}/>
+        <Route path="/projects" component={Projects}/>
       </Switch>
     </BrowserRouter>
     {/*<Projects/>*/}

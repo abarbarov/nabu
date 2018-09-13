@@ -6,23 +6,23 @@ import mod1 from '../Example/_mod1/Example_mod1';
 import mod2 from '../Example/_mod2/Example_mod2';
 import Example from '../Example/Example';
 
-import './Register.css';
+import './Projects.css';
 import { Link } from 'react-router-dom';
 
-export interface IRegisterProps {
+export interface IProjectsProps {
   path: string;
 }
 
-export interface IRegisterState {
+export interface IProjectsState {
   title: string;
 }
 
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
-export default class Register extends Block<IRegisterProps, IRegisterState> {
-  public block = 'Register';
+export default class Projects extends Block<IProjectsProps, IProjectsState> {
+  public block = 'Projects';
 
-  constructor(props: IRegisterProps) {
+  constructor(props: IProjectsProps) {
     super(props);
 
     this.state = {
@@ -31,7 +31,7 @@ export default class Register extends Block<IRegisterProps, IRegisterState> {
   }
 
   public componentDidMount() {
-    this.setState({ title: 'Welcome to LOGIN page' });
+    this.setState({ title: 'Welcome to PROJECTS page' });
   }
 
   public content() {
@@ -39,8 +39,9 @@ export default class Register extends Block<IRegisterProps, IRegisterState> {
       <Fragment>
         <ExampleWithMods mod1={true}/>
         <ExampleWithMods mod1={true} mod2={true}/>
-        <Bem block="Register" elem="Intro">
-          REGISTER<br/>
+        <Bem block="Projects" elem="Intro">
+          PROJECTS
+          <br/>
           <Link to={`/`}>HOME</Link>
         </Bem>
       </Fragment>

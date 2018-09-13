@@ -9,6 +9,7 @@ import {
   SELECT_BRANCH,
   SELECT_PROJECT
 } from '../actions/projects';
+
 import { Branch, Commit, Message, Project, StatusType } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
@@ -21,6 +22,7 @@ export type ProjectState = {
   readonly selectedBranch: Branch.AsObject | null,
   readonly selectedCommit: Commit.AsObject | null,
   readonly messages: Message.AsObject[],
+  readonly user: { role: string },
 };
 
 const initialState = {
@@ -33,6 +35,7 @@ const initialState = {
   selectedProject: null,
   selectedCommit: null,
   selectedBranch: null,
+  user: { role: 'nobody' }
 };
 
 export default function (state: ProjectState = initialState, action: RootAction): ProjectState {

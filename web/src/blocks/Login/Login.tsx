@@ -7,6 +7,7 @@ import mod2 from '../Example/_mod2/Example_mod2';
 import Example from '../Example/Example';
 
 import './Login.css';
+import { Link } from 'react-router-dom';
 
 export interface ILoginProps {
   path: string;
@@ -40,7 +41,7 @@ export default class Login extends Block<ILoginProps, ILoginState> {
         <ExampleWithMods mod1={true} mod2={true}/>
         <Bem block="Login" elem="Intro">
           LOGIN<br/>
-          To get started, edit <code>{this.props.path}</code> and save to reload.
+          <Link to={`/`}>HOME</Link>
         </Bem>
       </Fragment>
     );
