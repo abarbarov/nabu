@@ -126,9 +126,11 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return state;
 
     case SIGN_IN:
+      debugger;
       return { ...state, authenticated: true, user: action.payload.toObject() };
 
     case SIGN_OUT:
+      debugger;
       return { ...state, authenticated: false, user: null };
 
     default:

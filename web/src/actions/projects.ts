@@ -238,7 +238,6 @@ type SignIn = {
 export const signIn = (user: User) => ({ type: SIGN_IN, payload: user });
 
 export const authenticate = (username: string, password: string) => {
-
   let req = new AuthRequest();
   req.setUsername(username);
   req.setPassword(password);
