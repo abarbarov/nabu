@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"context"
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
@@ -64,6 +65,15 @@ func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuSe
 	}
 
 	return nil
+}
+
+func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
+	return &pb.AuthResponse{
+		User: &pb.User{
+			Id:    1,
+			Token: "super-token",
+		},
+	}, nil
 }
 
 func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuService_ListCommitsServer) error {

@@ -5,12 +5,18 @@ import { Fragment } from 'react';
 import mod1 from '../Example/_mod1/Example_mod1';
 import mod2 from '../Example/_mod2/Example_mod2';
 import Example from '../Example/Example';
+import { authenticate } from '../../actions/projects';
 
 import './Login.css';
 import { Link } from 'react-router-dom';
+// import { RootState } from "../../store";
+import { Dispatch } from 'redux';
+import { RootAction } from '../../actions';
+import { connect } from 'react-redux';
 
 export interface ILoginProps {
   path: string;
+  login: (username: string, password: string) => void;
 }
 
 export interface ILoginState {
@@ -34,10 +40,6 @@ class Login extends Block<ILoginProps, ILoginState> {
     this.setState({ title: 'Welcome to LOGIN page' });
   }
 
-  submit(values) {
-    console.log(values);
-  }
-
   public content() {
     return (
       <Fragment>
@@ -45,9 +47,8 @@ class Login extends Block<ILoginProps, ILoginState> {
         <ExampleWithMods mod1={true} mod2={true}/>
         <Bem block="Login" elem="Intro">
 
-          LOGIN<br/>
-
-          <form onSubmit={handleSubmit(this.submit)}>
+          LOGIN <br/>
+          <form onSubmit={() => this.props.login('test', 'test')}>
             <input
               name="email"
               type="text"
@@ -68,4 +69,13 @@ class Login extends Block<ILoginProps, ILoginState> {
   }
 }
 
-export default reduxForm({ form: 'signin' })(Login);
+function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
+  return {
+    signin: (username: string, password: string) => {
+      debugger;
+      dispatch(authenticate(username, password));
+    }
+  };
+}
+
+export default connect(mapDispatchToProps)(Login);
