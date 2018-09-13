@@ -11,6 +11,15 @@ var NabuService = (function () {
   return NabuService;
 }());
 
+NabuService.Authenticate = {
+  methodName: "Authenticate",
+  service: NabuService,
+  requestStream: false,
+  responseStream: false,
+  requestType: protobuf_nabu_pb.AuthRequest,
+  responseType: protobuf_nabu_pb.AuthResponse
+};
+
 NabuService.ListProjects = {
   methodName: "ListProjects",
   service: NabuService,
@@ -71,6 +80,28 @@ function NabuServiceClient(serviceHost, options) {
   this.serviceHost = serviceHost;
   this.options = options || {};
 }
+
+NabuServiceClient.prototype.authenticate = function authenticate(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  grpc.unary(NabuService.Authenticate, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+};
 
 NabuServiceClient.prototype.listProjects = function listProjects(requestMessage, metadata) {
   var listeners = {

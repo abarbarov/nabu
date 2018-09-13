@@ -4,6 +4,30 @@
 import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
+export class User extends jspb.Message {
+  getId(): number;
+  setId(value: number): void;
+
+  getToken(): string;
+  setToken(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): User.AsObject;
+  static toObject(includeInstance: boolean, msg: User): User.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: User, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): User;
+  static deserializeBinaryFromReader(message: User, reader: jspb.BinaryReader): User;
+}
+
+export namespace User {
+  export type AsObject = {
+    id: number,
+    token: string,
+  }
+}
+
 export class Project extends jspb.Message {
   getId(): number;
   setId(value: number): void;
@@ -268,6 +292,30 @@ export namespace CopyRequest {
   }
 }
 
+export class AuthRequest extends jspb.Message {
+  getUsername(): string;
+  setUsername(value: string): void;
+
+  getPassword(): string;
+  setPassword(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AuthRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AuthRequest): AuthRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: AuthRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AuthRequest;
+  static deserializeBinaryFromReader(message: AuthRequest, reader: jspb.BinaryReader): AuthRequest;
+}
+
+export namespace AuthRequest {
+  export type AsObject = {
+    username: string,
+    password: string,
+  }
+}
+
 export class InstallRequest extends jspb.Message {
   getProjectId(): number;
   setProjectId(value: number): void;
@@ -381,6 +429,28 @@ export class ListCommitsResponse extends jspb.Message {
 export namespace ListCommitsResponse {
   export type AsObject = {
     commit?: Commit.AsObject,
+  }
+}
+
+export class AuthResponse extends jspb.Message {
+  hasUser(): boolean;
+  clearUser(): void;
+  getUser(): User | undefined;
+  setUser(value?: User): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AuthResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: AuthResponse): AuthResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: AuthResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AuthResponse;
+  static deserializeBinaryFromReader(message: AuthResponse, reader: jspb.BinaryReader): AuthResponse;
+}
+
+export namespace AuthResponse {
+  export type AsObject = {
+    user?: User.AsObject,
   }
 }
 

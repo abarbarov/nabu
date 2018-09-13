@@ -4,6 +4,15 @@
 import * as protobuf_nabu_pb from "../protobuf/nabu_pb";
 import {grpc} from "grpc-web-client";
 
+type NabuServiceAuthenticate = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof protobuf_nabu_pb.AuthRequest;
+  readonly responseType: typeof protobuf_nabu_pb.AuthResponse;
+};
+
 type NabuServiceListProjects = {
   readonly methodName: string;
   readonly service: typeof NabuService;
@@ -60,6 +69,7 @@ type NabuServiceInstall = {
 
 export class NabuService {
   static readonly serviceName: string;
+  static readonly Authenticate: NabuServiceAuthenticate;
   static readonly ListProjects: NabuServiceListProjects;
   static readonly ListBranches: NabuServiceListBranches;
   static readonly ListCommits: NabuServiceListCommits;
@@ -83,6 +93,15 @@ export class NabuServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: ServiceClientOptions);
+  authenticate(
+    requestMessage: protobuf_nabu_pb.AuthRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
+  ): void;
+  authenticate(
+    requestMessage: protobuf_nabu_pb.AuthRequest,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
+  ): void;
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
   listBranches(requestMessage: protobuf_nabu_pb.BranchRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListBranchesResponse>;
   listCommits(requestMessage: protobuf_nabu_pb.CommitsRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;

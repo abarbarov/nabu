@@ -1,19 +1,22 @@
 import { Action } from 'redux';
 import {
+  AuthRequest,
+  AuthResponse,
   Branch,
   BranchRequest,
   BuildRequest,
-  InstallRequest,
   Commit,
   CommitsRequest,
   CopyRequest,
   EmptyRequest,
+  InstallRequest,
   ListBranchesResponse,
   ListCommitsResponse,
   ListProjectsResponse,
   Message,
   MessageResponse,
-  Project
+  Project,
+  User
 } from '../protobuf/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
 import { grpc } from 'grpc-web-client';
@@ -27,6 +30,10 @@ export const ADD_PROJECT = 'ADD_PROJECT';
 export const SELECT_PROJECT = 'SELECT_PROJECT';
 export const SELECT_BRANCH = 'SELECT_BRANCH';
 export const ADD_BRANCH = 'ADD_BRANCH';
+export const SIGN_IN = 'SIGN_IN';
+export const SIGN_OUT = 'SIGN_OUT';
+
+const host = 'http://localhost:9091';
 
 type ListProjectsInit = {
   type: typeof PROJECTS_INIT,
@@ -47,7 +54,7 @@ export const listProjects = () => {
       console.log(code, message, trailers);
       return;
     },
-    host: 'http://localhost:9091',
+    host: host,
     methodDescriptor: NabuService.ListProjects,
     onMessage: message => {
       const project = message.getProject();
@@ -102,7 +109,7 @@ export const listCommits = (projectId: number, branch: string) => {
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
-    host: 'http://localhost:9091',
+    host: host,
     methodDescriptor: NabuService.ListCommits,
     onMessage: message => {
       const commit = message.getCommit();
@@ -124,7 +131,7 @@ export const listBranches = (projectId: number) => {
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
-    host: 'http://localhost:9091',
+    host: host,
     methodDescriptor: NabuService.ListBranches,
     onMessage: message => {
       const b = message.getBranch();
@@ -159,7 +166,7 @@ export const buildProject = (projectId: number, branch: string, sha: string) => 
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
-    host: 'http://localhost:9091',
+    host: host,
     methodDescriptor: NabuService.Build,
     // transport: grpc.WebsocketTransportFactory,
     onMessage: message => {
@@ -183,7 +190,7 @@ export const copyProject = (projectId: number, sha: string) => {
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
-    host: 'http://localhost:9091',
+    host: host,
     methodDescriptor: NabuService.Copy,
     onMessage: message => {
       const m = message.getMessage();
@@ -207,7 +214,7 @@ export const installProject = (projectId: number, sha: string, color: string) =>
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
-    host: 'http://localhost:9091',
+    host: host,
     methodDescriptor: NabuService.Install,
     onMessage: message => {
       const m = message.getMessage();
@@ -219,8 +226,46 @@ export const installProject = (projectId: number, sha: string, color: string) =>
   });
 };
 
+type SignOut = {
+  type: typeof SIGN_OUT,
+};
+export const signOut = (): SignOut => ({ type: SIGN_OUT });
+
+type SignIn = {
+  type: typeof SIGN_IN,
+  payload: User,
+};
+export const signIn = (user: User) => ({ type: SIGN_IN, payload: user });
+
+export const authenticate = (username: string, password: string) => {
+
+  let req = new AuthRequest();
+  req.setUsername(username);
+  req.setPassword(password);
+
+  return grpcRequest<AuthRequest, AuthResponse>({
+    request: new AuthRequest(),
+    onStart: () => signOut(),
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+      return;
+    },
+    host: host,
+    methodDescriptor: NabuService.Authenticate,
+    onMessage: message => {
+      const user = message.getUser();
+      if (user) {
+        return signIn(user);
+      }
+      return;
+    },
+  });
+};
+
 export type ProjectActionTypes =
   | AddProject
+  | SignIn
+  | SignOut
   | ListProjectsInit
   | SelectProject
   | AddBranch
@@ -233,4 +278,5 @@ export type ProjectActionTypes =
   | GrpcAction<CommitsRequest, ListCommitsResponse>
   | GrpcAction<BuildRequest, MessageResponse>
   | GrpcAction<InstallRequest, MessageResponse>
+  | GrpcAction<AuthRequest, AuthResponse>
   | GrpcAction<CopyRequest, MessageResponse>;

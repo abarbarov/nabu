@@ -8,9 +8,12 @@ import Example from '../Example/Example';
 
 import './Projects.css';
 import { Link } from 'react-router-dom';
+import { RootState } from '../../store';
+import { connect } from 'react-redux';
 
 export interface IProjectsProps {
   path: string;
+  authenticated: boolean;
 }
 
 export interface IProjectsState {
@@ -19,7 +22,7 @@ export interface IProjectsState {
 
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
-export default class Projects extends Block<IProjectsProps, IProjectsState> {
+class Projects extends Block<IProjectsProps, IProjectsState> {
   public block = 'Projects';
 
   constructor(props: IProjectsProps) {
@@ -35,16 +38,36 @@ export default class Projects extends Block<IProjectsProps, IProjectsState> {
   }
 
   public content() {
-    return (
-      <Fragment>
-        <ExampleWithMods mod1={true}/>
-        <ExampleWithMods mod1={true} mod2={true}/>
-        <Bem block="Projects" elem="Intro">
-          PROJECTS
-          <br/>
-          <Link to={`/`}>HOME</Link>
-        </Bem>
-      </Fragment>
-    );
+
+    if (this.props.authenticated) {
+      return (
+        <Fragment>
+          <ExampleWithMods mod1={true}/>
+          <ExampleWithMods mod1={true} mod2={true}/>
+          <Bem block="Projects" elem="Intro">
+            PROJECTS
+            <br/>
+            <Link to={`/`}>HOME</Link>
+          </Bem>
+        </Fragment>
+      );
+    } else {
+
+      return (
+        <Fragment>
+          <Bem block="Projects" elem="intro">
+            NOT AUTHORIZED
+          </Bem>
+        </Fragment>
+      );
+    }
   }
 }
+
+function mapStateToProps(state: RootState) {
+  return {
+    authenticated: state.projects.authenticated,
+  };
+}
+
+export default connect(mapStateToProps)(Projects);

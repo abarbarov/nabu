@@ -8,7 +8,14 @@ import Projects from './blocks/Projects/Projects';
 import Register from './blocks/Register/Register';
 import './blocks/Page/Page.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { SIGN_IN } from './actions/projects';
 // import Projects from './blocks/Project/Projects';
+
+const user = localStorage.getItem('user');
+
+if (user) {
+  store.dispatch({ type: SIGN_IN });
+}
 
 ReactDOM.render(
   <Provider store={store}>

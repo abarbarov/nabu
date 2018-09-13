@@ -7,10 +7,12 @@ import {
   CLEAR_MESSAGES,
   PROJECTS_INIT,
   SELECT_BRANCH,
-  SELECT_PROJECT
+  SELECT_PROJECT,
+  SIGN_IN,
+  SIGN_OUT
 } from '../actions/projects';
 
-import { Branch, Commit, Message, Project, StatusType } from '../protobuf/nabu_pb';
+import { Branch, Commit, Message, Project, StatusType, User } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -22,7 +24,8 @@ export type ProjectState = {
   readonly selectedBranch: Branch.AsObject | null,
   readonly selectedCommit: Commit.AsObject | null,
   readonly messages: Message.AsObject[],
-  readonly user: { role: string },
+  readonly user: User.AsObject | null,
+  readonly authenticated: boolean,
 };
 
 const initialState = {
@@ -35,7 +38,8 @@ const initialState = {
   selectedProject: null,
   selectedCommit: null,
   selectedBranch: null,
-  user: { role: 'nobody' }
+  user: null,
+  authenticated: false
 };
 
 export default function (state: ProjectState = initialState, action: RootAction): ProjectState {
@@ -120,6 +124,12 @@ export default function (state: ProjectState = initialState, action: RootAction)
         };
       }
       return state;
+
+    case SIGN_IN:
+      return { ...state, authenticated: true, user: action.payload.toObject() };
+
+    case SIGN_OUT:
+      return { ...state, authenticated: false, user: null };
 
     default:
       return state;

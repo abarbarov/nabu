@@ -3,6 +3,11 @@ syntax = "proto3";
 package protobuf;
 import "google/protobuf/timestamp.proto";
 
+message User {
+    int64 id = 1;
+    string token = 2;
+}
+
 message Project {
     int64 id = 1;
     string title = 2;
@@ -43,6 +48,7 @@ message Message {
 }
 
 service NabuService {
+    rpc Authenticate (AuthRequest) returns (AuthResponse);
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
     rpc ListBranches (BranchRequest) returns (stream ListBranchesResponse);
     rpc ListCommits (CommitsRequest) returns (stream ListCommitsResponse);
@@ -74,6 +80,11 @@ message CopyRequest {
     string sha = 2;
 }
 
+message AuthRequest {
+    string username = 1;
+    string password = 2;
+}
+
 message InstallRequest {
     int64 project_id = 1;
     string sha = 2;
@@ -94,4 +105,8 @@ message ListBranchesResponse {
 
 message ListCommitsResponse {
     Commit commit = 1;
+}
+
+message AuthResponse {
+    User user = 1;
 }

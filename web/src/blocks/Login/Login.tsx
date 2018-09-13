@@ -19,7 +19,7 @@ export interface ILoginState {
 
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
-export default class Login extends Block<ILoginProps, ILoginState> {
+class Login extends Block<ILoginProps, ILoginState> {
   public block = 'Login';
 
   constructor(props: ILoginProps) {
@@ -34,16 +34,38 @@ export default class Login extends Block<ILoginProps, ILoginState> {
     this.setState({ title: 'Welcome to LOGIN page' });
   }
 
+  submit(values) {
+    console.log(values);
+  }
+
   public content() {
     return (
       <Fragment>
         <ExampleWithMods mod1={true}/>
         <ExampleWithMods mod1={true} mod2={true}/>
         <Bem block="Login" elem="Intro">
+
           LOGIN<br/>
+
+          <form onSubmit={handleSubmit(this.submit)}>
+            <input
+              name="email"
+              type="text"
+              placeholder="Email"
+            />
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+            />
+            <button type="submit" className="blue">Sign In</button>
+          </form>
+
           <Link to={`/`}>HOME</Link>
         </Bem>
       </Fragment>
     );
   }
 }
+
+export default reduxForm({ form: 'signin' })(Login);
