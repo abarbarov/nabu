@@ -7,26 +7,28 @@ import Login from './blocks/Login/Login';
 import Projects from './blocks/Projects/Projects';
 import Register from './blocks/Register/Register';
 import './blocks/Page/Page.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Router, Switch } from 'react-router-dom';
 import { SIGN_IN } from './actions/projects';
 // import Projects from './blocks/Project/Projects';
+import history from './history';
 
 const user = localStorage.getItem('user');
 
 if (user) {
-  store.dispatch({ type: SIGN_IN });
+  let userObj = JSON.parse(user);
+  store.dispatch({ type: SIGN_IN, payload: userObj });
 }
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <Route exact={true} path="/" component={App}/>
         <Route path="/login" component={Login}/>
         <Route path="/register" component={Register}/>
         <Route path="/projects" component={Projects}/>
       </Switch>
-    </BrowserRouter>
+    </Router>
     {/*<Projects/>*/}
   </Provider>,
   document.getElementById('root'));

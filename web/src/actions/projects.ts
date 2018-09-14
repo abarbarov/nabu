@@ -21,6 +21,7 @@ import {
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
 import { grpc } from 'grpc-web-client';
 import { NabuService } from '../protobuf/nabu_pb_service';
+import history from '../history';
 
 export const PROJECTS_INIT = 'PROJECTS_INIT';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
@@ -105,7 +106,6 @@ export const listCommits = (projectId: number, branch: string) => {
 
   return grpcRequest<CommitsRequest, ListCommitsResponse>({
     request: request,
-    // onStart: () => selectProject(projectId),
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
     },
@@ -168,7 +168,6 @@ export const buildProject = (projectId: number, branch: string, sha: string) => 
     },
     host: host,
     methodDescriptor: NabuService.Build,
-    // transport: grpc.WebsocketTransportFactory,
     onMessage: message => {
       const m = message.getMessage();
       if (m) {
@@ -233,7 +232,7 @@ export const signOut = (): SignOut => ({ type: SIGN_OUT });
 
 type SignIn = {
   type: typeof SIGN_IN,
-  payload: User,
+  payload: User.AsObject,
 };
 export const signIn = (user: User) => ({ type: SIGN_IN, payload: user });
 
@@ -254,9 +253,13 @@ export const authenticate = (username: string, password: string) => {
     onMessage: message => {
       const user = message.getUser();
       if (user) {
-        return signIn(user);
+        let userObj = user.toObject();
+        signIn(user);
+
+        localStorage.setItem('user', JSON.stringify(userObj));
+
+        history.push('/projects');
       }
-      return;
     },
   });
 };

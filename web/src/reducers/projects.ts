@@ -109,7 +109,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
     case ADD_BUILD_MESSAGE:
       const m: Message.AsObject = action.payload.toObject();
       if (m && m.message) {
-        console.log(m);
+        // console.log(m);
 
         if (m.status === StatusType.PENDING) {
           if (state.messages[m.id]) {
@@ -126,11 +126,9 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return state;
 
     case SIGN_IN:
-      debugger;
-      return { ...state, authenticated: true, user: action.payload.toObject() };
+      return { ...state, authenticated: true, user: action.payload };
 
     case SIGN_OUT:
-      debugger;
       return { ...state, authenticated: false, user: null };
 
     default:

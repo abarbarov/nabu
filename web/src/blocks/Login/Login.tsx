@@ -10,9 +10,11 @@ import { Dispatch } from 'redux';
 import { RootAction } from '../../actions';
 import { connect } from 'react-redux';
 import './Login.css';
+import { RootState } from '../../store';
 
 export interface ILoginProps {
   path: string;
+  error: Error | null;
   authenticate: (username: string, password: string) => void;
 }
 
@@ -59,12 +61,19 @@ class Login extends Block<ILoginProps, ILoginState> {
             <button type="button" onClick={() => this.props.authenticate('test', 'test')} className="blue">Sign In
             </button>
           </form>
-
+          {this.props.error}
           <Link to={`/`}>HOME</Link>
         </Bem>
       </Fragment>
     );
   }
+}
+
+function mapStateToProps(state: RootState) {
+  return {
+    authenticated: state.projects.authenticated,
+    error: state.projects.error,
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
@@ -75,4 +84,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
