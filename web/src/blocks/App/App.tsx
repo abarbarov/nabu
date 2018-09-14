@@ -74,7 +74,6 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
     signOut: () => {
-      debugger;
       dispatch(signOut());
     }
   };

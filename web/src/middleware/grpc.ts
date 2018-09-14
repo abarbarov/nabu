@@ -45,7 +45,6 @@ export function grpcRequest<RequestType extends jspb.Message, ResponseType exten
   };
 }
 
-
 export function newGrpcMiddleware(): Middleware {
   return ({ dispatch }: MiddlewareAPI<any>) => (next: Dispatch<AnyAction>) => (action: any) => {
     // skip non-grpc actions

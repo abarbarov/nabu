@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { RootAction } from '../../actions';
 import { connect } from 'react-redux';
-import './Login.css';
 import { RootState } from '../../store';
+import './Login.css';
 
 export interface ILoginProps {
   path: string;
