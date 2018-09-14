@@ -228,13 +228,21 @@ export const installProject = (projectId: number, sha: string, color: string) =>
 type SignOut = {
   type: typeof SIGN_OUT,
 };
-export const signOut = (): SignOut => ({ type: SIGN_OUT });
+export const signOut = (): SignOut => {
+  localStorage.clear();
+  return ({ type: SIGN_OUT });
+};
 
 type SignIn = {
   type: typeof SIGN_IN,
   payload: User.AsObject,
 };
-export const signIn = (user: User) => ({ type: SIGN_IN, payload: user });
+export const signIn = (user: User.AsObject) => {
+  localStorage.setItem('user', JSON.stringify(user));
+  history.push('/projects');
+
+  return ({ type: SIGN_IN, payload: user });
+};
 
 export const authenticate = (username: string, password: string) => {
   let req = new AuthRequest();
@@ -253,12 +261,7 @@ export const authenticate = (username: string, password: string) => {
     onMessage: message => {
       const user = message.getUser();
       if (user) {
-        let userObj = user.toObject();
-        signIn(user);
-
-        localStorage.setItem('user', JSON.stringify(userObj));
-
-        history.push('/projects');
+        signIn(user.toObject());
       }
     },
   });
