@@ -1,11 +1,7 @@
-import { Bem, Block, withMods } from 'bem-react-core';
+import { Bem, Block } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { Dispatch } from 'redux';
-
-import mod1 from '../../Example/_mod1/Example_mod1';
-import mod2 from '../../Example/_mod2/Example_mod2';
-import Example from '../../Example/Example';
 import Header from '../../Header/App-Header';
 import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
@@ -29,9 +25,9 @@ import ProjectList from './List/ProjectList';
 import CommitsList from './List/CommitsList';
 import BranchesList from './List/BranchesList';
 import './Projects.css';
+import { Button } from '../../Button/Button';
 
 export interface IProjectsProps {
-  path: string; // ???
   authenticated: boolean;
   projects: Project.AsObject[];
   commits: Commit.AsObject[];
@@ -54,10 +50,10 @@ export interface IProjectsState {
   title: string;
 }
 
-const ExampleWithMods = withMods(Example, mod1, mod2);
+// const ExampleWithMods = withMods(Example, mod1, mod2);
 
 class Projects extends Block<IProjectsProps, IProjectsState> {
-  public block = 'projects';
+  public block = 'page-projects';
 
   constructor(props: IProjectsProps) {
     super(props);
@@ -78,16 +74,16 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
       return (
         <Fragment>
           <Header title={this.state.title}/>
-          <ExampleWithMods mod1={true}/>
-          <ExampleWithMods mod1={true} mod2={true}/>
-          <Bem block="Projects" elem="Intro">
+          {/*<ExampleWithMods mod1={true}/>*/}
+          {/*<ExampleWithMods mod1={true} mod2={true}/>*/}
+          <Bem block="app" elem="projects">
             <div>Next Awesome Build Unit</div>
 
             <div>
               Projects available
             </div>
             <div>
-              <button>Add new</button>
+              <Button color="default">Add new</Button>
             </div>
             <hr/>
             <div>

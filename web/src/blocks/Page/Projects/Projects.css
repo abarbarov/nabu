@@ -1,18 +1,21 @@
-.main {
-    grid-template-areas: "header header" "main main" "footer footer";
-    grid-template-columns: 200px 1fr;
+.page-projects {
+    flex:1;
+    display:grid;
+    grid-template-areas: "header" "main" "footer";
+    grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 200px;
 }
 
-.projects {
+.app-projects {
     padding: 10px 0;
     color: black;
     margin: 1em;
+    grid-area: main;
 }
 
 .projects_item {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     padding: 0 10px;
 }
 
@@ -24,7 +27,7 @@
 
 .branches_item {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     padding: 0 10px;
 }
 

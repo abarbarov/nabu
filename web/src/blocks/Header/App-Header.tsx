@@ -20,16 +20,16 @@ export default class AppHeader extends Elem<IElemProps> {
     return (
       <Fragment>
         <Bem block="app-header" elem="item">
-          <Bem tag="a" elem="header-link" href="/">Nodes</Bem>
+          <Bem tag="a" block="app-header" elem="link" href="/">Nodes</Bem>
         </Bem>
         <Bem block="app-header" elem="item">
-          <Bem tag="a" elem="header-link" href="/projects">Projects</Bem>
+          <Bem tag="a" block="app-header" elem="link" href="/projects">Projects</Bem>
         </Bem>
         <Bem block="app-header" elem="item">
-          <Bem tag="a" elem="header-link" href="/health">Health</Bem>
+          <Bem tag="a" block="app-header" elem="link" href="/health">Health</Bem>
         </Bem>
         <Bem block="app-header" elem="item">
-          <Bem tag="a" elem="header-link" href="/logout">Logout</Bem>
+          <Bem tag="a" block="app-header" elem="link" href="/logout">Logout</Bem>
         </Bem>
       </Fragment>
     );
