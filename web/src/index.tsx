@@ -6,13 +6,12 @@ import App from './blocks/App/App';
 import Login from './blocks/Login/Login';
 import Projects from './blocks/Projects/Projects';
 import Register from './blocks/Register/Register';
-import './blocks/Page/Page.css';
 import { Route, Router, Switch } from 'react-router-dom';
 import { SIGN_IN } from './actions/projects';
-// import Projects from './blocks/Project/Projects';
 import history from './history';
 import withAuth from './hoc/requireAuth';
 import skipAuth from './hoc/skipAuth';
+import './blocks/Page/Page.css';
 
 const user = localStorage.getItem('user');
 

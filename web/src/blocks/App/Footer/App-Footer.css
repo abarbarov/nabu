@@ -1,0 +1,27 @@
+.app-footer {
+    color: #fff;
+    background-color: #f18973;
+    display: flex;
+    grid-area: footer;
+}
+
+.app-footer-column {
+    flex: 1;
+}
+
+.app-footer-list {
+    list-style: none;
+}
+
+.app-footer a:hover {
+    text-decoration: underline;
+}
+
+.app-footer li a {
+    line-height: 24px;
+}
+
+.app-footer a {
+    text-decoration: none;
+    color: #212121;
+}

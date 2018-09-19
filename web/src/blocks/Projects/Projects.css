@@ -1,13 +1,7 @@
-.App {
-    text-align: center;
-}
-
-.App-Title {
-    font-size: 1.5em;
-}
-
-.App-Intro {
-    font-size: large;
+.main {
+    grid-template-areas: "header header" "main main" "footer footer";
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 50px 1fr 200px;
 }
 
 .projects {

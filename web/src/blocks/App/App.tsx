@@ -5,6 +5,7 @@ import mod1 from '../Example/_mod1/Example_mod1';
 import mod2 from '../Example/_mod2/Example_mod2';
 import Example from '../Example/Example';
 import Header from './Header/App-Header';
+import Footer from './Footer/App-Footer';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../store';
 import { Dispatch } from 'redux';
@@ -26,7 +27,7 @@ export interface IAppState {
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
 class App extends Block<IAppProps, IAppState> {
-  public block = 'App';
+  public block = 'app';
 
   constructor(props: IAppProps) {
     super(props);
@@ -37,7 +38,7 @@ class App extends Block<IAppProps, IAppState> {
   }
 
   public componentDidMount() {
-    this.setState({ title: 'Welcome to BEM in the TypeScript world' });
+    this.setState({ title: 'N.A.B.U. - Next awesome build unit' });
   }
 
   public content() {
@@ -46,9 +47,9 @@ class App extends Block<IAppProps, IAppState> {
     return (
       <Fragment>
         <Header title={this.state.title}/>
-        <ExampleWithMods mod1={true}/>
-        <ExampleWithMods mod1={true} mod2={true}/>
-        <Bem block="App" elem="Intro">
+        <Bem block="app" elem="main">
+          <ExampleWithMods mod1={true}/>
+          <ExampleWithMods mod1={true} mod2={true}/>
           To get started, edit <code>{this.props.path}</code> and save to reload.
           <br/>
           <Link to={`/login`}>LOGIN</Link>
@@ -58,7 +59,9 @@ class App extends Block<IAppProps, IAppState> {
           <Link to={`/projects`}>PROJECTS</Link>
           <br/>
           {signOutBtn}
+
         </Bem>
+        <Footer/>
       </Fragment>
     );
   }

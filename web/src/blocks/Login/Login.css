@@ -1,11 +1,5 @@
-.App {
-  text-align: center;
-}
-
-.App-Title {
-  font-size: 1.5em;
-}
-
-.App-Intro {
-  font-size: large;
+.login {
+  grid-template-areas: ". . ." ". main ." ". . .";
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: 200px 1fr 200px;
 }

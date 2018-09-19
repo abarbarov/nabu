@@ -25,7 +25,7 @@ export interface ILoginState {
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
 class Login extends Block<ILoginProps, ILoginState> {
-  public block = 'Login';
+  public block = 'login';
 
   constructor(props: ILoginProps) {
     super(props);
@@ -44,7 +44,7 @@ class Login extends Block<ILoginProps, ILoginState> {
       <Fragment>
         <ExampleWithMods mod1={true}/>
         <ExampleWithMods mod1={true} mod2={true}/>
-        <Bem block="Login" elem="Intro">
+        <Bem block="login" elem="Intro">
 
           LOGIN <br/>
           <form>

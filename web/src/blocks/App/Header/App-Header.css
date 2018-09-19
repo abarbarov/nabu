@@ -1,6 +1,20 @@
-.App-Header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.app-header {
+    background: #b2c2bf;
+    color: white;
+    font-size: 1.1em;
+    grid-area: header;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 2px 3px 64px 1px rgba(0, 0, 0, .72);
+    z-index: 10;
+}
+
+.app-header__item {
+    display: flex;
+    align-items: center;
+}
+
+.app-header__link {
+    color: #c03619;
+    text-decoration: none;
 }

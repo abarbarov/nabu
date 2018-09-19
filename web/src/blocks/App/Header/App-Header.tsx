@@ -9,8 +9,8 @@ export interface IElemProps {
 }
 
 export default class AppHeader extends Elem<IElemProps> {
-  public block = 'App';
-  public elem = 'Header';
+  public block = 'app';
+  public elem = 'header';
 
   public tag() {
     return 'header';
@@ -19,9 +19,12 @@ export default class AppHeader extends Elem<IElemProps> {
   public content() {
     return (
       <Fragment>
-        <Bem block="App" elem="Title" tag="h1">{this.props.title}</Bem>
+        {/*<Bem block="app" elem="Title" tag="h1">{this.props.title}</Bem>*/}
+        <Bem block="app" elem="title" tag="h1">
+          {this.props.title}
+          <Bem block="app" elem="item"/>
+        </Bem>
       </Fragment>
     );
   }
-
 }
