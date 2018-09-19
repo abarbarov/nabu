@@ -1,11 +1,11 @@
-.page-main {
+.page-home {
     display: grid;
     grid-template-areas: "header" "main" "footer";
     grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 200px;
 }
 
-.app-main {
+.page-home-content{
     padding-top: 10px;
     background-color: #eaece5;
     color: #fff;

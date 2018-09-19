@@ -2,9 +2,9 @@ import { Bem, Block, withMods } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
 
-import mod1 from '../Example/_mod1/Example_mod1';
-import mod2 from '../Example/_mod2/Example_mod2';
-import Example from '../Example/Example';
+import mod1 from '../../Example/_mod1/Example_mod1';
+import mod2 from '../../Example/_mod2/Example_mod2';
+import Example from '../../Example/Example';
 
 import './Register.css';
 import { Link } from 'react-router-dom';

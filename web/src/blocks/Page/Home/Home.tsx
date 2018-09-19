@@ -1,18 +1,18 @@
 import { Bem, Block, withMods } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
-import mod1 from '../Example/_mod1/Example_mod1';
-import mod2 from '../Example/_mod2/Example_mod2';
-import Example from '../Example/Example';
-import Header from './Header/App-Header';
-import Footer from './Footer/App-Footer';
+import mod1 from '../../Example/_mod1/Example_mod1';
+import mod2 from '../../Example/_mod2/Example_mod2';
+import Example from '../../Example/Example';
+import Header from '../../Header/App-Header';
+import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import { Dispatch } from 'redux';
-import { RootAction } from '../../actions';
-import { signOut } from '../../actions/projects';
+import { RootAction } from '../../../actions';
+import { signOut } from '../../../actions/projects';
 import { connect } from 'react-redux';
-import './App.css';
+import './Home.css';
 
 export interface IAppProps {
   path: string;
@@ -26,8 +26,8 @@ export interface IAppState {
 
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
-class App extends Block<IAppProps, IAppState> {
-  public block = 'page-main';
+class Home extends Block<IAppProps, IAppState> {
+  public block = 'page-home';
 
   constructor(props: IAppProps) {
     super(props);
@@ -47,7 +47,7 @@ class App extends Block<IAppProps, IAppState> {
     return (
       <Fragment>
         <Header title={this.state.title}/>
-        <Bem block="app" elem="main">
+        <Bem block="page-home" elem="content">
           <ExampleWithMods mod1={true}/>
           <ExampleWithMods mod1={true} mod2={true}/>
           To get started, edit <code>{this.props.path}</code> and save to reload.
@@ -82,4 +82,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

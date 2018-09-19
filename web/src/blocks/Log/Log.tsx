@@ -1,12 +1,21 @@
 import * as React from 'react';
+import { Fragment } from 'react';
 import { Message } from '../../protobuf/nabu_pb';
+import './Log.css';
+import { Bem, Block } from 'bem-react-core';
 
 type LogProps = {
   messages: Message.AsObject[];
 };
 
-const Logs: React.SFC<LogProps> = (props) => {
-  function getDate(m: Message.AsObject | undefined) {
+class Log extends Block<LogProps, {}> {
+  public block = 'log';
+
+  constructor(props: LogProps) {
+    super(props);
+  }
+
+  getDate(m: Message.AsObject | undefined) {
     if (m && m.timestamp) {
       return new Date(m.timestamp.seconds * 1000).toISOString();
     }
@@ -14,18 +23,28 @@ const Logs: React.SFC<LogProps> = (props) => {
     return '';
   }
 
-  return (
-    <div>
-      {props.messages.map((m, i) =>
-        <div key={i}>
-          <div style={{ display: 'flex' }}>
-            <div>{getDate(m)}</div>
-            <div>{m && m.message}</div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+  public content() {
+    if (this.props.messages.length) {
+      return (
+        <Fragment>
+          <Bem block="log" elem="container" tag="div">
+            {this.props.messages.map((m, i) =>
+              <Bem tag="div" block="log" elem="row" key={i}>
+                <Bem tag="b" block="log-row" elem="time">{this.getDate(m)}</Bem>
+                <span>{m && m.message}</span>
+              </Bem>
+            )}
+          </Bem>
+        </Fragment>
+      );
+    }
 
-export default Logs;
+    return (
+      <Fragment>
+        <Bem block="log" elem="container" tag="div"/>
+      </Fragment>
+    );
+  }
+}
+
+export default Log;

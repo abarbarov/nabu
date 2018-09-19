@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Project } from '../../../protobuf/nabu_pb';
+import { Project } from '../../../../protobuf/nabu_pb';
 
 type ProjectListProps = {
   projects: Project.AsObject[],

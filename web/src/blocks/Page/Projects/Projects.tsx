@@ -1,18 +1,19 @@
 import { Bem, Block, withMods } from 'bem-react-core';
 import * as React from 'react';
-import { Dispatch } from 'redux';
 import { Fragment } from 'react';
+import { Dispatch } from 'redux';
 
-import mod1 from '../Example/_mod1/Example_mod1';
-import mod2 from '../Example/_mod2/Example_mod2';
-import Example from '../Example/Example';
-
+import mod1 from '../../Example/_mod1/Example_mod1';
+import mod2 from '../../Example/_mod2/Example_mod2';
+import Example from '../../Example/Example';
+import Header from '../../Header/App-Header';
+import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import { connect } from 'react-redux';
-import { Branch, Commit, Message, Project } from '../../protobuf/nabu_pb';
-import Logs from '../Log/Log';
-import { RootAction } from '../../actions';
+import { Branch, Commit, Message, Project } from '../../../protobuf/nabu_pb';
+import Log from '../../Log/Log';
+import { RootAction } from '../../../actions';
 import {
   buildProject,
   clearMessages,
@@ -23,7 +24,7 @@ import {
   listProjects,
   selectBranch,
   selectProject
-} from '../../actions/projects';
+} from '../../../actions/projects';
 import ProjectList from './List/ProjectList';
 import CommitsList from './List/CommitsList';
 import BranchesList from './List/BranchesList';
@@ -76,6 +77,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
     if (this.props.authenticated) {
       return (
         <Fragment>
+          <Header title={this.state.title}/>
           <ExampleWithMods mod1={true}/>
           <ExampleWithMods mod1={true} mod2={true}/>
           <Bem block="Projects" elem="Intro">
@@ -122,11 +124,12 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
                   : null
                 }
               </div>
-              <Logs messages={this.props.messages}/>
+              <Log messages={this.props.messages}/>
             </div>
             <br/>
             <Link to={`/`}>HOME</Link>
           </Bem>
+          <Footer/>
         </Fragment>
       );
     } else {

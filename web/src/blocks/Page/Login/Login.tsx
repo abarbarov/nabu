@@ -1,15 +1,15 @@
 import { Block, Bem } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
-import { authenticate } from '../../actions/projects';
+import { authenticate } from '../../../actions/projects';
 import { Link } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { RootAction } from '../../actions';
+import { RootAction } from '../../../actions';
 import { connect } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import './Login.css';
-import Header from '../App/Header/App-Header';
-import Footer from '../App/Footer/App-Footer';
+import Header from '../../Header/App-Header';
+import Footer from '../../Footer/App-Footer';
 
 export interface ILoginProps {
   path: string;
