@@ -12,6 +12,7 @@ import { Dispatch } from 'redux';
 import { RootAction } from '../../../actions';
 import { signOut } from '../../../actions/projects';
 import { connect } from 'react-redux';
+import { Button } from '../../Button/Button';
 import './Home.css';
 
 export interface IAppProps {
@@ -59,7 +60,7 @@ class Home extends Block<IAppProps, IAppState> {
           <Link to={`/projects`}>PROJECTS</Link>
           <br/>
           {signOutBtn}
-
+          <Button type="button" color="default">ATATAT</Button>
         </Bem>
         <Footer/>
       </Fragment>

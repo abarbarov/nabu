@@ -1,0 +1,77 @@
+.btn {
+    align-items: flex-start;
+    background-clip: border-box;
+    background: rgba(0, 0, 0, 0.2) none scroll;
+    background-origin: padding-box;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-size: auto;
+    border-radius: 3px;
+    border: 0px none rgb(0, 0, 0);
+    box-sizing: border-box;
+    display: inline-block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-stretch: 100%;
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-east-asian: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-weight: 400;
+    height: 36px;
+    letter-spacing: normal;
+    line-height: 36px;
+    margin: 0px;
+    outline: rgb(0, 0, 0) none 0px;
+    position: relative;
+    text-align: center;
+    word-spacing: 0px;
+    writing-mode: horizontal-tb;
+
+    font-size: 16px;
+    text-decoration: none;
+    vertical-align: middle;
+    min-width: 80px;
+    white-space: nowrap;
+    color: white;
+    box-shadow: rgba(0, 0, 0, 1) 0 1px 0;
+    text-shadow: rgba(0, 0, 0, .4) 0 1px 0;
+    padding: 6px 9px;
+    cursor:pointer;
+}
+
+.btn:active {
+    align-items: flex-start;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto;
+    border: 0 none rgb(0, 0, 0);
+    box-sizing: border-box;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    margin: 0px;
+    outline: rgb(0, 0, 0) none 0px;
+    position: relative;
+    text-align: center;
+    text-indent: 0px;
+    text-rendering: auto;
+    text-transform: none;
+    touch-action: manipulation;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.btn_color_default {
+    background: #65a9d7;
+}
+
+.btn_color_default:active{
+    background: rgba(101, 169, 215, 0.5) none scroll;
+}
+.btn_color_success {
+    background: #26a972;
+}
+
+.btn_color_danger {
+    background: #d04e4e;
+}
