@@ -19,10 +19,17 @@ export default class AppHeader extends Elem<IElemProps> {
   public content() {
     return (
       <Fragment>
-        {/*<Bem block="app" elem="Title" tag="h1">{this.props.title}</Bem>*/}
-        <Bem block="app" elem="title" tag="h1">
-          {this.props.title}
-          <Bem block="app" elem="item"/>
+        <Bem block="app-header" elem="item">
+          <Bem tag="a" elem="header-link" href="/">Nodes</Bem>
+        </Bem>
+        <Bem block="app-header" elem="item">
+          <Bem tag="a" elem="header-link" href="/projects">Projects</Bem>
+        </Bem>
+        <Bem block="app-header" elem="item">
+          <Bem tag="a" elem="header-link" href="/health">Health</Bem>
+        </Bem>
+        <Bem block="app-header" elem="item">
+          <Bem tag="a" elem="header-link" href="/logout">Logout</Bem>
         </Bem>
       </Fragment>
     );

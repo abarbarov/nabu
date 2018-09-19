@@ -27,7 +27,7 @@ export interface IAppState {
 const ExampleWithMods = withMods(Example, mod1, mod2);
 
 class App extends Block<IAppProps, IAppState> {
-  public block = 'app';
+  public block = 'page-main';
 
   constructor(props: IAppProps) {
     super(props);

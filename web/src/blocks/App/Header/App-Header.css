@@ -9,12 +9,12 @@
     z-index: 10;
 }
 
-.app-header__item {
+.app-header-item {
     display: flex;
     align-items: center;
 }
 
-.app-header__link {
+.app-header-link {
     color: #c03619;
     text-decoration: none;
 }

@@ -1,9 +1,6 @@
-import { Bem, Block, withMods } from 'bem-react-core';
+import { Block, Bem } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
-import mod1 from '../Example/_mod1/Example_mod1';
-import mod2 from '../Example/_mod2/Example_mod2';
-import Example from '../Example/Example';
 import { authenticate } from '../../actions/projects';
 import { Link } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -11,6 +8,8 @@ import { RootAction } from '../../actions';
 import { connect } from 'react-redux';
 import { RootState } from '../../store';
 import './Login.css';
+import Header from '../App/Header/App-Header';
+import Footer from '../App/Footer/App-Footer';
 
 export interface ILoginProps {
   path: string;
@@ -22,10 +21,8 @@ export interface ILoginState {
   title: string;
 }
 
-const ExampleWithMods = withMods(Example, mod1, mod2);
-
 class Login extends Block<ILoginProps, ILoginState> {
-  public block = 'login';
+  public block = 'page-login';
 
   constructor(props: ILoginProps) {
     super(props);
@@ -42,10 +39,8 @@ class Login extends Block<ILoginProps, ILoginState> {
   public content() {
     return (
       <Fragment>
-        <ExampleWithMods mod1={true}/>
-        <ExampleWithMods mod1={true} mod2={true}/>
-        <Bem block="login" elem="Intro">
-
+        <Header title={this.state.title}/>
+        <Bem block="app" elem="login">
           LOGIN <br/>
           <form>
             <input
@@ -64,6 +59,10 @@ class Login extends Block<ILoginProps, ILoginState> {
           {this.props.error}
           <Link to={`/`}>HOME</Link>
         </Bem>
+        {/*<ExampleWithMods mod1={true}/>*/}
+        {/*<ExampleWithMods mod1={true} mod2={true}/>*/}
+
+        <Footer/>
       </Fragment>
     );
   }

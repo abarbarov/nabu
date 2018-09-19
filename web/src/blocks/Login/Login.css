@@ -1,5 +1,6 @@
-.login {
-  grid-template-areas: ". . ." ". main ." ". . .";
-  grid-template-columns: 200px 1fr 200px;
-  grid-template-rows: 200px 1fr 200px;
+.page-login {
+    display: grid;
+    grid-template-areas: "header header header" ". main ." "footer footer footer";
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: 200px 1fr 200px;
 }

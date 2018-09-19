@@ -1,7 +1,7 @@
-.app {
+.page-main {
     display: grid;
-    grid-template-areas: "header header" "main main" "footer footer";
-    grid-template-columns: 200px 1fr;
+    grid-template-areas: "header" "main" "footer";
+    grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 200px;
 }
 
