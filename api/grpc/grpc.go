@@ -188,7 +188,7 @@ func (ngs *nabuGrpcService) Copy(req *pb.CopyRequest, stream pb.NabuService_Copy
 	}
 
 	messages := make(chan *builder.Message)
-	go ngs.builder.Copy(proj.Repository.Owner, proj.Repository.Name, req.Sha, messages)
+	go ngs.builder.Copy(*proj, req.Sha, messages)
 	defer close(messages)
 
 	var ticker int64 = 0

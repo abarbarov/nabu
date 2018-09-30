@@ -107,11 +107,11 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 	outClose(messages, fmt.Sprintf("[INFO] app built"), 10)
 }
 
-func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
+func (b *Builder) Copy(proj store.Project, sha string, messages chan *Message) {
 
 	outOk(messages, "[INFO] copying started...", 0)
 
-	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", owner, name, tools.Substr(sha, 0, 7)))
+	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", proj.Repository.Owner, proj.Repository.Name, tools.Substr(sha, 0, 7)))
 	buildPath := filepath.Join(b.BuildOutput, fullName)
 	outZip := filepath.Join(buildPath, fmt.Sprintf("out-%s.zip", sha))
 
@@ -123,7 +123,7 @@ func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
-	connection, err := ssh.Dial("tcp", "95.216.163.61:22", sshConfig)
+	connection, err := ssh.Dial("tcp", proj.Host, sshConfig)
 	if err != nil {
 		outErr(messages, fmt.Sprintf("[ERR] ssh connection failed: %+v", err), 6)
 		return
