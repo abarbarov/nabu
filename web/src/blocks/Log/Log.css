@@ -5,7 +5,7 @@
 }
 
 .log-container {
-    height: calc(100% - 20px);
+    /*height: calc(100% - 20px);*/
     min-height: 250px;
     width: calc(100% - 20px);
     padding: 10px;
@@ -22,4 +22,9 @@
 
 .log-row-time {
     margin-right: 5px;
+    flex: 20%;
+}
+
+.log-row-info {
+    flex: 80%;
 }

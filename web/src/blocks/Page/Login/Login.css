@@ -1,6 +1,7 @@
 .page-login {
+    flex: 1;
     display: grid;
-    grid-template-areas: "header header header" ". main ." "footer footer footer";
-    grid-template-columns: 200px 1fr 200px;
-    grid-template-rows: 200px 1fr 200px;
+    grid-template-areas: "header" "main" "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 1fr 200px;
 }

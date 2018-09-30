@@ -1,11 +1,12 @@
 .page-home {
+    flex: 1;
     display: grid;
     grid-template-areas: "header" "main" "footer";
     grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 200px;
 }
 
-.page-home-content{
+.page-home-content {
     padding-top: 10px;
     background-color: #eaece5;
     color: #fff;

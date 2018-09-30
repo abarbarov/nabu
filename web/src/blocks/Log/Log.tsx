@@ -31,7 +31,7 @@ class Log extends Block<LogProps, {}> {
             {this.props.messages.map((m, i) =>
               <Bem tag="div" block="log" elem="row" key={i}>
                 <Bem tag="b" block="log-row" elem="time">{this.getDate(m)}</Bem>
-                <span>{m && m.message}</span>
+                <Bem tag="span" block="log-row" elem="info">{m && m.message}</Bem>
               </Bem>
             )}
           </Bem>

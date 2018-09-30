@@ -4,6 +4,7 @@ type Project struct {
 	Id         int64
 	Title      string
 	Repository *Repository
+	Host       string
 	Exec       string
 	Dir        string
 }
@@ -27,21 +28,23 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
+		Host: "95.216.163.61:22",
 		Exec: "firstfile.%s.service",
 		Dir:  "/apps/firstfile/%s",
 	})
 
 	projects = append(projects, &Project{
 		Id:    2,
-		Title: "firstfile-prod",
+		Title: "firstfile-PROD",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "trademark.web",
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
-		Exec: "firstfile.%s.service",
-		Dir:  "/apps/firstfile/%s",
+		Host: "5.23.53.238:22",
+		Exec: "trademark.%s.service",
+		Dir:  "/apps/trademark/%s",
 	})
 
 	projects = append(projects, &Project{
@@ -53,6 +56,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
+		Host: "95.216.163.61:22",
 		Exec: "nabu.%s.service",
 		Dir:  "/apps/nabu/%s",
 	})
@@ -66,6 +70,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
+		Host: "95.216.163.61:22",
 		Exec: "nabu.%s.service",
 		Dir:  "/apps/nabu/%s",
 	})
@@ -79,6 +84,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
+		Host: "95.216.163.61:22",
 		Exec: "barbarov.%s.service",
 		Dir:  "/apps/barbarov/%s",
 	})
@@ -92,6 +98,7 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
+		Host: "95.216.163.61:22",
 		Exec: "svoerazvitie.%s.service",
 		Dir:  "/apps/svoerazvitie/%s",
 	})

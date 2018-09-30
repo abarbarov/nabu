@@ -244,7 +244,7 @@ func (ngs *nabuGrpcService) Install(req *pb.InstallRequest, stream pb.NabuServic
 	}
 
 	messages := make(chan *builder.Message)
-	go ngs.builder.Install(proj.Repository.Owner, proj.Repository.Name, req.Sha, req.Color, proj.Exec, proj.Dir, messages)
+	go ngs.builder.Install(*proj, req.Sha, req.Color, messages)
 	defer close(messages)
 
 	var ticker int64 = 0

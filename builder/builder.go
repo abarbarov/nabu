@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/abarbarov/nabu/github"
+	"github.com/abarbarov/nabu/store"
 	"github.com/abarbarov/nabu/tools"
 	"github.com/pkg/errors"
 	"github.com/pkg/sftp"
@@ -145,16 +146,16 @@ func (b *Builder) Copy(owner, name, sha string, messages chan *Message) {
 	outClose(messages, fmt.Sprintf("[INFO] app copied"), 12)
 }
 
-func (b *Builder) Install(owner, name, sha, color, exec, dir string, messages chan *Message) {
+func (b *Builder) Install(proj store.Project, sha, color string, messages chan *Message) {
 
 	outOk(messages, fmt.Sprintf("[INFO] installing %s-%s started...", sha, color), 0)
 
-	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", owner, name, tools.Substr(sha, 0, 7)))
+	fullName, err := findFullName(b.BuildOutput, fmt.Sprintf("%s-%s-%s", proj.Repository.Owner, proj.Repository.Name, tools.Substr(sha, 0, 7)))
 	staticAssetsPath := filepath.Join(b.BuildOutput, fullName, "static")
 
 	remoteBuildDir := fmt.Sprintf("/home/dev/out-%s", sha)
-	remoteServiceDir := fmt.Sprintf(dir, color)
-	serviceName := fmt.Sprintf(exec, color)
+	remoteServiceDir := fmt.Sprintf(proj.Dir, color)
+	serviceName := fmt.Sprintf(proj.Exec, color)
 
 	stop := fmt.Sprintf("sudo systemctl stop %s", serviceName)
 	cpStatic := fmt.Sprintf("sudo cp -R %s/static %s", remoteBuildDir, remoteServiceDir)
@@ -170,7 +171,7 @@ func (b *Builder) Install(owner, name, sha, color, exec, dir string, messages ch
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
-	connection, err := ssh.Dial("tcp", "95.216.163.61:22", sshConfig)
+	connection, err := ssh.Dial("tcp", proj.Host, sshConfig)
 	if err != nil {
 		outErr(messages, fmt.Sprintf("[ERR] ssh connection failed: %+v", err), 2)
 		return
