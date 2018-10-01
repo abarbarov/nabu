@@ -5,7 +5,7 @@
     box-sizing: border-box;
     display: inline-block;
     height: 36px;
-    line-height: 36px;
+    /*line-height: 36px;*/
     margin: 0;
     outline: rgb(0, 0, 0) none 0;
     position: relative;

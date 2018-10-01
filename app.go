@@ -15,7 +15,8 @@ import (
 	"syscall"
 )
 
-var version = "unknown"
+var revision = "unknown"
+var buildstamp = "unknown"
 
 type Opts struct {
 	Port         int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
@@ -31,7 +32,7 @@ type Application struct {
 }
 
 func main() {
-	fmt.Printf("[INFO] nabu %s\n", version)
+	fmt.Printf("[INFO] nabu %s\n build date: %s", revision, buildstamp)
 
 	var opts Opts
 	p := flags.NewParser(&opts, flags.Default)
@@ -74,7 +75,7 @@ func Create(opts Opts) (*Application, error) {
 	}
 
 	srv := &api.Server{
-		Version: version,
+		Version: revision,
 		WebRoot: opts.WebRoot,
 		Store:   ds,
 		Github:  gh,

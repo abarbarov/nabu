@@ -60,16 +60,16 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 
 	outOk(messages, "[INFO] build started", 0)
 
-	zip, err := b.Github.Archive(token, owner, name, branch, sha, b.BuildOutput)
+	sourcesZip, err := b.Github.Archive(token, owner, name, branch, sha, b.BuildOutput)
 
 	if err != nil {
 		outErr(messages, fmt.Sprintf("[ERR] %v", err), 2)
 		return
 	}
 
-	outOk(messages, fmt.Sprintf("[INFO] archive downloaded to %v", zip), 2)
+	outOk(messages, fmt.Sprintf("[INFO] archive downloaded to %v", sourcesZip), 2)
 
-	err = unzipFiles(zip, b.BuildOutput)
+	err = unzipFiles(sourcesZip, b.BuildOutput)
 
 	if err != nil {
 		outErr(messages, fmt.Sprintf("[ERR] %v", err), 4)
@@ -85,7 +85,7 @@ func (b *Builder) Build(token, owner, name, branch, sha string, messages chan *M
 	}
 
 	buildPath := filepath.Join(b.BuildOutput, fullName)
-	err = b.vgoBuild(buildPath)
+	err = b.vgoBuild(buildPath, sha)
 
 	if err != nil {
 		outErr(messages, fmt.Sprintf("[ERR] %v", err), 6)
@@ -220,9 +220,8 @@ func (b *Builder) Install(proj store.Project, sha, color string, messages chan *
 	outClose(messages, fmt.Sprintf("[INFO] service restarted"), 14)
 }
 
-func (b *Builder) vgoBuild(dir string) error {
-
-	args := []string{"build", "-o", "application"}
+func (b *Builder) vgoBuild(dir, sha string) error {
+	args := []string{"build", "-o", "application", "-ldflags", fmt.Sprintf("-X main.buildstamp=%s -X main.revision=%s", time.Now().Format(time.RFC3339), sha)}
 	var cmd *exec.Cmd
 
 	cmd = exec.Command(b.GoExecutable, args...)
