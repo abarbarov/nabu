@@ -68,10 +68,38 @@ func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuSe
 }
 
 func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
+	if req.Username == "admin" && req.Password == "admin" {
+		return &pb.AuthResponse{
+			User: &pb.User{
+				Id:    1,
+				Token: "super-token",
+			},
+		}, nil
+	}
+
 	return &pb.AuthResponse{
 		User: &pb.User{
-			Id:    1,
-			Token: "super-token",
+			Id:    0,
+			Token: "",
+		},
+	}, nil
+}
+
+func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
+	if req.Username == "admin" && req.Password == "admin" {
+
+		return &pb.AuthResponse{
+			User: &pb.User{
+				Id:    1,
+				Token: "super-token",
+			},
+		}, nil
+	}
+
+	return &pb.AuthResponse{
+		User: &pb.User{
+			Id:    0,
+			Token: "",
 		},
 	}, nil
 }
@@ -245,6 +273,62 @@ func (ngs *nabuGrpcService) Install(req *pb.InstallRequest, stream pb.NabuServic
 
 	messages := make(chan *builder.Message)
 	go ngs.builder.Install(*proj, req.Sha, req.Color, messages)
+	defer close(messages)
+
+	var ticker int64 = 0
+
+	for {
+		select {
+		case message, ok := <-messages:
+			log.Printf("[INFO] %v", message.Text)
+			if !ok {
+				return nil
+			}
+
+			atomic.SwapInt64(&ticker, message.Id+1)
+
+			stream.Send(&pb.MessageResponse{
+				Message: &pb.Message{
+					Id: message.Id,
+					Timestamp: &timestamp.Timestamp{
+						Seconds: message.Timestamp.Unix(),
+					},
+					Message: message.Text,
+					Status:  convertStatus(message.Status),
+				},
+			})
+
+			if message.Close {
+				return nil
+			}
+		default:
+			id := atomic.LoadInt64(&ticker)
+			if id > 0 {
+				stream.Send(&pb.MessageResponse{
+					Message: &pb.Message{
+						Id: id,
+						Timestamp: &timestamp.Timestamp{
+							Seconds: time.Now().Unix(),
+						},
+						Message: ".",
+						Status:  pb.StatusType_PENDING,
+					},
+				})
+			}
+
+			time.Sleep(1000 * time.Millisecond)
+		}
+	}
+}
+
+func (ngs *nabuGrpcService) Restart(req *pb.RestartRequest, stream pb.NabuService_RestartServer) error {
+	proj, err := ngs.store.Project(req.ProjectId)
+	if err != nil {
+		return err
+	}
+
+	messages := make(chan *builder.Message)
+	go ngs.builder.Restart(*proj, req.Sha, req.Color, messages)
 	defer close(messages)
 
 	var ticker int64 = 0

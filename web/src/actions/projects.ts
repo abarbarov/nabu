@@ -10,6 +10,7 @@ import {
   CopyRequest,
   EmptyRequest,
   InstallRequest,
+  RestartRequest,
   ListBranchesResponse,
   ListCommitsResponse,
   ListProjectsResponse,
@@ -25,12 +26,12 @@ import history from '../history';
 
 export const PROJECTS_INIT = 'PROJECTS_INIT';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
-export const ADD_COMMIT = 'ADD_COMMIT';
-export const ADD_BUILD_MESSAGE = 'ADD_BUILD_MESSAGE';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const ADD_PROJECT = 'ADD_PROJECT';
 export const SELECT_PROJECT = 'SELECT_PROJECT';
 export const SELECT_BRANCH = 'SELECT_BRANCH';
 export const ADD_BRANCH = 'ADD_BRANCH';
+export const ADD_COMMIT = 'ADD_COMMIT';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 
@@ -149,10 +150,10 @@ type ClearMessages = {
 export const clearMessages = (): ClearMessages => ({ type: CLEAR_MESSAGES });
 
 type AddBuildMessages = {
-  type: typeof ADD_BUILD_MESSAGE,
+  type: typeof ADD_MESSAGE,
   payload: Message,
 };
-export const addBuildMessage = (message: Message) => ({ type: ADD_BUILD_MESSAGE, payload: message });
+export const addMessage = (message: Message) => ({ type: ADD_MESSAGE, payload: message });
 
 export const buildProject = (projectId: number, branch: string, sha: string) => {
 
@@ -171,7 +172,7 @@ export const buildProject = (projectId: number, branch: string, sha: string) => 
     onMessage: message => {
       const m = message.getMessage();
       if (m) {
-        return addBuildMessage(m);
+        return addMessage(m);
       }
       return;
     }
@@ -194,7 +195,7 @@ export const copyProject = (projectId: number, sha: string) => {
     onMessage: message => {
       const m = message.getMessage();
       if (m) {
-        return addBuildMessage(m);
+        return addMessage(m);
       }
       return;
     }
@@ -218,7 +219,31 @@ export const installProject = (projectId: number, sha: string, color: string) =>
     onMessage: message => {
       const m = message.getMessage();
       if (m) {
-        return addBuildMessage(m);
+        return addMessage(m);
+      }
+      return;
+    }
+  });
+};
+
+export const restartProject = (projectId: number, sha: string, color: string) => {
+
+  let req = new RestartRequest();
+  req.setProjectId(projectId);
+  req.setColor(color);
+  req.setSha(sha);
+
+  return grpcRequest<InstallRequest, MessageResponse>({
+    request: req,
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+    },
+    host: host,
+    methodDescriptor: NabuService.Restart,
+    onMessage: message => {
+      const m = message.getMessage();
+      if (m) {
+        return addMessage(m);
       }
       return;
     }

@@ -344,6 +344,34 @@ export namespace InstallRequest {
   }
 }
 
+export class RestartRequest extends jspb.Message {
+  getProjectId(): number;
+  setProjectId(value: number): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  getColor(): string;
+  setColor(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RestartRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: RestartRequest): RestartRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: RestartRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RestartRequest;
+  static deserializeBinaryFromReader(message: RestartRequest, reader: jspb.BinaryReader): RestartRequest;
+}
+
+export namespace RestartRequest {
+  export type AsObject = {
+    projectId: number,
+    sha: string,
+    color: string,
+  }
+}
+
 export class MessageResponse extends jspb.Message {
   hasMessage(): boolean;
   clearMessage(): void;
@@ -449,6 +477,28 @@ export class AuthResponse extends jspb.Message {
 }
 
 export namespace AuthResponse {
+  export type AsObject = {
+    user?: User.AsObject,
+  }
+}
+
+export class RegisterResponse extends jspb.Message {
+  hasUser(): boolean;
+  clearUser(): void;
+  getUser(): User | undefined;
+  setUser(value?: User): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RegisterResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: RegisterResponse): RegisterResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: RegisterResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RegisterResponse;
+  static deserializeBinaryFromReader(message: RegisterResponse, reader: jspb.BinaryReader): RegisterResponse;
+}
+
+export namespace RegisterResponse {
   export type AsObject = {
     user?: User.AsObject,
   }

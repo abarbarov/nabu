@@ -1,7 +1,7 @@
 import { RootAction } from '../actions';
 import {
   ADD_BRANCH,
-  ADD_BUILD_MESSAGE,
+  ADD_MESSAGE,
   ADD_COMMIT,
   ADD_PROJECT,
   CLEAR_MESSAGES,
@@ -106,7 +106,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
       }
       return state;
 
-    case ADD_BUILD_MESSAGE:
+    case ADD_MESSAGE:
       const m: Message.AsObject = action.payload.toObject();
       if (m && m.message) {
         // console.log(m);

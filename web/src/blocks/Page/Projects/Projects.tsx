@@ -15,6 +15,7 @@ import {
   clearMessages,
   copyProject,
   installProject,
+  restartProject,
   listBranches,
   listCommits,
   listProjects,
@@ -44,13 +45,12 @@ export interface IProjectsProps {
   build: (projectId: number, branch: string, sha: string) => void;
   copy: (projectId: number, sha: string) => void;
   install: (projectId: number, sha: string, color: string) => void;
+  restart: (projectId: number, sha: string, color: string) => void;
 }
 
 export interface IProjectsState {
   title: string;
 }
-
-// const ExampleWithMods = withMods(Example, mod1, mod2);
 
 class Projects extends Block<IProjectsProps, IProjectsState> {
   public block = 'page-projects';
@@ -116,6 +116,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
                     onBuild={this.props.build}
                     onCopy={this.props.copy}
                     onInstall={this.props.install}
+                    onRestart={this.props.restart}
                   />
                   : null
                 }
@@ -180,6 +181,10 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
     install: (projectId: number, sha: string, color: string) => {
       dispatch(clearMessages());
       dispatch(installProject(projectId, sha, color));
+    },
+    restart: (projectId: number, sha: string, color: string) => {
+      dispatch(clearMessages());
+      dispatch(restartProject(projectId, sha, color));
     }
   };
 }

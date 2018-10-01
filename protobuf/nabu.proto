@@ -49,12 +49,14 @@ message Message {
 
 service NabuService {
     rpc Authenticate (AuthRequest) returns (AuthResponse);
+    rpc Register (AuthRequest) returns (AuthResponse);
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
     rpc ListBranches (BranchRequest) returns (stream ListBranchesResponse);
     rpc ListCommits (CommitsRequest) returns (stream ListCommitsResponse);
     rpc Build (BuildRequest) returns (stream MessageResponse);
     rpc Copy (CopyRequest) returns (stream MessageResponse);
     rpc Install (InstallRequest) returns (stream MessageResponse);
+    rpc Restart (RestartRequest) returns (stream MessageResponse);
 }
 
 message EmptyRequest {
@@ -91,6 +93,12 @@ message InstallRequest {
     string color = 3;
 }
 
+message RestartRequest {
+    int64 project_id = 1;
+    string sha = 2;
+    string color = 3;
+}
+
 message MessageResponse {
     Message message = 1;
 }
@@ -108,5 +116,9 @@ message ListCommitsResponse {
 }
 
 message AuthResponse {
+    User user = 1;
+}
+
+message RegisterResponse {
     User user = 1;
 }

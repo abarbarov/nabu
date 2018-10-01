@@ -13,6 +13,15 @@ type NabuServiceAuthenticate = {
   readonly responseType: typeof protobuf_nabu_pb.AuthResponse;
 };
 
+type NabuServiceRegister = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof protobuf_nabu_pb.AuthRequest;
+  readonly responseType: typeof protobuf_nabu_pb.AuthResponse;
+};
+
 type NabuServiceListProjects = {
   readonly methodName: string;
   readonly service: typeof NabuService;
@@ -67,15 +76,26 @@ type NabuServiceInstall = {
   readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
 };
 
+type NabuServiceRestart = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.RestartRequest;
+  readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
+};
+
 export class NabuService {
   static readonly serviceName: string;
   static readonly Authenticate: NabuServiceAuthenticate;
+  static readonly Register: NabuServiceRegister;
   static readonly ListProjects: NabuServiceListProjects;
   static readonly ListBranches: NabuServiceListBranches;
   static readonly ListCommits: NabuServiceListCommits;
   static readonly Build: NabuServiceBuild;
   static readonly Copy: NabuServiceCopy;
   static readonly Install: NabuServiceInstall;
+  static readonly Restart: NabuServiceRestart;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -102,11 +122,21 @@ export class NabuServiceClient {
     requestMessage: protobuf_nabu_pb.AuthRequest,
     callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
   ): void;
+  register(
+    requestMessage: protobuf_nabu_pb.AuthRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
+  ): void;
+  register(
+    requestMessage: protobuf_nabu_pb.AuthRequest,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
+  ): void;
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;
   listBranches(requestMessage: protobuf_nabu_pb.BranchRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListBranchesResponse>;
   listCommits(requestMessage: protobuf_nabu_pb.CommitsRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListCommitsResponse>;
   build(requestMessage: protobuf_nabu_pb.BuildRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
   copy(requestMessage: protobuf_nabu_pb.CopyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
   install(requestMessage: protobuf_nabu_pb.InstallRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
+  restart(requestMessage: protobuf_nabu_pb.RestartRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
 }
 

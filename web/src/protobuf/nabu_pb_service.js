@@ -20,6 +20,15 @@ NabuService.Authenticate = {
   responseType: protobuf_nabu_pb.AuthResponse
 };
 
+NabuService.Register = {
+  methodName: "Register",
+  service: NabuService,
+  requestStream: false,
+  responseStream: false,
+  requestType: protobuf_nabu_pb.AuthRequest,
+  responseType: protobuf_nabu_pb.AuthResponse
+};
+
 NabuService.ListProjects = {
   methodName: "ListProjects",
   service: NabuService,
@@ -74,6 +83,15 @@ NabuService.Install = {
   responseType: protobuf_nabu_pb.MessageResponse
 };
 
+NabuService.Restart = {
+  methodName: "Restart",
+  service: NabuService,
+  requestStream: false,
+  responseStream: true,
+  requestType: protobuf_nabu_pb.RestartRequest,
+  responseType: protobuf_nabu_pb.MessageResponse
+};
+
 exports.NabuService = NabuService;
 
 function NabuServiceClient(serviceHost, options) {
@@ -86,6 +104,28 @@ NabuServiceClient.prototype.authenticate = function authenticate(requestMessage,
     callback = arguments[1];
   }
   grpc.unary(NabuService.Authenticate, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+};
+
+NabuServiceClient.prototype.register = function register(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  grpc.unary(NabuService.Register, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -305,6 +345,45 @@ NabuServiceClient.prototype.install = function install(requestMessage, metadata)
     status: []
   };
   var client = grpc.invoke(NabuService.Install, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onMessage: function (responseMessage) {
+      listeners.data.forEach(function (handler) {
+        handler(responseMessage);
+      });
+    },
+    onEnd: function (status, statusMessage, trailers) {
+      listeners.end.forEach(function (handler) {
+        handler();
+      });
+      listeners.status.forEach(function (handler) {
+        handler({ code: status, details: statusMessage, metadata: trailers });
+      });
+      listeners = null;
+    }
+  });
+  return {
+    on: function (type, handler) {
+      listeners[type].push(handler);
+      return this;
+    },
+    cancel: function () {
+      listeners = null;
+      client.close();
+    }
+  };
+};
+
+NabuServiceClient.prototype.restart = function restart(requestMessage, metadata) {
+  var listeners = {
+    data: [],
+    end: [],
+    status: []
+  };
+  var client = grpc.invoke(NabuService.Restart, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

@@ -44,3 +44,21 @@
 .btn_color_danger:active {
     background: rgba(208, 78, 78, 0.5);
 }
+
+.btn_square {
+    width: 48px;
+    height: 40px;
+    min-width: 40px;
+    text-align: center;
+    margin: 1px;
+    display: inline-flex;
+}
+
+.btn_svg {
+    width: 24px;
+    height: 24px;
+}
+
+.btn_svg path {
+    fill: white;
+}

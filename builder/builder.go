@@ -220,6 +220,37 @@ func (b *Builder) Install(proj store.Project, sha, color string, messages chan *
 	outClose(messages, fmt.Sprintf("[INFO] service restarted"), 14)
 }
 
+func (b *Builder) Restart(proj store.Project, sha, color string, messages chan *Message) {
+
+	outOk(messages, fmt.Sprintf("[INFO] restarting %s-%s app...", sha, color), 0)
+
+	serviceName := fmt.Sprintf(proj.Exec, color)
+
+	restart := fmt.Sprintf("sudo systemctl restart %s", serviceName)
+
+	sshConfig := &ssh.ClientConfig{
+		User: "dev",
+		Auth: []ssh.AuthMethod{
+			PrivateKeyFile(),
+		},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+
+	connection, err := ssh.Dial("tcp", proj.Host, sshConfig)
+	if err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] ssh connection failed: %+v", err), 2)
+		return
+	}
+	defer connection.Close()
+
+	if _, err := execSSH(connection, restart); err != nil {
+		outErr(messages, fmt.Sprintf("[ERR] restart failed: %+v", err), 12)
+		return
+	}
+
+	outClose(messages, fmt.Sprintf("[INFO] service restarted"), 14)
+}
+
 func (b *Builder) vgoBuild(dir, sha string) error {
 	args := []string{"build", "-o", "application", "-ldflags", fmt.Sprintf("-X main.buildstamp=%s -X main.revision=%s", time.Now().Format(time.RFC3339), sha)}
 	var cmd *exec.Cmd
