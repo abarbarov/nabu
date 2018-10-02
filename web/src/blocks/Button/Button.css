@@ -78,6 +78,12 @@
     border-color: #d61b31
 }
 
+.btn:disabled {
+    background: #9b9b9b;
+    border-color: #9b9b9b;
+    cursor: default;
+}
+
 .btn_square {
     width: 48px;
     height: 40px;
@@ -119,7 +125,7 @@
     color: #9b9b9b
 }
 
-input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type="number"], input[type="tel"], select, textarea {
+input[type="text"], input[type="email"], input[type="url"], input[type="password"], select, textarea {
     -moz-appearance: none;
     -webkit-appearance: none;
     -moz-border-radius: 3px;
@@ -139,7 +145,14 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
     padding: 10px
 }
 
-input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active, input[type="email"]:hover, input[type="email"]:focus, input[type="email"]:active, input[type="url"]:hover, input[type="url"]:focus, input[type="url"]:active, input[type="password"]:hover, input[type="password"]:focus, input[type="password"]:active, input[type="search"]:hover, input[type="search"]:focus, input[type="search"]:active, input[type="number"]:hover, input[type="number"]:focus, input[type="number"]:active, input[type="tel"]:hover, input[type="tel"]:focus, input[type="tel"]:active, select:hover, select:focus, select:active, textarea:hover, textarea:focus, textarea:active {
+input[type="text"].error, input[type="email"].error, input[type="password"].error, select.error, textarea.error {
+    border-color: #d61b31;
+}
+
+input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active,
+input[type="email"]:hover, input[type="email"]:focus, input[type="email"]:active,
+input[type="password"]:hover, input[type="password"]:focus, input[type="password"]:active,
+select:hover, select:focus, select:active, textarea:hover, textarea:focus, textarea:active {
     border-color: #cdd5dc;
     outline: 0
 }

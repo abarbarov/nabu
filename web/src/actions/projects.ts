@@ -10,13 +10,13 @@ import {
   CopyRequest,
   EmptyRequest,
   InstallRequest,
-  RestartRequest,
   ListBranchesResponse,
   ListCommitsResponse,
   ListProjectsResponse,
   Message,
   MessageResponse,
   Project,
+  RestartRequest,
   User
 } from '../protobuf/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
@@ -34,6 +34,7 @@ export const ADD_BRANCH = 'ADD_BRANCH';
 export const ADD_COMMIT = 'ADD_COMMIT';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
+export const ADD_ERROR = 'ADD_ERROR';
 
 const host = 'http://localhost:9091';
 
@@ -258,15 +259,22 @@ export const signOut = (): SignOut => {
   return ({ type: SIGN_OUT });
 };
 
+type AddError = {
+  type: typeof ADD_ERROR,
+  payload: Error,
+};
 type SignIn = {
   type: typeof SIGN_IN,
   payload: User.AsObject,
 };
-export const signIn = (user: User.AsObject) => {
-  localStorage.setItem('user', JSON.stringify(user));
-  history.push('/projects');
+export const signIn = (user: User.AsObject | null) => {
+  if (user && user.id && user.token) {
+    localStorage.setItem('user', JSON.stringify(user));
+    history.push('/projects');
+    return ({ type: SIGN_IN, payload: user });
+  }
 
-  return ({ type: SIGN_IN, payload: user });
+  return ({ type: ADD_ERROR, payload: new Error('Wrong username or password') });
 };
 
 export const authenticate = (username: string, password: string) => {
@@ -275,7 +283,7 @@ export const authenticate = (username: string, password: string) => {
   req.setPassword(password);
 
   return grpcRequest<AuthRequest, AuthResponse>({
-    request: new AuthRequest(),
+    request: req,
     onStart: () => signOut(),
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
@@ -286,8 +294,10 @@ export const authenticate = (username: string, password: string) => {
     onMessage: message => {
       const user = message.getUser();
       if (user) {
-        signIn(user.toObject());
+        return signIn(user.toObject());
       }
+
+      return signIn(null);
     },
   });
 };
@@ -303,6 +313,8 @@ export type ProjectActionTypes =
   | ClearMessages
   | SelectBranch
   | AddBuildMessages
+  | AddError
+  | Request
   | GrpcAction<EmptyRequest, ListProjectsResponse>
   | GrpcAction<BranchRequest, ListBranchesResponse>
   | GrpcAction<CommitsRequest, ListCommitsResponse>

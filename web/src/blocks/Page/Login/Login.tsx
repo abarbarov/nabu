@@ -10,6 +10,7 @@ import { RootState } from '../../../store';
 import './Login.css';
 import Header from '../../Header/App-Header';
 import Footer from '../../Footer/App-Footer';
+import { FormErrors } from '../../FormErrors';
 
 export interface ILoginProps {
   path: string;
@@ -19,6 +20,12 @@ export interface ILoginProps {
 
 export interface ILoginState {
   title: string;
+  username: string;
+  password: string;
+  formErrors: { username: string, password: string };
+  usernameValid: boolean;
+  passwordValid: boolean;
+  formValid: boolean;
 }
 
 class Login extends Block<ILoginProps, ILoginState> {
@@ -28,7 +35,13 @@ class Login extends Block<ILoginProps, ILoginState> {
     super(props);
 
     this.state = {
-      title: 'not loaded'
+      title: 'not loaded',
+      username: '',
+      password: '',
+      formErrors: { username: '', password: '' },
+      usernameValid: false,
+      passwordValid: false,
+      formValid: false
     };
   }
 
@@ -36,7 +49,56 @@ class Login extends Block<ILoginProps, ILoginState> {
     this.setState({ title: 'Login to N.A.B.U. app' });
   }
 
+  // @ts-ignore
+  handleUserInput = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    // @ts-ignore
+    this.setState({ [name]: value }, () => {
+      this.validateField(name, value);
+    });
+  }
+
+  validateField(fieldName: string, value: string) {
+    let fieldValidationErrors = this.state.formErrors;
+    let usernameValid = this.state.usernameValid;
+    let passwordValid = this.state.passwordValid;
+
+    switch (fieldName) {
+      case 'username':
+        usernameValid = value.length >= 5;
+        fieldValidationErrors.username = usernameValid ? '' : ' is invalid';
+        break;
+      case 'password':
+        passwordValid = value.length >= 5;
+        fieldValidationErrors.password = passwordValid ? '' : ' is too short';
+        break;
+      default:
+        break;
+    }
+    this.setState(
+      {
+        formErrors: fieldValidationErrors,
+        usernameValid: usernameValid,
+        passwordValid: passwordValid
+      },
+      this.validateForm);
+  }
+
+  validateForm() {
+    this.setState({
+      formValid: this.state.usernameValid && this.state.passwordValid
+    });
+  }
+
+  errorClass(error: string) {
+    return (error.length === 0 ? '' : 'error');
+  }
+
   public content() {
+    let error = this.props.error ? <Bem elem="error">{this.props.error.message}</Bem> : '';
+
     return (
       <Fragment>
         <Header title={this.state.title}/>
@@ -44,18 +106,31 @@ class Login extends Block<ILoginProps, ILoginState> {
           <h3>Login</h3>
           <Bem tag="form" block="app-login" elem="form">
             <input
-              name="email"
+              className={`${this.errorClass(this.state.formErrors.username)}`}
+              name="username"
               type="text"
-              placeholder="Email"
+              placeholder="Username"
+              value={this.state.username}
+              onChange={this.handleUserInput}
             />
             <input
+              className={`${this.errorClass(this.state.formErrors.password)}`}
               name="password"
               type="password"
               placeholder="Password"
+              value={this.state.password}
+              onChange={this.handleUserInput}
             />
-            <button type="button" className="btn btn_color_blue" onClick={() => this.props.authenticate('test', 'test')}>Sign In </button>
+            <button
+              type="button"
+              className="btn btn_color_blue"
+              disabled={!this.state.formValid}
+              onClick={() => this.props.authenticate(this.state.username, this.state.password)}
+            >Sign In
+            </button>
           </Bem>
-          {this.props.error}
+          {error}
+          <FormErrors formErrors={this.state.formErrors}/>
           <Link to={`/`}>HOME</Link>
         </Bem>
         <Footer/>
@@ -74,7 +149,6 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
     authenticate: (username: string, password: string) => {
-      debugger;
       dispatch(authenticate(username, password));
     }
   };
