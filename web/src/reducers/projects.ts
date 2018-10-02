@@ -9,7 +9,8 @@ import {
   SELECT_BRANCH,
   SELECT_PROJECT,
   SIGN_IN,
-  SIGN_OUT
+  SIGN_OUT,
+  ADD_ERROR
 } from '../actions/projects';
 
 import { Branch, Commit, Message, Project, StatusType, User } from '../protobuf/nabu_pb';
@@ -130,6 +131,9 @@ export default function (state: ProjectState = initialState, action: RootAction)
 
     case SIGN_OUT:
       return { ...state, authenticated: false, user: null };
+
+    case ADD_ERROR:
+      return {...state, error: action.payload };
 
     default:
       return state;
