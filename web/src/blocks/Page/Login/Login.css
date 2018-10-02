@@ -5,3 +5,16 @@
     grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 200px;
 }
+
+.app-login {
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-login-form {
+    display: flex;
+    flex-direction: column;
+}

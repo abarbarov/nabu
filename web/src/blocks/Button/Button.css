@@ -1,48 +1,81 @@
 .btn {
-    background: rgba(0, 0, 0, 0.2) none scroll;
-    border-radius: 5px;
-    border: 0 none rgb(0, 0, 0);
-    box-sizing: border-box;
-    display: inline-block;
-    height: 36px;
-    /*line-height: 36px;*/
-    margin: 0;
-    outline: rgb(0, 0, 0) none 0;
-    position: relative;
-    text-align: center;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 1rem;
+    -moz-transition: background-color .2s ease-out, border-color .2s ease-out;
+    -o-transition: background-color .2s ease-out, border-color .2s ease-out;
+    -webkit-transition: background-color .2s ease-out, border-color .2s ease-out;
+    transition: background-color .2s ease-out, border-color .2s ease-out;
 
-    font-size: 16px;
-    min-width: 80px;
-    white-space: nowrap;
-    color: white;
-    box-shadow: rgba(0, 0, 0, 0.5) 0 1px 0;
-    text-shadow: rgba(0, 0, 0, .4) 0 1px 0;
-    padding: 3px 16px;
+    color: #fff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    line-height: 1.2;
+    min-width: 100px;
+    padding: 14px 12px 10px;
+    text-transform: uppercase;
+    vertical-align: top;
+
     cursor: pointer;
 }
 
-.btn_color_default {
-    background: #65a9d7;
+.btn_color_blue {
+    background: #2579a2;
+    border-color: #2579a2
 }
 
-.btn_color_default:active {
-    background: rgba(101, 169, 215, 0.5) none scroll;
+.btn_color_blue:hover {
+    background: #1d6081;
+    border-color: #1d6081
 }
 
-.btn_color_success {
+.btn_color_blue:active {
+    background: #164760;
+    border-color: #164760
+}
+
+.btn_color_orange {
+    background: #ff744b;
+    border-color: #ff744b
+}
+
+.btn_color_orange:hover {
+    background: #ff5422;
+    border-color: #ff5422
+}
+
+.btn_color_orange:active {
+    background: #f83900;
+    border-color: #f83900
+}
+
+.btn_color_green {
     background: #26a972;
+    border-color: #51816d
 }
 
-.btn_color_success:active {
-    background: rgba(38, 169, 114, 0.5);
+.btn_color_green:active {
+    background: #1cb575;
+    border-color: #51816d;
 }
 
-.btn_color_danger {
-    background: #d04e4e;
+.btn_color_red:hover {
+    background: #e53549;
+    border-color: #e53549;
+    outline: 0
 }
 
-.btn_color_danger:active {
-    background: rgba(208, 78, 78, 0.5);
+.btn_color_red:focus {
+    background: #e53549;
+    border-color: #e53549
+}
+
+.btn_color_red:active {
+    background: #d61b31;
+    border-color: #d61b31
 }
 
 .btn_square {
@@ -52,13 +85,89 @@
     text-align: center;
     margin: 1px;
     display: inline-flex;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn_svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 .btn_svg path {
     fill: white;
 }
+
+.btn_svg_neg path {
+    fill: black;
+}
+
+::-webkit-input-placeholder {
+    color: #9b9b9b
+}
+
+::-moz-placeholder {
+    color: #9b9b9b
+}
+
+:-ms-input-placeholder {
+    color: #9b9b9b
+}
+
+:-moz-placeholder {
+    color: #9b9b9b
+}
+
+input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type="number"], input[type="tel"], select, textarea {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-size: .875rem;
+    -moz-transition: border-color .2s ease-out;
+    -o-transition: border-color .2s ease-out;
+    -webkit-transition: border-color .2s ease-out;
+    transition: border-color .2s ease-out;
+    background: #fff;
+    border: 1px solid #d9e2e9;
+    color: #595959;
+    line-height: 1.5;
+    max-width: 100%;
+    padding: 10px
+}
+
+input[type="text"]:hover, input[type="text"]:focus, input[type="text"]:active, input[type="email"]:hover, input[type="email"]:focus, input[type="email"]:active, input[type="url"]:hover, input[type="url"]:focus, input[type="url"]:active, input[type="password"]:hover, input[type="password"]:focus, input[type="password"]:active, input[type="search"]:hover, input[type="search"]:focus, input[type="search"]:active, input[type="number"]:hover, input[type="number"]:focus, input[type="number"]:active, input[type="tel"]:hover, input[type="tel"]:focus, input[type="tel"]:active, select:hover, select:focus, select:active, textarea:hover, textarea:focus, textarea:active {
+    border-color: #cdd5dc;
+    outline: 0
+}
+
+select {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    max-width: 240px;
+    width: 100%
+}
+
+select[multiple='multiple'] {
+    height: 246px;
+    padding: 0
+}
+
+select option {
+    padding: 10px
+}
+
+select::-ms-expand {
+    display: none
+}
+
+textarea {
+    display: block;
+    resize: none;
+    width: 100%
+}
+

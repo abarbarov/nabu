@@ -7,7 +7,7 @@ interface IButtonProps {
 }
 
 interface IModsProps extends IButtonProps {
-  color: 'default' | 'warning' | 'danger' | 'success';
+  color: 'blue' | 'orange' | 'red' | 'green';
 }
 
 // Creating the Text element
@@ -31,6 +31,12 @@ export class Button<T extends IModsProps> extends Block<T> {
   mods() {
     return {
       color: this.props.color,
+    };
+  }
+
+  attrs() {
+    return {
+      type: 'button'
     };
   }
 

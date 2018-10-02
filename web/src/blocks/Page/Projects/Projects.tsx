@@ -83,7 +83,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
               Projects available
             </div>
             <div>
-              <Button color="default">Add new</Button>
+              <Button color="blue">Add new</Button>
             </div>
             <hr/>
             <div>

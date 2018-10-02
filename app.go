@@ -32,7 +32,7 @@ type Application struct {
 }
 
 func main() {
-	fmt.Printf("[INFO] nabu %s\n build date: %s", revision, buildstamp)
+	fmt.Printf("[INFO] nabu %s\nbuild date: %s\n", revision, buildstamp)
 
 	var opts Opts
 	p := flags.NewParser(&opts, flags.Default)

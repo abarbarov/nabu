@@ -1,4 +1,4 @@
-import { Block, Bem } from 'bem-react-core';
+import { Bem, Block } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { authenticate } from '../../../actions/projects';
@@ -33,7 +33,7 @@ class Login extends Block<ILoginProps, ILoginState> {
   }
 
   public componentDidMount() {
-    this.setState({ title: 'Welcome to LOGIN page' });
+    this.setState({ title: 'Login to N.A.B.U. app' });
   }
 
   public content() {
@@ -41,8 +41,8 @@ class Login extends Block<ILoginProps, ILoginState> {
       <Fragment>
         <Header title={this.state.title}/>
         <Bem block="app" elem="login">
-          LOGIN <br/>
-          <form>
+          <h3>Login</h3>
+          <Bem tag="form" block="app-login" elem="form">
             <input
               name="email"
               type="text"
@@ -53,15 +53,11 @@ class Login extends Block<ILoginProps, ILoginState> {
               type="password"
               placeholder="Password"
             />
-            <button type="button" onClick={() => this.props.authenticate('test', 'test')} className="blue">Sign In
-            </button>
-          </form>
+            <button type="button" className="btn btn_color_blue" onClick={() => this.props.authenticate('test', 'test')}>Sign In </button>
+          </Bem>
           {this.props.error}
           <Link to={`/`}>HOME</Link>
         </Bem>
-        {/*<ExampleWithMods mod1={true}/>*/}
-        {/*<ExampleWithMods mod1={true} mod2={true}/>*/}
-
         <Footer/>
       </Fragment>
     );
@@ -78,6 +74,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
     authenticate: (username: string, password: string) => {
+      debugger;
       dispatch(authenticate(username, password));
     }
   };
