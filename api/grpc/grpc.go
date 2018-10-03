@@ -68,24 +68,28 @@ func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuSe
 }
 
 func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
-	if req.Username == "admin" && req.Password == "admin" {
+	user, err := ngs.store.User(req.Username)
+
+	if err != nil || req.Password != user.Hash {
 		return &pb.AuthResponse{
 			User: &pb.User{
-				Id:    1,
-				Token: "super-token",
+				Id:    0,
+				Token: "",
 			},
 		}, nil
 	}
 
 	return &pb.AuthResponse{
 		User: &pb.User{
-			Id:    0,
-			Token: "",
+			Id:    1,
+			Token: "super-token",
 		},
 	}, nil
 }
 
 func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
+	//user, err := ngs.store.AddUser(req.Username, req.Password)
+
 	if req.Username == "admin" && req.Password == "admin" {
 
 		return &pb.AuthResponse{

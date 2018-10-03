@@ -16,10 +16,8 @@ type Repository struct {
 	Token string
 }
 
-func (ds *DataStore) Projects() ([]*Project, error) {
-	var projects []*Project
-
-	projects = append(projects, &Project{
+var projects = []*Project{
+	{
 		Id:    1,
 		Title: "firstfile-dev",
 		Repository: &Repository{
@@ -31,9 +29,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Host: "95.216.163.61:22",
 		Exec: "firstfile.%s.service",
 		Dir:  "/apps/firstfile/%s",
-	})
-
-	projects = append(projects, &Project{
+	},
+	{
 		Id:    2,
 		Title: "firstfile-PROD",
 		Repository: &Repository{
@@ -45,9 +42,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Host: "5.23.53.238:22",
 		Exec: "trademark.%s.service",
 		Dir:  "/apps/trademark/%s",
-	})
-
-	projects = append(projects, &Project{
+	},
+	{
 		Id:    3,
 		Title: "nabu",
 		Repository: &Repository{
@@ -59,9 +55,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Host: "95.216.163.61:22",
 		Exec: "nabu.%s.service",
 		Dir:  "/apps/nabu/%s",
-	})
-
-	projects = append(projects, &Project{
+	},
+	{
 		Id:    4,
 		Title: "boilerplate",
 		Repository: &Repository{
@@ -73,9 +68,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Host: "95.216.163.61:22",
 		Exec: "nabu.%s.service",
 		Dir:  "/apps/nabu/%s",
-	})
-
-	projects = append(projects, &Project{
+	},
+	{
 		Id:    5,
 		Title: "barbarov.com",
 		Repository: &Repository{
@@ -87,9 +81,8 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Host: "95.216.163.61:22",
 		Exec: "barbarov.%s.service",
 		Dir:  "/apps/barbarov/%s",
-	})
-
-	projects = append(projects, &Project{
+	},
+	{
 		Id:    6,
 		Title: "svoerazvitie.com",
 		Repository: &Repository{
@@ -101,20 +94,15 @@ func (ds *DataStore) Projects() ([]*Project, error) {
 		Host: "95.216.163.61:22",
 		Exec: "svoerazvitie.%s.service",
 		Dir:  "/apps/svoerazvitie/%s",
-	})
+	},
+}
 
+func (ds *DataStore) Projects() ([]*Project, error) {
 	return projects, nil
 }
 
 func (ds *DataStore) Project(id int64) (*Project, error) {
-
-	allProjects, err := ds.Projects()
-
-	if err != nil {
-		return nil, err
-	}
-
-	for _, p := range allProjects {
+	for _, p := range projects {
 		if p.Id == id {
 			return p, nil
 		}
