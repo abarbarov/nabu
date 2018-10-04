@@ -1,6 +1,6 @@
 .page-projects {
-    flex:1;
-    display:grid;
+    flex: 1;
+    display: grid;
     grid-template-areas: "header" "main" "footer";
     grid-template-columns: 1fr;
     grid-template-rows: 50px 1fr 200px;
@@ -11,18 +11,6 @@
     color: black;
     margin: 1em;
     grid-area: main;
-}
-
-.projects_item {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: 0 10px;
-}
-
-.projects_item:hover {
-    background-color: #f4e1d2;
-    color: black;
-    cursor: pointer;
 }
 
 .branches_item {
@@ -37,14 +25,4 @@
     cursor: pointer;
 }
 
-.commits_item {
-    display: grid;
-    grid-template-columns: 1fr 2fr 3fr 2fr;
-    padding: 0 10px;
-    cursor: pointer;
-}
 
-.commits_item:hover {
-    background-color: #f4e1d2;
-    color: black;
-}

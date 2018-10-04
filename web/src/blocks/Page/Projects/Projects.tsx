@@ -25,8 +25,8 @@ import {
 import ProjectList from './List/ProjectList';
 import CommitsList from './List/CommitsList';
 import BranchesList from './List/BranchesList';
-import './Projects.css';
 import { Button } from '../../Button/Button';
+import './Projects.css';
 
 export interface IProjectsProps {
   authenticated: boolean;

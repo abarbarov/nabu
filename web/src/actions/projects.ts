@@ -303,8 +303,7 @@ export const authenticate = (username: string, password: string) => {
     onMessage: message => {
       const errors = message.getErrorsList();
 
-      if (errors) {
-        debugger;
+      if (errors && errors.length) {
         let unwrapped = errors.map(e => e.toObject())
         return addErrors(unwrapped);
       }

@@ -3,11 +3,11 @@ import * as React from 'react';
 // @ts-ignore
 export const FormErrors = ({ formErrors }) => {
   return (
-    <div className="formErrors">
+    <div className="form-errors">
       {Object.keys(formErrors).map((fieldName, i) => {
         if (formErrors[fieldName].length > 0) {
           return (
-            <p key={i}>{fieldName} {formErrors[fieldName]}</p>
+            <p className="error" key={i}>{fieldName} {formErrors[fieldName]}</p>
           );
         } else {
           return '';

@@ -1,0 +1,31 @@
+.commits-table {
+    max-height: 550px;
+    overflow: auto;
+}
+
+.commits-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 3fr 2fr;
+    padding: 0 10px;
+    cursor: pointer;
+    line-height: 36px;
+}
+
+.commits-row:hover {
+    background-color: #f4e1d2;
+    color: black;
+}
+
+.commits-row_selected {
+    background: #1d6081;
+    color: white;
+}
+
+.commits-col {
+    display: flex;
+    align-items: center;
+}
+
+.commits-col_actions {
+    justify-content: flex-end;
+}

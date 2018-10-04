@@ -1,6 +1,6 @@
 import { Bem, Block } from 'bem-react-core';
 import * as React from 'react';
-import { Fragment } from 'react';
+import { ChangeEvent, Fragment } from 'react';
 import { authenticate } from '../../../actions/projects';
 import { Link } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -32,6 +32,10 @@ export interface ILoginState {
 class Login extends Block<ILoginProps, ILoginState> {
   public block = 'page-login';
 
+  static errorClass(error: string) {
+    return (error.length === 0 ? '' : 'error');
+  }
+
   constructor(props: ILoginProps) {
     super(props);
 
@@ -50,17 +54,6 @@ class Login extends Block<ILoginProps, ILoginState> {
     this.setState({ title: 'Login to N.A.B.U. app' });
   }
 
-  // @ts-ignore
-  handleUserInput = e => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    // @ts-ignore
-    this.setState({ [name]: value }, () => {
-      this.validateField(name, value);
-    });
-  }
-
   validateField(fieldName: string, value: string) {
     let fieldValidationErrors = this.state.formErrors;
     let usernameValid = this.state.usernameValid;
@@ -69,7 +62,7 @@ class Login extends Block<ILoginProps, ILoginState> {
     switch (fieldName) {
       case 'username':
         usernameValid = value.length >= 5;
-        fieldValidationErrors.username = usernameValid ? '' : ' is invalid';
+        fieldValidationErrors.username = usernameValid ? '' : ' is too short';
         break;
       case 'password':
         passwordValid = value.length >= 5;
@@ -93,10 +86,6 @@ class Login extends Block<ILoginProps, ILoginState> {
     });
   }
 
-  errorClass(error: string) {
-    return (error.length === 0 ? '' : 'error');
-  }
-
   public content() {
     let errorsText = this.props.errors && this.props.errors.map(e => e.text);
     let error = this.props.errors ? <Bem elem="error">{errorsText}</Bem> : '';
@@ -106,9 +95,10 @@ class Login extends Block<ILoginProps, ILoginState> {
         <Header title={this.state.title}/>
         <Bem block="app" elem="login">
           <h3>Login</h3>
+          <FormErrors formErrors={this.state.formErrors}/>
           <Bem tag="form" block="app-login" elem="form">
             <input
-              className={`${this.errorClass(this.state.formErrors.username)}`}
+              className={`app-login-form input ${Login.errorClass(this.state.formErrors.username)}`}
               name="username"
               type="text"
               placeholder="Username"
@@ -116,7 +106,7 @@ class Login extends Block<ILoginProps, ILoginState> {
               onChange={this.handleUserInput}
             />
             <input
-              className={`${this.errorClass(this.state.formErrors.password)}`}
+              className={`app-login-form input ${Login.errorClass(this.state.formErrors.password)}`}
               name="password"
               type="password"
               placeholder="Password"
@@ -132,12 +122,21 @@ class Login extends Block<ILoginProps, ILoginState> {
             </button>
           </Bem>
           {error}
-          <FormErrors formErrors={this.state.formErrors}/>
           <Link to={`/`}>HOME</Link>
         </Bem>
         <Footer/>
       </Fragment>
     );
+  }
+
+  handleUserInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    // @ts-ignore
+    this.setState({ [name]: value }, () => {
+      this.validateField(name, value);
+    });
   }
 }
 

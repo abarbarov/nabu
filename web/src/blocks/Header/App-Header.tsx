@@ -11,7 +11,7 @@ import { signOut } from '../../actions/projects';
 import './App-Header.css';
 
 export interface IHeaderProps {
-  authenticated: boolean;
+  authenticated?: boolean;
   signOut: () => void;
   title: string;
 }

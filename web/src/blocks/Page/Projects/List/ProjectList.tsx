@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Project } from '../../../../protobuf/nabu_pb';
+import './ProjectList.css';
 
 type ProjectListProps = {
   projects: Project.AsObject[],
@@ -10,13 +11,14 @@ type ProjectListProps = {
 const ProjectList: React.SFC<ProjectListProps> = (props) => {
   return (
     <div className="projects">
+      <div className="projects-row projects-row_title">
+        <div>ID</div>
+        <div>|Title</div>
+        <div>|Repository</div>
+      </div>
       {props.projects.map((project, i) =>
         <div
-          className="projects_item"
-          style={props.selectedProject && project.id === props.selectedProject.id
-            ? { 'backgroundColor': 'rgba(0, 0, 0, 0.08)' }
-            : {}
-          }
+          className={`projects-row ${props.selectedProject && project.id === props.selectedProject.id ? 'projects-row_selected' : ''}`}
           key={i}
           onClick={() => {
             if (project.id) {

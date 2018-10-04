@@ -1,0 +1,29 @@
+.projects-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr;
+    padding: 0 10px;
+    line-height: 1.5em;
+}
+
+.projects-row:hover {
+    background-color: #f4e1d2;
+    color: black;
+    cursor: pointer;
+}
+
+.projects-row_selected {
+    background: #2579a2;
+    color: white;
+}
+
+.projects-row_title {
+    background: #164760;
+    color: white;
+    line-height: 36px;
+}
+
+.projects-row_title:hover {
+    background: #164760;
+    color: white;
+    cursor: default;
+}
