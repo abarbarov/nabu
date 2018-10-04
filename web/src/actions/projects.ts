@@ -181,12 +181,13 @@ type AddBuildMessages = {
 };
 export const addMessage = (message: Message) => ({ type: ADD_MESSAGE, payload: message });
 
-export const buildProject = (projectId: number, branch: string, sha: string) => {
+export const buildProject = (token: string, projectId: number, branch: string, sha: string) => {
 
   let req = new BuildRequest();
   req.setProjectId(projectId);
   req.setBranch(branch);
   req.setSha(sha);
+  req.setToken(token);
 
   return grpcRequest<BuildRequest, MessageResponse>({
     request: req,
@@ -212,11 +213,12 @@ export const buildProject = (projectId: number, branch: string, sha: string) => 
   });
 };
 
-export const copyProject = (projectId: number, sha: string) => {
+export const copyProject = (token: string, projectId: number, sha: string) => {
 
   let req = new CopyRequest();
   req.setProjectId(projectId);
   req.setSha(sha);
+  req.setToken(token);
 
   return grpcRequest<CopyRequest, MessageResponse>({
     request: req,
@@ -242,12 +244,13 @@ export const copyProject = (projectId: number, sha: string) => {
   });
 };
 
-export const installProject = (projectId: number, sha: string, color: string) => {
+export const installProject = (token: string, projectId: number, sha: string, color: string) => {
 
   let req = new InstallRequest();
   req.setProjectId(projectId);
   req.setColor(color);
   req.setSha(sha);
+  req.setToken(token);
 
   return grpcRequest<InstallRequest, MessageResponse>({
     request: req,
@@ -273,12 +276,13 @@ export const installProject = (projectId: number, sha: string, color: string) =>
   });
 };
 
-export const restartProject = (projectId: number, sha: string, color: string) => {
+export const restartProject = (token: string, projectId: number, sha: string, color: string) => {
 
   let req = new RestartRequest();
   req.setProjectId(projectId);
   req.setColor(color);
   req.setSha(sha);
+  req.setToken(token);
 
   return grpcRequest<InstallRequest, MessageResponse>({
     request: req,

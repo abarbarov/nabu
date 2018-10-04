@@ -35,7 +35,7 @@ var projects = []*Project{
 	{
 		Id:     2,
 		UserId: 1,
-		Title:  "firstfile-PROD",
+		Title:  "firstfile-PRODUCTION",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "trademark.web",

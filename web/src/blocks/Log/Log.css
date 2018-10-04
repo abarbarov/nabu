@@ -5,7 +5,6 @@
 }
 
 .log-container {
-    /*height: calc(100% - 20px);*/
     min-height: 250px;
     width: calc(100% - 20px);
     padding: 10px;
@@ -14,6 +13,7 @@
     color: #2ecc40;
     display: flex;
     flex-direction: column;
+    font-size: 11pt;
 }
 
 .log-row {
@@ -22,9 +22,9 @@
 
 .log-row-time {
     margin-right: 5px;
-    flex: 20%;
+    flex: 15%;
 }
 
 .log-row-info {
-    flex: 80%;
+    flex: 85%;
 }

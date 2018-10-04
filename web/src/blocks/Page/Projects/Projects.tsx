@@ -43,10 +43,10 @@ export interface IProjectsProps {
   fetchProjects: (token: string) => void;
   selectProject: (token: string, projectId: number) => void;
   selectBranch: (token: string, projectId: number, name: string) => void;
-  build: (projectId: number, branch: string, sha: string) => void;
-  copy: (projectId: number, sha: string) => void;
-  install: (projectId: number, sha: string, color: string) => void;
-  restart: (projectId: number, sha: string, color: string) => void;
+  build: (token: string, projectId: number, branch: string, sha: string) => void;
+  copy: (token: string, projectId: number, sha: string) => void;
+  install: (token: string, projectId: number, sha: string, color: string) => void;
+  restart: (token: string, projectId: number, sha: string, color: string) => void;
   user: User.AsObject | null;
 }
 
@@ -115,6 +115,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
               <div>
                 {this.props.selectedBranch && this.props.selectedProject
                   ? <CommitsList
+                    token={(this.props.user && this.props.user.token) || ''}
                     selectedProject={this.props.selectedProject}
                     selectedBranch={this.props.selectedBranch}
                     commits={this.props.commits}
@@ -178,21 +179,21 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
       dispatch(selectBranch(projectId, name));
       dispatch(listCommits(token, projectId, name));
     },
-    build: (projectId: number, branch: string, sha: string) => {
+    build: (token: string, projectId: number, branch: string, sha: string) => {
       dispatch(clearMessages());
-      dispatch(buildProject(projectId, branch, sha));
+      dispatch(buildProject(token, projectId, branch, sha));
     },
-    copy: (projectId: number, sha: string) => {
+    copy: (token: string, projectId: number, sha: string) => {
       dispatch(clearMessages());
-      dispatch(copyProject(projectId, sha));
+      dispatch(copyProject(token, projectId, sha));
     },
-    install: (projectId: number, sha: string, color: string) => {
+    install: (token: string, projectId: number, sha: string, color: string) => {
       dispatch(clearMessages());
-      dispatch(installProject(projectId, sha, color));
+      dispatch(installProject(token, projectId, sha, color));
     },
-    restart: (projectId: number, sha: string, color: string) => {
+    restart: (token: string, projectId: number, sha: string, color: string) => {
       dispatch(clearMessages());
-      dispatch(restartProject(projectId, sha, color));
+      dispatch(restartProject(token, projectId, sha, color));
     }
   };
 }
