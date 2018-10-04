@@ -2,11 +2,13 @@ package grpc
 
 import (
 	"context"
+	"github.com/abarbarov/nabu/auth"
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
 	"github.com/abarbarov/nabu/tools"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"log"
 	"sync/atomic"
@@ -14,13 +16,14 @@ import (
 )
 
 type nabuGrpcService struct {
-	github  *github.Github
-	store   *store.DataStore
-	builder *builder.Builder
+	github        *github.Github
+	store         *store.DataStore
+	builder       *builder.Builder
+	authenticator *auth.Authenticator
 }
 
-func NewNabuGrpcService(store *store.DataStore, github *github.Github, builder *builder.Builder) *nabuGrpcService {
-	return &nabuGrpcService{github, store, builder}
+func NewNabuGrpcService(store *store.DataStore, github *github.Github, builder *builder.Builder, auth *auth.Authenticator) *nabuGrpcService {
+	return &nabuGrpcService{github, store, builder, auth}
 }
 
 func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuService_ListProjectsServer) error {
@@ -72,10 +75,6 @@ func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthReques
 
 	if err != nil || req.Password != user.Hash {
 		return &pb.AuthResponse{
-			User: &pb.User{
-				Id:    0,
-				Token: "",
-			},
 			Errors: []*pb.Error{
 				{
 					Text:  "Wrong username or password",
@@ -86,31 +85,70 @@ func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthReques
 		}, nil
 	}
 
-	return &pb.AuthResponse{
-		User: &pb.User{
-			Id:    1,
-			Token: "super-token",
+	claims := auth.CustomClaims{
+		State: auth.RandToken(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        auth.RandToken(),
+			Issuer:    "nabu.app",
+			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
+			NotBefore: time.Now().Add(-1 * time.Minute).Unix(),
 		},
-	}, nil
-}
+		User: user,
+	}
 
-func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
-	//user, err := ngs.store.AddUser(req.Username, req.Password)
-
-	if req.Username == "admin" && req.Password == "admin" {
-
+	token, err := ngs.authenticator.Token(&claims)
+	if err != nil {
 		return &pb.AuthResponse{
-			User: &pb.User{
-				Id:    1,
-				Token: "super-token",
+			Errors: []*pb.Error{
+				{
+					Text:  "Cannot create token",
+					Code:  1,
+					Field: "",
+				},
 			},
 		}, nil
 	}
 
 	return &pb.AuthResponse{
 		User: &pb.User{
-			Id:    0,
-			Token: "",
+			Id:    user.Id,
+			Token: token,
+		},
+	}, nil
+}
+
+func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
+	user, err := ngs.store.AddUser(req.Username, req.Password)
+
+	if err != nil {
+		return &pb.AuthResponse{
+			Errors: []*pb.Error{
+				{
+					Text:  "Cannot create user",
+					Code:  2,
+					Field: "",
+				},
+			},
+		}, nil
+	}
+
+	claims := auth.CustomClaims{
+		State: auth.RandToken(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        auth.RandToken(),
+			Issuer:    "nabu.app",
+			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
+			NotBefore: time.Now().Add(-1 * time.Minute).Unix(),
+		},
+		User: user,
+	}
+
+	token, err := ngs.authenticator.Token(&claims)
+
+	return &pb.AuthResponse{
+		User: &pb.User{
+			Id:    user.Id,
+			Token: token,
 		},
 	}, nil
 }

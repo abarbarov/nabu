@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/abarbarov/nabu/auth"
 	"log"
 	"net/http"
 	"sync"
@@ -15,18 +16,18 @@ import (
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	"github.com/abarbarov/nabu/store"
-	//"github.com/go-chi/cors"
 )
 
 type Server struct {
-	Version    string
-	WebRoot    string
-	Logger     log.Logger
-	httpServer *http.Server
-	lock       sync.Mutex
-	Store      *store.DataStore
-	Github     *github.Github
-	Builder    *builder.Builder
+	Version       string
+	WebRoot       string
+	Logger        log.Logger
+	httpServer    *http.Server
+	lock          sync.Mutex
+	Store         *store.DataStore
+	Github        *github.Github
+	Builder       *builder.Builder
+	Authenticator *auth.Authenticator
 }
 
 // Run the lister and request's router, activate server
@@ -77,7 +78,7 @@ func (s *Server) routes() chi.Router {
 	//	MaxAge:           300,
 	//})
 
-	grpcMiddleware := middleware.NewGrpcWebMiddleware(s.Store, s.Github, s.Builder)
+	grpcMiddleware := middleware.NewGrpcWebMiddleware(s.Store, s.Github, s.Builder, s.Authenticator)
 
 	router.Use(grpcMiddleware.Handler)
 	//router.Use(corsMiddleware.Handler)

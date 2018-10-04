@@ -40,5 +40,13 @@ func (ds *DataStore) AddUser(username, password string) (*User, error) {
 		return nil, errors.New("Duplicate username")
 	}
 
-	return nil, nil
+	newUser := &User{
+		Id:   int64(len(users)),
+		Hash: password,
+		Name: username,
+	}
+
+	users = append(users, newUser)
+
+	return newUser, nil
 }

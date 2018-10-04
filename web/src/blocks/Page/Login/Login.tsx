@@ -88,7 +88,7 @@ class Login extends Block<ILoginProps, ILoginState> {
 
   public content() {
     let errorsText = this.props.errors && this.props.errors.map(e => e.text);
-    let error = this.props.errors ? <Bem elem="error">{errorsText}</Bem> : '';
+    let error = this.props.errors ? <div className="form-errors"><p className="error">{errorsText}</p></div> : '';
 
     return (
       <Fragment>
@@ -96,6 +96,7 @@ class Login extends Block<ILoginProps, ILoginState> {
         <Bem block="app" elem="login">
           <h3>Login</h3>
           <FormErrors formErrors={this.state.formErrors}/>
+          {error}
           <Bem tag="form" block="app-login" elem="form">
             <input
               className={`app-login-form input ${Login.errorClass(this.state.formErrors.username)}`}
@@ -104,6 +105,7 @@ class Login extends Block<ILoginProps, ILoginState> {
               placeholder="Username"
               value={this.state.username}
               onChange={this.handleUserInput}
+              onKeyPress={this.handleKeyDown}
             />
             <input
               className={`app-login-form input ${Login.errorClass(this.state.formErrors.password)}`}
@@ -112,6 +114,7 @@ class Login extends Block<ILoginProps, ILoginState> {
               placeholder="Password"
               value={this.state.password}
               onChange={this.handleUserInput}
+              onKeyDown={this.handleKeyDown}
             />
             <button
               type="button"
@@ -121,7 +124,6 @@ class Login extends Block<ILoginProps, ILoginState> {
             >Sign In
             </button>
           </Bem>
-          {error}
           <Link to={`/`}>HOME</Link>
         </Bem>
         <Footer/>
@@ -137,6 +139,16 @@ class Login extends Block<ILoginProps, ILoginState> {
     this.setState({ [name]: value }, () => {
       this.validateField(name, value);
     });
+  }
+
+  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.props.authenticate(this.state.username, this.state.password);
+    }
   }
 }
 

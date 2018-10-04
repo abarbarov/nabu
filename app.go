@@ -2,13 +2,17 @@ package main
 
 import (
 	"context"
+	"crypto/rsa"
 	"fmt"
 	"github.com/abarbarov/nabu/api"
+	"github.com/abarbarov/nabu/auth"
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
 	"github.com/abarbarov/nabu/store"
 	"github.com/abarbarov/nabu/tools"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/jessevdk/go-flags"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -17,6 +21,11 @@ import (
 
 var revision = "unknown"
 var buildstamp = "unknown"
+
+const (
+	privKeyPath = "app.rsa"     // openssl genrsa -out app.rsa keysize
+	pubKeyPath  = "app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
+)
 
 type Opts struct {
 	Port         int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
@@ -29,6 +38,29 @@ type Application struct {
 	Opts
 	srv        *api.Server
 	terminated chan struct{}
+}
+
+func parseRsaKeys() (*rsa.PublicKey, *rsa.PrivateKey, error) {
+	signBytes, err := ioutil.ReadFile(privKeyPath)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	signKey, err := jwt.ParseRSAPrivateKeyFromPEM(signBytes)
+	if err != nil {
+		return nil, nil, err
+	}
+	verifyBytes, err := ioutil.ReadFile(pubKeyPath)
+	if err != nil {
+		return nil, nil, err
+	}
+	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return verifyKey, signKey, nil
 }
 
 func main() {
@@ -74,12 +106,20 @@ func Create(opts Opts) (*Application, error) {
 		GoExecutable: opts.GoExecutable,
 	}
 
+	verifyKey, signKey, _ := parseRsaKeys()
+
+	a := &auth.Authenticator{
+		SignKey:   signKey,
+		VerifyKey: verifyKey,
+	}
+
 	srv := &api.Server{
-		Version: revision,
-		WebRoot: opts.WebRoot,
-		Store:   ds,
-		Github:  gh,
-		Builder: b,
+		Version:       revision,
+		WebRoot:       opts.WebRoot,
+		Store:         ds,
+		Github:        gh,
+		Builder:       b,
+		Authenticator: a,
 	}
 
 	tch := make(chan struct{})
