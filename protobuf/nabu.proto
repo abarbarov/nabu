@@ -47,12 +47,21 @@ message Message {
     StatusType status = 4;
 }
 
+message Error {
+    int64 code = 1;
+    string field = 2;
+    string text = 3;
+}
+
 service NabuService {
     rpc Authenticate (AuthRequest) returns (AuthResponse);
     rpc Register (AuthRequest) returns (AuthResponse);
+    rpc RefreshToken (EmptyRequest) returns (AuthResponse);
+
     rpc ListProjects (EmptyRequest) returns (stream ListProjectsResponse);
     rpc ListBranches (BranchRequest) returns (stream ListBranchesResponse);
     rpc ListCommits (CommitsRequest) returns (stream ListCommitsResponse);
+
     rpc Build (BuildRequest) returns (stream MessageResponse);
     rpc Copy (CopyRequest) returns (stream MessageResponse);
     rpc Install (InstallRequest) returns (stream MessageResponse);
@@ -60,26 +69,31 @@ service NabuService {
 }
 
 message EmptyRequest {
+    string token = 1;
 }
 
 message BranchRequest {
     int64 repo_id = 1;
+    string token = 2;
 }
 
 message CommitsRequest {
     int64 repo_id = 1;
     string branch_name = 2;
+    string token = 3;
 }
 
 message BuildRequest {
     int64 project_id = 1;
     string branch = 2;
     string sha = 3;
+    string token = 4;
 }
 
 message CopyRequest {
     int64 project_id = 1;
     string sha = 2;
+    string token = 3;
 }
 
 message AuthRequest {
@@ -91,12 +105,14 @@ message InstallRequest {
     int64 project_id = 1;
     string sha = 2;
     string color = 3;
+    string token = 4;
 }
 
 message RestartRequest {
     int64 project_id = 1;
     string sha = 2;
     string color = 3;
+    string token = 4;
 }
 
 message MessageResponse {
@@ -117,8 +133,5 @@ message ListCommitsResponse {
 
 message AuthResponse {
     User user = 1;
-}
-
-message RegisterResponse {
-    User user = 1;
+    repeated Error errors = 2;
 }

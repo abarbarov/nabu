@@ -22,6 +22,15 @@ type NabuServiceRegister = {
   readonly responseType: typeof protobuf_nabu_pb.AuthResponse;
 };
 
+type NabuServiceRefreshToken = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof protobuf_nabu_pb.EmptyRequest;
+  readonly responseType: typeof protobuf_nabu_pb.AuthResponse;
+};
+
 type NabuServiceListProjects = {
   readonly methodName: string;
   readonly service: typeof NabuService;
@@ -89,6 +98,7 @@ export class NabuService {
   static readonly serviceName: string;
   static readonly Authenticate: NabuServiceAuthenticate;
   static readonly Register: NabuServiceRegister;
+  static readonly RefreshToken: NabuServiceRefreshToken;
   static readonly ListProjects: NabuServiceListProjects;
   static readonly ListBranches: NabuServiceListBranches;
   static readonly ListCommits: NabuServiceListCommits;
@@ -129,6 +139,15 @@ export class NabuServiceClient {
   ): void;
   register(
     requestMessage: protobuf_nabu_pb.AuthRequest,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
+  ): void;
+  refreshToken(
+    requestMessage: protobuf_nabu_pb.EmptyRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
+  ): void;
+  refreshToken(
+    requestMessage: protobuf_nabu_pb.EmptyRequest,
     callback: (error: ServiceError, responseMessage: protobuf_nabu_pb.AuthResponse|null) => void
   ): void;
   listProjects(requestMessage: protobuf_nabu_pb.EmptyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.ListProjectsResponse>;

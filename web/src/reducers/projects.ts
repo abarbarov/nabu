@@ -1,25 +1,25 @@
 import { RootAction } from '../actions';
 import {
   ADD_BRANCH,
-  ADD_MESSAGE,
   ADD_COMMIT,
+  ADD_ERROR,
+  ADD_MESSAGE,
   ADD_PROJECT,
   CLEAR_MESSAGES,
   PROJECTS_INIT,
   SELECT_BRANCH,
   SELECT_PROJECT,
   SIGN_IN,
-  SIGN_OUT,
-  ADD_ERROR
+  SIGN_OUT
 } from '../actions/projects';
 
-import { Branch, Commit, Message, Project, StatusType, User } from '../protobuf/nabu_pb';
+import { Branch, Commit, Message, Project, StatusType, User, Error } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
   readonly commits: { [commitId: string]: Commit.AsObject },
   readonly branches: { [brancName: string]: Branch.AsObject }
-  readonly error: Error | null,
+  readonly errors: Array<Error.AsObject> | null,
   readonly loading: boolean,
   readonly selectedProject: Project.AsObject | null,
   readonly selectedBranch: Branch.AsObject | null,
@@ -34,7 +34,7 @@ const initialState = {
   commits: {},
   branches: {},
   messages: [],
-  error: null,
+  errors: null,
   loading: false,
   selectedProject: null,
   selectedCommit: null,
@@ -133,7 +133,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return { ...state, authenticated: false, user: null };
 
     case ADD_ERROR:
-      return {...state, error: action.payload };
+      return { ...state, errors: action.payload };
 
     default:
       return state;

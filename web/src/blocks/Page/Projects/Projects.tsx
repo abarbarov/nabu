@@ -7,7 +7,7 @@ import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { connect } from 'react-redux';
-import { Branch, Commit, Message, Project } from '../../../protobuf/nabu_pb';
+import { Branch, Commit, Error, Message, Project } from '../../../protobuf/nabu_pb';
 import Log from '../../Log/Log';
 import { RootAction } from '../../../actions';
 import {
@@ -35,7 +35,7 @@ export interface IProjectsProps {
   branches: Branch.AsObject[];
   messages: Message.AsObject[];
   loading: boolean;
-  error: Error | null;
+  errors: Array<Error.AsObject> | null;
   selectedProject: Project.AsObject | null;
   selectedBranch: Branch.AsObject | null;
   selectedCommit: Commit.AsObject | null;
@@ -150,7 +150,7 @@ function mapStateToProps(state: RootState) {
     branches: Object.keys(state.projects.branches).map(key => state.projects.branches[key]),
     messages: Object.keys(state.projects.messages).map(key => state.projects.messages[parseInt(key, 10)]),
     loading: state.projects.loading,
-    error: state.projects.error,
+    errors: state.projects.errors,
     selectedProject: state.projects.selectedProject,
     selectedCommit: state.projects.selectedCommit,
     selectedBranch: state.projects.selectedBranch,

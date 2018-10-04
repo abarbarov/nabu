@@ -11,10 +11,11 @@ import './Login.css';
 import Header from '../../Header/App-Header';
 import Footer from '../../Footer/App-Footer';
 import { FormErrors } from '../../FormErrors';
+import { Error } from '../../../protobuf/nabu_pb';
 
 export interface ILoginProps {
   path: string;
-  error: Error | null;
+  errors: Array<Error.AsObject> | null;
   authenticate: (username: string, password: string) => void;
 }
 
@@ -97,7 +98,8 @@ class Login extends Block<ILoginProps, ILoginState> {
   }
 
   public content() {
-    let error = this.props.error ? <Bem elem="error">{this.props.error.message}</Bem> : '';
+    let errorsText = this.props.errors && this.props.errors.map(e => e.text);
+    let error = this.props.errors ? <Bem elem="error">{errorsText}</Bem> : '';
 
     return (
       <Fragment>
@@ -142,7 +144,7 @@ class Login extends Block<ILoginProps, ILoginState> {
 function mapStateToProps(state: RootState) {
   return {
     authenticated: state.projects.authenticated,
-    error: state.projects.error,
+    errors: state.projects.errors,
   };
 }
 

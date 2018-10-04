@@ -51,7 +51,6 @@ class AppHeader extends Elem<IHeaderProps> {
 function mapStateToProps(state: RootState) {
   return {
     authenticated: state.projects.authenticated,
-    error: state.projects.error,
   };
 }
 

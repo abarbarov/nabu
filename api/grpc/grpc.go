@@ -76,6 +76,13 @@ func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthReques
 				Id:    0,
 				Token: "",
 			},
+			Errors: []*pb.Error{
+				{
+					Text:  "Wrong username or password",
+					Code:  1,
+					Field: "username;password",
+				},
+			},
 		}, nil
 	}
 
@@ -104,6 +111,15 @@ func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (
 		User: &pb.User{
 			Id:    0,
 			Token: "",
+		},
+	}, nil
+}
+
+func (ngs *nabuGrpcService) RefreshToken(ctx context.Context, req *pb.EmptyRequest) (*pb.AuthResponse, error) {
+	return &pb.AuthResponse{
+		User: &pb.User{
+			Id:    1,
+			Token: "super-token",
 		},
 	}, nil
 }

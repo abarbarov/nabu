@@ -180,7 +180,38 @@ export namespace Message {
   }
 }
 
+export class Error extends jspb.Message {
+  getCode(): number;
+  setCode(value: number): void;
+
+  getField(): string;
+  setField(value: string): void;
+
+  getText(): string;
+  setText(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Error.AsObject;
+  static toObject(includeInstance: boolean, msg: Error): Error.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Error, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Error;
+  static deserializeBinaryFromReader(message: Error, reader: jspb.BinaryReader): Error;
+}
+
+export namespace Error {
+  export type AsObject = {
+    code: number,
+    field: string,
+    text: string,
+  }
+}
+
 export class EmptyRequest extends jspb.Message {
+  getToken(): string;
+  setToken(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EmptyRequest.AsObject;
   static toObject(includeInstance: boolean, msg: EmptyRequest): EmptyRequest.AsObject;
@@ -193,12 +224,16 @@ export class EmptyRequest extends jspb.Message {
 
 export namespace EmptyRequest {
   export type AsObject = {
+    token: string,
   }
 }
 
 export class BranchRequest extends jspb.Message {
   getRepoId(): number;
   setRepoId(value: number): void;
+
+  getToken(): string;
+  setToken(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BranchRequest.AsObject;
@@ -213,6 +248,7 @@ export class BranchRequest extends jspb.Message {
 export namespace BranchRequest {
   export type AsObject = {
     repoId: number,
+    token: string,
   }
 }
 
@@ -222,6 +258,9 @@ export class CommitsRequest extends jspb.Message {
 
   getBranchName(): string;
   setBranchName(value: string): void;
+
+  getToken(): string;
+  setToken(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CommitsRequest.AsObject;
@@ -237,6 +276,7 @@ export namespace CommitsRequest {
   export type AsObject = {
     repoId: number,
     branchName: string,
+    token: string,
   }
 }
 
@@ -249,6 +289,9 @@ export class BuildRequest extends jspb.Message {
 
   getSha(): string;
   setSha(value: string): void;
+
+  getToken(): string;
+  setToken(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BuildRequest.AsObject;
@@ -265,6 +308,7 @@ export namespace BuildRequest {
     projectId: number,
     branch: string,
     sha: string,
+    token: string,
   }
 }
 
@@ -274,6 +318,9 @@ export class CopyRequest extends jspb.Message {
 
   getSha(): string;
   setSha(value: string): void;
+
+  getToken(): string;
+  setToken(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CopyRequest.AsObject;
@@ -289,6 +336,7 @@ export namespace CopyRequest {
   export type AsObject = {
     projectId: number,
     sha: string,
+    token: string,
   }
 }
 
@@ -326,6 +374,9 @@ export class InstallRequest extends jspb.Message {
   getColor(): string;
   setColor(value: string): void;
 
+  getToken(): string;
+  setToken(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): InstallRequest.AsObject;
   static toObject(includeInstance: boolean, msg: InstallRequest): InstallRequest.AsObject;
@@ -341,6 +392,7 @@ export namespace InstallRequest {
     projectId: number,
     sha: string,
     color: string,
+    token: string,
   }
 }
 
@@ -353,6 +405,9 @@ export class RestartRequest extends jspb.Message {
 
   getColor(): string;
   setColor(value: string): void;
+
+  getToken(): string;
+  setToken(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RestartRequest.AsObject;
@@ -369,6 +424,7 @@ export namespace RestartRequest {
     projectId: number,
     sha: string,
     color: string,
+    token: string,
   }
 }
 
@@ -466,6 +522,11 @@ export class AuthResponse extends jspb.Message {
   getUser(): User | undefined;
   setUser(value?: User): void;
 
+  clearErrorsList(): void;
+  getErrorsList(): Array<Error>;
+  setErrorsList(value: Array<Error>): void;
+  addErrors(value?: Error, index?: number): Error;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AuthResponse.AsObject;
   static toObject(includeInstance: boolean, msg: AuthResponse): AuthResponse.AsObject;
@@ -479,28 +540,7 @@ export class AuthResponse extends jspb.Message {
 export namespace AuthResponse {
   export type AsObject = {
     user?: User.AsObject,
-  }
-}
-
-export class RegisterResponse extends jspb.Message {
-  hasUser(): boolean;
-  clearUser(): void;
-  getUser(): User | undefined;
-  setUser(value?: User): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): RegisterResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: RegisterResponse): RegisterResponse.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: RegisterResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): RegisterResponse;
-  static deserializeBinaryFromReader(message: RegisterResponse, reader: jspb.BinaryReader): RegisterResponse;
-}
-
-export namespace RegisterResponse {
-  export type AsObject = {
-    user?: User.AsObject,
+    errorsList: Array<Error.AsObject>,
   }
 }
 

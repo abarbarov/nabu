@@ -29,6 +29,15 @@ NabuService.Register = {
   responseType: protobuf_nabu_pb.AuthResponse
 };
 
+NabuService.RefreshToken = {
+  methodName: "RefreshToken",
+  service: NabuService,
+  requestStream: false,
+  responseStream: false,
+  requestType: protobuf_nabu_pb.EmptyRequest,
+  responseType: protobuf_nabu_pb.AuthResponse
+};
+
 NabuService.ListProjects = {
   methodName: "ListProjects",
   service: NabuService,
@@ -126,6 +135,28 @@ NabuServiceClient.prototype.register = function register(requestMessage, metadat
     callback = arguments[1];
   }
   grpc.unary(NabuService.Register, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          callback(Object.assign(new Error(response.statusMessage), { code: response.status, metadata: response.trailers }), null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+};
+
+NabuServiceClient.prototype.refreshToken = function refreshToken(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  grpc.unary(NabuService.RefreshToken, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

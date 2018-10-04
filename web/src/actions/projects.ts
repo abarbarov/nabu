@@ -9,6 +9,7 @@ import {
   CommitsRequest,
   CopyRequest,
   EmptyRequest,
+  Error,
   InstallRequest,
   ListBranchesResponse,
   ListCommitsResponse,
@@ -259,10 +260,6 @@ export const signOut = (): SignOut => {
   return ({ type: SIGN_OUT });
 };
 
-type AddError = {
-  type: typeof ADD_ERROR,
-  payload: Error,
-};
 type SignIn = {
   type: typeof SIGN_IN,
   payload: User.AsObject,
@@ -274,7 +271,19 @@ export const signIn = (user: User.AsObject | null) => {
     return ({ type: SIGN_IN, payload: user });
   }
 
-  return ({ type: ADD_ERROR, payload: new Error('Wrong username or password') });
+  let err = new Error();
+  err.setText('Wrong username or password');
+
+  return ({ type: ADD_ERROR, payload: [err] });
+};
+
+type AddError = {
+  type: typeof ADD_ERROR,
+  payload: Array<Error.AsObject> | null,
+};
+
+export const addErrors = (errors: Array<Error.AsObject>) => {
+  return ({ type: ADD_ERROR, payload: errors });
 };
 
 export const authenticate = (username: string, password: string) => {
@@ -292,6 +301,13 @@ export const authenticate = (username: string, password: string) => {
     host: host,
     methodDescriptor: NabuService.Authenticate,
     onMessage: message => {
+      const errors = message.getErrorsList();
+
+      if (errors) {
+        debugger;
+        let unwrapped = errors.map(e => e.toObject())
+        return addErrors(unwrapped);
+      }
       const user = message.getUser();
       if (user) {
         return signIn(user.toObject());
