@@ -49,7 +49,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
   switch (action.type) {
 
     case INIT_PROJECTS:
-      return { ...state, loading: true, projects: {} };
+      return { ...state, loading: true, projects: {}, errors: null };
 
     case SELECT_PROJECT:
       return {
@@ -58,6 +58,7 @@ export default function (state: ProjectState = initialState, action: RootAction)
         commits: {},
         branches: {},
         messages: [],
+        errors: null,
         selectedProject: state.projects[action.payload],
         selectedBranch: null
       };
@@ -68,11 +69,12 @@ export default function (state: ProjectState = initialState, action: RootAction)
         loading: true,
         messages: [],
         commits: {},
+        errors: null,
         selectedBranch: state.branches[action.payload.branch]
       };
 
     case CLEAR_MESSAGES:
-      return { ...state, loading: true, messages: [] };
+      return { ...state, loading: true, messages: [], errors: null };
 
     case ADD_PROJECT:
       const project: Project.AsObject = action.payload.toObject();
@@ -127,10 +129,10 @@ export default function (state: ProjectState = initialState, action: RootAction)
       return state;
 
     case SIGN_IN:
-      return { ...state, authenticated: true, user: action.payload };
+      return { ...state, authenticated: true, user: action.payload, errors: null };
 
     case SIGN_OUT:
-      return { ...state, authenticated: false, user: null };
+      return { ...state, authenticated: false, user: null, errors: null };
 
     case ADD_ERROR:
       return { ...state, errors: action.payload };
