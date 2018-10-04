@@ -6,14 +6,14 @@ import {
   ADD_MESSAGE,
   ADD_PROJECT,
   CLEAR_MESSAGES,
-  PROJECTS_INIT,
+  INIT_PROJECTS,
   SELECT_BRANCH,
   SELECT_PROJECT,
   SIGN_IN,
   SIGN_OUT
 } from '../actions/projects';
 
-import { Branch, Commit, Message, Project, StatusType, User, Error } from '../protobuf/nabu_pb';
+import { Branch, Commit, Error, Message, Project, StatusType, User } from '../protobuf/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },
@@ -48,8 +48,8 @@ export default function (state: ProjectState = initialState, action: RootAction)
 
   switch (action.type) {
 
-    case PROJECTS_INIT:
-      return { ...state, loading: true };
+    case INIT_PROJECTS:
+      return { ...state, loading: true, projects: {} };
 
     case SELECT_PROJECT:
       return {

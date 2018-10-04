@@ -3,9 +3,10 @@ import { Project } from '../../../../protobuf/nabu_pb';
 import './ProjectList.css';
 
 type ProjectListProps = {
+  token: string,
   projects: Project.AsObject[],
   selectedProject: Project.AsObject | null,
-  onProjectSelect: (id: number) => void
+  onProjectSelect: (token: string, projectId: number) => void
 };
 
 const ProjectList: React.SFC<ProjectListProps> = (props) => {
@@ -22,7 +23,7 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
           key={i}
           onClick={() => {
             if (project.id) {
-              props.onProjectSelect(project.id);
+              props.onProjectSelect(props.token, project.id);
             }
           }}
         >

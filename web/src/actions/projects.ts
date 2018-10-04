@@ -25,7 +25,7 @@ import { grpc } from 'grpc-web-client';
 import { NabuService } from '../protobuf/nabu_pb_service';
 import history from '../history';
 
-export const PROJECTS_INIT = 'PROJECTS_INIT';
+export const INIT_PROJECTS = 'INIT_PROJECTS';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const ADD_PROJECT = 'ADD_PROJECT';
@@ -39,10 +39,10 @@ export const ADD_ERROR = 'ADD_ERROR';
 
 const host = 'http://localhost:9091';
 
-type ListProjectsInit = {
-  type: typeof PROJECTS_INIT,
+type InitProjects = {
+  type: typeof INIT_PROJECTS,
 };
-export const listProjectsInit = (): ListProjectsInit => ({ type: PROJECTS_INIT });
+export const initProjects = (): InitProjects => ({ type: INIT_PROJECTS });
 
 type AddProject = {
   type: typeof ADD_PROJECT,
@@ -50,13 +50,21 @@ type AddProject = {
 };
 export const addProject = (story: Project) => ({ type: ADD_PROJECT, payload: story });
 
-export const listProjects = () => {
+export const listProjects = (token: string) => {
+  let req = new EmptyRequest();
+  req.setToken(token);
+
   return grpcRequest<EmptyRequest, ListProjectsResponse>({
-    request: new EmptyRequest(),
-    onStart: () => listProjectsInit(),
+    request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
-      return;
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error listing projects');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.ListProjects,
@@ -101,16 +109,24 @@ type AddCommit = {
 };
 export const addCommit = (commit: Commit) => ({ type: ADD_COMMIT, payload: commit });
 
-export const listCommits = (projectId: number, branch: string) => {
+export const listCommits = (token: string, projectId: number, branch: string) => {
 
   let request = new CommitsRequest();
   request.setBranchName(branch);
   request.setRepoId(projectId);
+  request.setToken(token);
 
   return grpcRequest<CommitsRequest, ListCommitsResponse>({
     request: request,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error listing commits');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.ListCommits,
@@ -124,15 +140,23 @@ export const listCommits = (projectId: number, branch: string) => {
   });
 };
 
-export const listBranches = (projectId: number) => {
+export const listBranches = (token: string, projectId: number) => {
 
-  let branchRequest = new BranchRequest();
-  branchRequest.setRepoId(projectId);
+  let req = new BranchRequest();
+  req.setRepoId(projectId);
+  req.setToken(token);
 
   return grpcRequest<BranchRequest, ListBranchesResponse>({
-    request: branchRequest,
+    request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error listing branches');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.ListBranches,
@@ -168,6 +192,13 @@ export const buildProject = (projectId: number, branch: string, sha: string) => 
     request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error building project');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.Build,
@@ -191,6 +222,13 @@ export const copyProject = (projectId: number, sha: string) => {
     request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error copying project');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.Copy,
@@ -215,6 +253,13 @@ export const installProject = (projectId: number, sha: string, color: string) =>
     request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error installing project');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.Install,
@@ -239,6 +284,13 @@ export const restartProject = (projectId: number, sha: string, color: string) =>
     request: req,
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error restarting project');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.Restart,
@@ -296,7 +348,13 @@ export const authenticate = (username: string, password: string) => {
     onStart: () => signOut(),
     onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
       console.log(code, message, trailers);
-      return;
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'cannot authenticate');
+
+        return addErrors([err.toObject()]);
+      }
     },
     host: host,
     methodDescriptor: NabuService.Authenticate,
@@ -308,6 +366,7 @@ export const authenticate = (username: string, password: string) => {
         return addErrors(unwrapped);
       }
       const user = message.getUser();
+
       if (user) {
         return signIn(user.toObject());
       }
@@ -321,7 +380,7 @@ export type ProjectActionTypes =
   | AddProject
   | SignIn
   | SignOut
-  | ListProjectsInit
+  | InitProjects
   | SelectProject
   | AddBranch
   | AddCommit

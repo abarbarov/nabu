@@ -2,6 +2,7 @@ package store
 
 type Project struct {
 	Id         int64
+	UserId     int64
 	Title      string
 	Repository *Repository
 	Host       string
@@ -18,8 +19,9 @@ type Repository struct {
 
 var projects = []*Project{
 	{
-		Id:    1,
-		Title: "firstfile-dev",
+		Id:     1,
+		UserId: 1,
+		Title:  "firstfile-dev",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "trademark.web",
@@ -31,8 +33,9 @@ var projects = []*Project{
 		Dir:  "/apps/firstfile/%s",
 	},
 	{
-		Id:    2,
-		Title: "firstfile-PROD",
+		Id:     2,
+		UserId: 1,
+		Title:  "firstfile-PROD",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "trademark.web",
@@ -44,8 +47,9 @@ var projects = []*Project{
 		Dir:  "/apps/trademark/%s",
 	},
 	{
-		Id:    3,
-		Title: "nabu",
+		Id:     3,
+		UserId: 1,
+		Title:  "nabu",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "nabu",
@@ -57,8 +61,9 @@ var projects = []*Project{
 		Dir:  "/apps/nabu/%s",
 	},
 	{
-		Id:    4,
-		Title: "boilerplate",
+		Id:     4,
+		UserId: 1,
+		Title:  "boilerplate",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "boilerplate",
@@ -70,8 +75,9 @@ var projects = []*Project{
 		Dir:  "/apps/nabu/%s",
 	},
 	{
-		Id:    5,
-		Title: "barbarov.com",
+		Id:     5,
+		UserId: 1,
+		Title:  "barbarov.com",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "barbarov.com",
@@ -83,8 +89,9 @@ var projects = []*Project{
 		Dir:  "/apps/barbarov/%s",
 	},
 	{
-		Id:    6,
-		Title: "svoerazvitie.com",
+		Id:     6,
+		UserId: 1,
+		Title:  "svoerazvitie.com",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "svoerazvitie.com",
@@ -95,15 +102,51 @@ var projects = []*Project{
 		Exec: "svoerazvitie.%s.service",
 		Dir:  "/apps/svoerazvitie/%s",
 	},
+	{
+		Id:     1,
+		UserId: 2,
+		Title:  "firstfile-dev",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "trademark.web",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "95.216.163.61:22",
+		Exec: "firstfile.%s.service",
+		Dir:  "/apps/firstfile/%s",
+	},
+	{
+		Id:     2,
+		UserId: 2,
+		Title:  "firstfile-PROD",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "trademark.web",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "5.23.53.238:22",
+		Exec: "trademark.%s.service",
+		Dir:  "/apps/trademark/%s",
+	},
 }
 
-func (ds *DataStore) Projects() ([]*Project, error) {
-	return projects, nil
-}
+func (ds *DataStore) Projects(userId int64) ([]*Project, error) {
+	var userProjects []*Project
 
-func (ds *DataStore) Project(id int64) (*Project, error) {
 	for _, p := range projects {
-		if p.Id == id {
+		if p.UserId == userId {
+			userProjects = append(userProjects, p)
+		}
+	}
+
+	return userProjects, nil
+}
+
+func (ds *DataStore) Project(userId, projectId int64) (*Project, error) {
+	for _, p := range projects {
+		if p.UserId == userId && p.Id == projectId {
 			return p, nil
 		}
 	}

@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha1"
-	"crypto/x509"
 	"fmt"
 	"github.com/abarbarov/nabu/store"
 	"github.com/dgrijalva/jwt-go"
@@ -25,10 +24,9 @@ type CustomClaims struct {
 }
 
 func (a *Authenticator) Token(claims *CustomClaims) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signKeyBytes := x509.MarshalPKCS1PrivateKey(a.SignKey)
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	tokenString, err := token.SignedString(signKeyBytes)
+	tokenString, err := token.SignedString(a.SignKey)
 	if err != nil {
 		return "", errors.Wrap(err, "can't sign jwt token")
 	}
@@ -41,13 +39,13 @@ func (a *Authenticator) Parse(tokenString string) (*CustomClaims, error) {
 	parser := jwt.Parser{SkipClaimsValidation: true} // allow parsing of expired tokens
 
 	token, err := parser.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, errors.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		verifyKeyBytes := x509.MarshalPKCS1PublicKey(a.VerifyKey)
-		return verifyKeyBytes, nil
+		return a.VerifyKey, nil
 	})
+
 	if err != nil {
 		return nil, errors.Wrap(err, "can't parse jwt")
 	}

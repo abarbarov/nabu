@@ -26,50 +26,6 @@ func NewNabuGrpcService(store *store.DataStore, github *github.Github, builder *
 	return &nabuGrpcService{github, store, builder, auth}
 }
 
-func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuService_ListProjectsServer) error {
-
-	projects, err := ngs.Projects()
-	defer close(projects)
-
-	if err != nil {
-		return err
-	}
-	for project := range projects {
-		if err := stream.Send(&pb.ListProjectsResponse{Project: project}); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuService_ListBranchesServer) error {
-	proj, err := ngs.store.Project(req.RepoId)
-	if err != nil {
-		return err
-	}
-
-	branches, err := ngs.github.Branches(proj.Repository.Token, proj.Repository.Owner, proj.Repository.Name)
-
-	if err != nil {
-		return err
-	}
-
-	for _, c := range branches {
-		err = stream.Send(&pb.ListBranchesResponse{
-			Branch: &pb.Branch{
-				Name: c.Name,
-			},
-		})
-
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthRequest) (*pb.AuthResponse, error) {
 	user, err := ngs.store.User(req.Username)
 
@@ -85,17 +41,7 @@ func (ngs *nabuGrpcService) Authenticate(ctx context.Context, req *pb.AuthReques
 		}, nil
 	}
 
-	claims := auth.CustomClaims{
-		State: auth.RandToken(),
-		StandardClaims: jwt.StandardClaims{
-			Id:        auth.RandToken(),
-			Issuer:    "nabu.app",
-			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
-			NotBefore: time.Now().Add(-1 * time.Minute).Unix(),
-		},
-		User: user,
-	}
-
+	claims := createUserClaims(user)
 	token, err := ngs.authenticator.Token(&claims)
 	if err != nil {
 		return &pb.AuthResponse{
@@ -132,17 +78,7 @@ func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (
 		}, nil
 	}
 
-	claims := auth.CustomClaims{
-		State: auth.RandToken(),
-		StandardClaims: jwt.StandardClaims{
-			Id:        auth.RandToken(),
-			Issuer:    "nabu.app",
-			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
-			NotBefore: time.Now().Add(-1 * time.Minute).Unix(),
-		},
-		User: user,
-	}
-
+	claims := createUserClaims(user)
 	token, err := ngs.authenticator.Token(&claims)
 
 	return &pb.AuthResponse{
@@ -154,16 +90,86 @@ func (ngs *nabuGrpcService) Register(ctx context.Context, req *pb.AuthRequest) (
 }
 
 func (ngs *nabuGrpcService) RefreshToken(ctx context.Context, req *pb.EmptyRequest) (*pb.AuthResponse, error) {
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return nil, err
+	}
+
+	newClaims := createUserClaims(claims.User)
+	token, err := ngs.authenticator.Token(&newClaims)
+
 	return &pb.AuthResponse{
 		User: &pb.User{
-			Id:    1,
-			Token: "super-token",
+			Id:    claims.User.Id,
+			Token: token,
 		},
 	}, nil
 }
 
+func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuService_ListProjectsServer) error {
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	projects, err := ngs.projects(claims.User.Id)
+	defer close(projects)
+
+	if err != nil {
+		return err
+	}
+	for project := range projects {
+		if err := stream.Send(&pb.ListProjectsResponse{Project: project}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (ngs *nabuGrpcService) ListBranches(req *pb.BranchRequest, stream pb.NabuService_ListBranchesServer) error {
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	proj, err := ngs.store.Project(claims.User.Id, req.RepoId)
+	if err != nil {
+		return err
+	}
+
+	branches, err := ngs.github.Branches(proj.Repository.Token, proj.Repository.Owner, proj.Repository.Name)
+
+	if err != nil {
+		return err
+	}
+
+	for _, c := range branches {
+		err = stream.Send(&pb.ListBranchesResponse{
+			Branch: &pb.Branch{
+				Name: c.Name,
+			},
+		})
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuService_ListCommitsServer) error {
-	proj, err := ngs.store.Project(req.RepoId)
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	proj, err := ngs.store.Project(claims.User.Id, req.RepoId)
 	if err != nil {
 		return err
 	}
@@ -190,7 +196,13 @@ func (ngs *nabuGrpcService) ListCommits(req *pb.CommitsRequest, resp pb.NabuServ
 }
 
 func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_BuildServer) error {
-	proj, err := ngs.store.Project(req.ProjectId)
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	proj, err := ngs.store.Project(claims.User.Id, req.ProjectId)
 	if err != nil {
 		return err
 	}
@@ -245,30 +257,14 @@ func (ngs *nabuGrpcService) Build(req *pb.BuildRequest, stream pb.NabuService_Bu
 	}
 }
 
-func (ngs *nabuGrpcService) Projects() (chan *pb.Project, error) {
-	output := make(chan *pb.Project)
-
-	projects, err := ngs.store.Projects()
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	for _, p := range projects {
-		go func(p *store.Project) {
-			project := &pb.Project{
-				Id:         p.Id,
-				Title:      p.Title,
-				Repository: p.Repository.Name,
-			}
-
-			output <- project
-		}(p)
-	}
-
-	return output, nil
-}
-
 func (ngs *nabuGrpcService) Copy(req *pb.CopyRequest, stream pb.NabuService_CopyServer) error {
-	proj, err := ngs.store.Project(req.ProjectId)
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	proj, err := ngs.store.Project(claims.User.Id, req.ProjectId)
 	if err != nil {
 		return err
 	}
@@ -324,7 +320,13 @@ func (ngs *nabuGrpcService) Copy(req *pb.CopyRequest, stream pb.NabuService_Copy
 }
 
 func (ngs *nabuGrpcService) Install(req *pb.InstallRequest, stream pb.NabuService_InstallServer) error {
-	proj, err := ngs.store.Project(req.ProjectId)
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	proj, err := ngs.store.Project(claims.User.Id, req.ProjectId)
 	if err != nil {
 		return err
 	}
@@ -380,7 +382,13 @@ func (ngs *nabuGrpcService) Install(req *pb.InstallRequest, stream pb.NabuServic
 }
 
 func (ngs *nabuGrpcService) Restart(req *pb.RestartRequest, stream pb.NabuService_RestartServer) error {
-	proj, err := ngs.store.Project(req.ProjectId)
+	claims, err := ngs.authenticator.Parse(req.Token)
+
+	if err != nil {
+		return err
+	}
+
+	proj, err := ngs.store.Project(claims.User.Id, req.ProjectId)
 	if err != nil {
 		return err
 	}
@@ -435,6 +443,29 @@ func (ngs *nabuGrpcService) Restart(req *pb.RestartRequest, stream pb.NabuServic
 	}
 }
 
+func (ngs *nabuGrpcService) projects(userId int64) (chan *pb.Project, error) {
+
+	output := make(chan *pb.Project)
+
+	projects, err := ngs.store.Projects(userId)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, p := range projects {
+		go func(p *store.Project) {
+			project := &pb.Project{
+				Id:         p.Id,
+				Title:      p.Title,
+				Repository: p.Repository.Name,
+			}
+
+			output <- project
+		}(p)
+	}
+
+	return output, nil
+}
+
 func convertStatus(status int) pb.StatusType {
 	switch status {
 	case 1:
@@ -446,4 +477,21 @@ func convertStatus(status int) pb.StatusType {
 	default:
 		return pb.StatusType_UNKNOWN
 	}
+}
+
+func createUserClaims(user *store.User) auth.CustomClaims {
+	claims := auth.CustomClaims{
+		State: auth.RandToken(),
+		StandardClaims: jwt.StandardClaims{
+			Id:        auth.RandToken(),
+			Issuer:    "nabu.app",
+			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
+			NotBefore: time.Now().Add(-1 * time.Minute).Unix(),
+		},
+		User: &store.User{
+			Id: user.Id,
+		},
+	}
+
+	return claims
 }

@@ -26,8 +26,8 @@ class AppHeader extends Elem<IHeaderProps> {
 
   public content() {
     let signOutBtn = (this.props.authenticated) ?
-      <Bem tag="a" block="app-header" elem="link" href="javascript:void();" onClick={() => this.props.signOut()}>Logout</Bem> :
-      <Link to={`/login`}>LOGIN</Link>;
+      <Bem tag="a" block="app-header" elem="link" onClick={(e) => { e.preventDefault(); this.props.signOut(); }} >Logout</Bem> :
+      <Link to={`/login`} className="app-header-link">LOGIN</Link>;
 
     return (
       <Fragment>

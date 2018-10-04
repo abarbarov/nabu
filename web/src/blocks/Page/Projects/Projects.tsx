@@ -7,18 +7,19 @@ import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { connect } from 'react-redux';
-import { Branch, Commit, Error, Message, Project } from '../../../protobuf/nabu_pb';
+import { Branch, Commit, Error, Message, Project, User } from '../../../protobuf/nabu_pb';
 import Log from '../../Log/Log';
 import { RootAction } from '../../../actions';
 import {
   buildProject,
   clearMessages,
   copyProject,
+  initProjects,
   installProject,
-  restartProject,
   listBranches,
   listCommits,
   listProjects,
+  restartProject,
   selectBranch,
   selectProject
 } from '../../../actions/projects';
@@ -39,13 +40,14 @@ export interface IProjectsProps {
   selectedProject: Project.AsObject | null;
   selectedBranch: Branch.AsObject | null;
   selectedCommit: Commit.AsObject | null;
-  fetchProjects: () => void;
-  selectProject: (id: number) => void;
-  selectBranch: (projectId: number, name: string) => void;
+  fetchProjects: (token: string) => void;
+  selectProject: (token: string, projectId: number) => void;
+  selectBranch: (token: string, projectId: number, name: string) => void;
   build: (projectId: number, branch: string, sha: string) => void;
   copy: (projectId: number, sha: string) => void;
   install: (projectId: number, sha: string, color: string) => void;
   restart: (projectId: number, sha: string, color: string) => void;
+  user: User.AsObject | null;
 }
 
 export interface IProjectsState {
@@ -64,11 +66,13 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
   }
 
   public componentDidMount() {
-    this.props.fetchProjects();
+    this.props.fetchProjects((this.props.user && this.props.user.token) || '');
     this.setState({ title: 'NABU projects' });
   }
 
   public content() {
+    let errorsText = this.props.errors && this.props.errors.map(e => e.text);
+    let error = this.props.errors ? <div className="form-errors"><p className="error">{errorsText}</p></div> : '';
 
     if (this.props.authenticated) {
       return (
@@ -78,7 +82,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
           {/*<ExampleWithMods mod1={true} mod2={true}/>*/}
           <Bem block="app" elem="projects">
             <div>Next Awesome Build Unit</div>
-
+            {error}
             <div>
               Projects available
             </div>
@@ -88,6 +92,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
             <hr/>
             <div>
               <ProjectList
+                token={(this.props.user && this.props.user.token) || ''}
                 selectedProject={this.props.selectedProject}
                 projects={this.props.projects}
                 onProjectSelect={this.props.selectProject}
@@ -96,6 +101,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
               <div>
                 {this.props.selectedProject
                   ? <BranchesList
+                    token={(this.props.user && this.props.user.token) || ''}
                     branches={this.props.branches}
                     selectedProject={this.props.selectedProject}
                     selectedBranch={this.props.selectedBranch}
@@ -145,6 +151,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
 function mapStateToProps(state: RootState) {
   return {
     authenticated: state.projects.authenticated,
+    user: state.projects.user,
     projects: Object.keys(state.projects.projects).map(key => state.projects.projects[parseInt(key, 10)]),
     commits: Object.keys(state.projects.commits).map(key => state.projects.commits[key]),
     branches: Object.keys(state.projects.branches).map(key => state.projects.branches[key]),
@@ -159,16 +166,17 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
-    fetchProjects: () => {
-      dispatch(listProjects());
+    fetchProjects: (token: string) => {
+      dispatch(initProjects());
+      dispatch(listProjects(token));
     },
-    selectProject: (projectId: number) => {
+    selectProject: (token: string, projectId: number) => {
       dispatch(selectProject(projectId));
-      dispatch(listBranches(projectId));
+      dispatch(listBranches(token, projectId));
     },
-    selectBranch: (projectId: number, name: string) => {
+    selectBranch: (token: string, projectId: number, name: string) => {
       dispatch(selectBranch(projectId, name));
-      dispatch(listCommits(projectId, name));
+      dispatch(listCommits(token, projectId, name));
     },
     build: (projectId: number, branch: string, sha: string) => {
       dispatch(clearMessages());

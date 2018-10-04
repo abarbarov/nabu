@@ -2,10 +2,11 @@ import * as React from 'react';
 import { Branch, Project } from '../../../../protobuf/nabu_pb';
 
 type BranchesListProps = {
+  token: string,
   branches: Branch.AsObject[],
   selectedProject: Project.AsObject | null,
   selectedBranch: Branch.AsObject | null,
-  onBranchSelect: (projectId: number, name: string) => void
+  onBranchSelect: (token: string, projectId: number, name: string) => void
 };
 
 const BranchesList: React.SFC<BranchesListProps> = (props) => {
@@ -22,7 +23,7 @@ const BranchesList: React.SFC<BranchesListProps> = (props) => {
           key={i}
           onClick={() => {
             if (branch.name) {
-              props.onBranchSelect((props.selectedProject || { id: 0 }).id, branch.name);
+              props.onBranchSelect(props.token, (props.selectedProject || { id: 0 }).id, branch.name);
             }
           }}
         >

@@ -12,7 +12,6 @@ import (
 	"github.com/abarbarov/nabu/tools"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jessevdk/go-flags"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -23,8 +22,28 @@ var revision = "unknown"
 var buildstamp = "unknown"
 
 const (
-	privKeyPath = "app.rsa"     // openssl genrsa -out app.rsa keysize
-	pubKeyPath  = "app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
+	privKey = `-----BEGIN RSA PRIVATE KEY-----
+MIICXAIBAAKBgQCuvNKLs+DwyzXPAfKWoU4QrsruTnfko/sZK6Yk62mXN6MUrW+h
+LlEeDr/NyyZAiET3lg6uU5AOdv6xBwXs03UXlgHFXj6BCXfwlSNbY2iXIrp8qlm8
+zQXPEkd5Xx5LaZHJqVDG4GZ1Salm8RGZgDBN0LBhhkjvHkQ8uXys+hE3XwIDAQAB
+AoGAcnWLcSl98h0afSPodRTqXvEwSpOp42Iqy90UsuBlxUETmSrWkX0Wc5rztukY
+gHMCwi9QJI7mMSNvSCSyk+QbsSdg4MoiNYMoHNjr37hAaY4hn0RGty2ZKUCrYbVM
+4NG3V9EY5IB/rjpWqgBsYiPqyTM4AxAu4mTdagxj0X1OQ9ECQQDVEDqpsw5H4gU2
+b1cTtK9XcY3cEH/1pMS5X8Feta4f+tG4RDaPrP1cS5ddEcI9V+a18PqgtNoHRjqI
+8Mih/SNXAkEA0fNlOcJ5XIPqhFhtmWcfaS5XBxGuNuE9t2oNGCUrGpwO2ydIKBnl
+sDByG7j7LS5T5wtWXYHkCXNcjZ97dEfPOQJBAKaErJR8kKi1iQVmN1P7Xx6kbQ6V
+BqzhPa7zm5l9vLzZtpahGVNpDAraOU5P1tNCo9mGoRqAvfX5eT4VkXio8rkCQF7q
++D+1wWJnLVZqGBq7eYL29Vd30dhz2pAafRMGcsdT+I9x4fhnROVz8ZLA/aW+hSY2
+hPQ/bhYrtpM8n/bBJFkCQCp+bP46jnV+ryDUxBalaTgYGUroirafTanCviQLDqxo
+WBSAuxo4cTgDBS6Hxrik2D7rBgGI5FLt5fKcjPvlu3w=
+-----END RSA PRIVATE KEY-----`  // openssl genrsa -out app.rsa keysize
+
+	pubKey = `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCuvNKLs+DwyzXPAfKWoU4Qrsru
+Tnfko/sZK6Yk62mXN6MUrW+hLlEeDr/NyyZAiET3lg6uU5AOdv6xBwXs03UXlgHF
+Xj6BCXfwlSNbY2iXIrp8qlm8zQXPEkd5Xx5LaZHJqVDG4GZ1Salm8RGZgDBN0LBh
+hkjvHkQ8uXys+hE3XwIDAQAB
+-----END PUBLIC KEY-----`  // openssl rsa -in app.rsa -pubout > app.rsa.pub
 )
 
 type Opts struct {
@@ -41,21 +60,12 @@ type Application struct {
 }
 
 func parseRsaKeys() (*rsa.PublicKey, *rsa.PrivateKey, error) {
-	signBytes, err := ioutil.ReadFile(privKeyPath)
+	signKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privKey))
 	if err != nil {
 		return nil, nil, err
 	}
 
-	signKey, err := jwt.ParseRSAPrivateKeyFromPEM(signBytes)
-	if err != nil {
-		return nil, nil, err
-	}
-	verifyBytes, err := ioutil.ReadFile(pubKeyPath)
-	if err != nil {
-		return nil, nil, err
-	}
-	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
-
+	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(pubKey))
 	if err != nil {
 		return nil, nil, err
 	}

@@ -17,4 +17,5 @@
 .app-header-link {
     color: #c03619;
     text-decoration: none;
+    cursor: pointer;
 }

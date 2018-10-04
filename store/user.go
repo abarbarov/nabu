@@ -15,7 +15,12 @@ var users = []*User{
 	{
 		Id:   1,
 		Name: "admin",
-		Hash: "admin",
+		Hash: "password",
+	},
+	{
+		Id:   2,
+		Name: "firstfile",
+		Hash: "password",
 	},
 }
 
