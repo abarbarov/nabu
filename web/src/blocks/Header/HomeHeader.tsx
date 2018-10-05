@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { RootAction } from '../../actions';
 import { RootState } from '../../store';
 import { signOut } from '../../actions/projects';
-import './App-Header.css';
+import './AppHeader.css';
 
 export interface IHeaderProps {
   authenticated?: boolean;
@@ -16,7 +16,7 @@ export interface IHeaderProps {
   title: string;
 }
 
-class AppHeader extends Elem<IHeaderProps> {
+class HomeHeader extends Elem<IHeaderProps> {
   public block = 'app';
   public elem = 'header';
 
@@ -31,15 +31,6 @@ class AppHeader extends Elem<IHeaderProps> {
 
     return (
       <Fragment>
-        <Bem block="app-header" elem="item">
-          <Bem tag="a" block="app-header" elem="link" href="/">Nodes</Bem>
-        </Bem>
-        <Bem block="app-header" elem="item">
-          <Bem tag="a" block="app-header" elem="link" href="/projects">Projects</Bem>
-        </Bem>
-        <Bem block="app-header" elem="item">
-          <Bem tag="a" block="app-header" elem="link" href="/health">Health</Bem>
-        </Bem>
         <Bem block="app-header" elem="item">
           {signOutBtn}
         </Bem>
@@ -62,4 +53,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeHeader);

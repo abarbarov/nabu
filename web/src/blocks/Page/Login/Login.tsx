@@ -8,7 +8,7 @@ import { RootAction } from '../../../actions';
 import { connect } from 'react-redux';
 import { RootState } from '../../../store';
 import './Login.css';
-import Header from '../../Header/App-Header';
+import Header from '../../Header/AppHeader';
 import Footer from '../../Footer/App-Footer';
 import { FormErrors } from '../../FormErrors';
 import { Error } from '../../../protobuf/nabu_pb';
@@ -121,10 +121,13 @@ class Login extends Block<ILoginProps, ILoginState> {
               className="btn btn_color_blue"
               disabled={!this.state.formValid}
               onClick={() => this.props.authenticate(this.state.username, this.state.password)}
-            >Sign In
+            >Login
             </button>
           </Bem>
-          <Link to={`/`}>HOME</Link>
+          <br/>
+          <Link to={`/register`}>Register</Link>
+          <br/>
+          <Link to={`/`}>Back to home page</Link>
         </Bem>
         <Footer/>
       </Fragment>

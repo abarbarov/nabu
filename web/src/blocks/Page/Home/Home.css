@@ -11,4 +11,114 @@
     background-color: #eaece5;
     color: #fff;
     grid-area: main;
+    display: grid;
+    grid-template-areas: "how" "login" "features" "customers";
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr 2fr 2fr;
 }
+
+.page-home-how {
+    grid-area: how;
+    border: 1px solid blueviolet;
+    display: grid;
+    grid-template-areas: ". title ." "col1 col2 col3";
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.page-home-how-title {
+    grid-area: title;
+    text-align: center;
+    color: #c03619;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.page-home-how-col1 {
+    grid-area: col1;
+    text-align: center;
+    color: #c03619;
+    font-size: 24px;
+}
+
+.page-home-how-col2 {
+    grid-area: col2;
+    text-align: center;
+    color: #c03619;
+    font-size: 24px;
+}
+
+.page-home-how-col3 {
+    grid-area: col3;
+    text-align: center;
+    color: #c03619;
+    font-size: 24px;
+}
+
+.page-home-login {
+    grid-area: login;
+    display: grid;
+    grid-template-areas: ". login ." ". reg .";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+    border: 1px solid red;
+}
+
+.page-home-login-login {
+    grid-area: login;
+    text-align: center;
+}
+
+.page-home-login-reg {
+    grid-area: reg;
+    text-align: center;
+}
+
+.page-home-features {
+    grid-area: features;
+    border: 1px solid #51816d;
+    display: grid;
+    grid-template-areas: "title title" "col1 col2" "col3 col4";
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 10em;
+}
+
+.page-home-features-title {
+    grid-area: title;
+    text-align: center;
+    color: #c03619;
+    font-size: 36px;
+}
+
+.page-home-features-col1 {
+    grid-area: col1;
+    border: 1px solid red;
+    color: #c03619;
+}
+
+.page-home-features-col2 {
+    grid-area: col2;
+    border: 1px solid red;
+    color: #c03619;
+}
+
+.page-home-features-col3 {
+    grid-area: col3;
+    border: 1px solid red;
+    color: #c03619;
+}
+
+.page-home-features-col4 {
+    grid-area: col4;
+    border: 1px solid red;
+    color: #c03619;
+}
+
+.page-home-customers {
+    grid-area: customers;
+    border: 1px solid orangered;
+}
+
+

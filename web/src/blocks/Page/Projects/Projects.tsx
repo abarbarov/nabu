@@ -2,7 +2,7 @@ import { Bem, Block } from 'bem-react-core';
 import * as React from 'react';
 import { Fragment } from 'react';
 import { Dispatch } from 'redux';
-import Header from '../../Header/App-Header';
+import Header from '../../Header/AppHeader';
 import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../../store';
