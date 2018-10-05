@@ -46,7 +46,7 @@ func (ds *DataStore) AddUser(username, password string) (*User, error) {
 	}
 
 	newUser := &User{
-		Id:   int64(len(users)),
+		Id:   int64(len(users)) + 1,
 		Hash: password,
 		Name: username,
 	}

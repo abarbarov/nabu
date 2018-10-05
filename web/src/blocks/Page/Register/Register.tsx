@@ -1,7 +1,7 @@
 import { Bem, Block } from 'bem-react-core';
 import * as React from 'react';
 import { ChangeEvent, Fragment } from 'react';
-import { authenticate } from '../../../actions/projects';
+import { register } from '../../../actions/projects';
 import { Link } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { RootAction } from '../../../actions';
@@ -16,15 +16,15 @@ import { Error } from '../../../protobuf/nabu_pb';
 export interface ILoginProps {
   path: string;
   errors: Array<Error.AsObject> | null;
-  authenticate: (username: string, password: string) => void;
+  register: (email: string, password: string) => void;
 }
 
 export interface ILoginState {
   title: string;
-  username: string;
+  email: string;
   password: string;
-  formErrors: { username: string, password: string };
-  usernameValid: boolean;
+  formErrors: { email: string, password: string };
+  emailValid: boolean;
   passwordValid: boolean;
   formValid: boolean;
 }
@@ -41,10 +41,10 @@ class Register extends Block<ILoginProps, ILoginState> {
 
     this.state = {
       title: 'not loaded',
-      username: '',
+      email: '',
       password: '',
-      formErrors: { username: '', password: '' },
-      usernameValid: false,
+      formErrors: { email: '', password: '' },
+      emailValid: false,
       passwordValid: false,
       formValid: false
     };
@@ -56,16 +56,17 @@ class Register extends Block<ILoginProps, ILoginState> {
 
   validateField(fieldName: string, value: string) {
     let fieldValidationErrors = this.state.formErrors;
-    let usernameValid = this.state.usernameValid;
+    let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
 
     switch (fieldName) {
-      case 'username':
-        usernameValid = value.length >= 5;
-        fieldValidationErrors.username = usernameValid ? '' : ' is too short';
+      case 'email':
+        emailValid = !!value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+        break;
         break;
       case 'password':
-        passwordValid = value.length >= 5;
+        passwordValid = value.length >= 6;
         fieldValidationErrors.password = passwordValid ? '' : ' is too short';
         break;
       default:
@@ -74,7 +75,7 @@ class Register extends Block<ILoginProps, ILoginState> {
     this.setState(
       {
         formErrors: fieldValidationErrors,
-        usernameValid: usernameValid,
+        emailValid: emailValid,
         passwordValid: passwordValid
       },
       this.validateForm);
@@ -82,7 +83,7 @@ class Register extends Block<ILoginProps, ILoginState> {
 
   validateForm() {
     this.setState({
-      formValid: this.state.usernameValid && this.state.passwordValid
+      formValid: this.state.emailValid && this.state.passwordValid
     });
   }
 
@@ -99,11 +100,11 @@ class Register extends Block<ILoginProps, ILoginState> {
           {error}
           <Bem tag="form" block="app-login" elem="form">
             <input
-              className={`app-login-form input ${Register.errorClass(this.state.formErrors.username)}`}
+              className={`app-login-form input ${Register.errorClass(this.state.formErrors.email)}`}
               name="email"
               type="text"
               placeholder="Email"
-              value={this.state.username}
+              value={this.state.email}
               onChange={this.handleUserInput}
               onKeyPress={this.handleKeyDown}
             />
@@ -120,7 +121,7 @@ class Register extends Block<ILoginProps, ILoginState> {
               type="button"
               className="btn btn_color_blue"
               disabled={!this.state.formValid}
-              onClick={() => this.props.authenticate(this.state.username, this.state.password)}
+              onClick={() => this.props.register(this.state.email, this.state.password)}
             >Register
             </button>
           </Bem>
@@ -150,7 +151,7 @@ class Register extends Block<ILoginProps, ILoginState> {
       e.preventDefault();
       e.stopPropagation();
 
-      this.props.authenticate(this.state.username, this.state.password);
+      this.props.register(this.state.email, this.state.password);
     }
   }
 }
@@ -164,8 +165,8 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
   return {
-    authenticate: (username: string, password: string) => {
-      dispatch(authenticate(username, password));
+    register: (email: string, password: string) => {
+      dispatch(register(email, password));
     }
   };
 }

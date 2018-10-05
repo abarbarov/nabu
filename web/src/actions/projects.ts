@@ -380,6 +380,44 @@ export const authenticate = (username: string, password: string) => {
   });
 };
 
+export const register = (username: string, password: string) => {
+  let req = new AuthRequest();
+  req.setUsername(username);
+  req.setPassword(password);
+
+  return grpcRequest<AuthRequest, AuthResponse>({
+    request: req,
+    onStart: () => signOut(),
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'cannot authenticate');
+
+        return addErrors([err.toObject()]);
+      }
+    },
+    host: host,
+    methodDescriptor: NabuService.Register,
+    onMessage: message => {
+      const errors = message.getErrorsList();
+
+      if (errors && errors.length) {
+        let unwrapped = errors.map(e => e.toObject())
+        return addErrors(unwrapped);
+      }
+      const user = message.getUser();
+
+      if (user) {
+        return signIn(user.toObject());
+      }
+
+      return signIn(null);
+    },
+  });
+};
+
 export type ProjectActionTypes =
   | AddProject
   | SignIn
