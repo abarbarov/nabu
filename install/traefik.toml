@@ -24,10 +24,10 @@ defaultEntryPoints = ["https","http"]
 
 [acme]
 email = "afanasy.barbarov@hotmail.com"
-storage = "acme.json"
+storage = "/apps/acme.json"
 entryPoint = "https"
 onHostRule = true
-acmeLogging=true
+acmeLogging = true
 
   [acme.httpChallenge]
     entryPoint = "http"
@@ -38,7 +38,7 @@ acmeLogging=true
 
   [[acme.domains]]
     main = "nabu.app"
-    sans = ["nabu.app", "live.nabu.app"]
+    sans = ["nabu.app", "live.nabu.app", "tg.nabu.app"]
 
   [[acme.domains]]
     main = "barbarov.com"

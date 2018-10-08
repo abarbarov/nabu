@@ -9,7 +9,7 @@
         url = "http://127.0.0.1:10002"
         weight = 2
     [backends.backend-nabu.maxconn]
-       amount = 10
+       amount = 20
        extractorfunc = "client.ip"
     [backends.backend-nabu.loadbalancer.stickiness]
 
@@ -22,7 +22,7 @@
         url = "http://127.0.0.1:10102"
         weight = 2
     [backends.backend-barbarov.maxconn]
-       amount = 10
+       amount = 20
        extractorfunc = "client.ip"
     [backends.backend-barbarov.loadbalancer.stickiness]
 
@@ -35,7 +35,7 @@
         url = "http://127.0.0.1:10202"
         weight = 2
     [backends.backend-firstfile.maxconn]
-       amount = 10
+       amount = 20
        extractorfunc = "client.ip"
     [backends.backend-firstfile.loadbalancer.stickiness]
 
@@ -43,6 +43,11 @@
     [backends.backend-svoerazvitie.servers]
       [backends.backend-svoerazvitie.servers.server-blue]
         url = "http://127.0.0.1:10301"
+
+  [backends.backend-tgnabu]
+    [backends.backend-tgnabu.servers]
+      [backends.backend-tgnabu.servers.server-blue]
+        url = "http://127.0.0.1:10401"
 
 [frontends]
 
@@ -52,6 +57,13 @@
     [frontends.frontend-nabu.routes]
       [frontends.frontend-nabu.routes.route0]
         rule = "Host:nabu.app,live.nabu.app"
+
+  [frontends.frontend-tgnabu]
+    backend = "backend-tgnabu"
+    passHostHeader = true
+    [frontends.frontend-tgnabu.routes]
+      [frontends.frontend-tgnabu.routes.route0]
+        rule = "Host:tg.nabu.app"
 
   [frontends.frontend-barbarov]
     backend = "backend-barbarov"
