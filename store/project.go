@@ -94,7 +94,7 @@ var projects = []*Project{
 		Title:  "svoerazvitie.com",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "svoerazvitie.com",
+			Name:  "underconstruction",
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
