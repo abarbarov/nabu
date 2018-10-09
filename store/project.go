@@ -130,6 +130,20 @@ var projects = []*Project{
 		Exec: "trademark.%s.service",
 		Dir:  "/apps/trademark/%s",
 	},
+	{
+		Id:     7,
+		UserId: 1,
+		Title:  "tgnabu",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "nabu.tg",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "95.216.163.61:22",
+		Exec: "tg.nabu.%s.service",
+		Dir:  "/apps/tg.nabu/%s",
+	},
 }
 
 func (ds *DataStore) Projects(userId int64) ([]*Project, error) {
