@@ -12,6 +12,7 @@ message Project {
     int64 id = 1;
     string title = 2;
     string repository = 3;
+    string owner = 4;
 }
 
 message Repository {

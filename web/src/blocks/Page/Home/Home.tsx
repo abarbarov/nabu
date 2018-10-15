@@ -38,7 +38,7 @@ class Home extends Block<IAppProps, IAppState> {
         <Bem block="page-home" elem="content">
           <Bem block="page-home" elem="how">
             <Bem block="page-home-how" elem="title"><h2>How it works</h2></Bem>
-            <Bem block="page-home-how" elem="col1">1. Create project</Bem>
+            <Bem block="page-home-how" elem="col1">1. Create a project</Bem>
             <Bem block="page-home-how" elem="col2">2. Link a repo</Bem>
             <Bem block="page-home-how" elem="col3">3. Build and install</Bem>
 

@@ -38,6 +38,9 @@ export class Project extends jspb.Message {
   getRepository(): string;
   setRepository(value: string): void;
 
+  getOwner(): string;
+  setOwner(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Project.AsObject;
   static toObject(includeInstance: boolean, msg: Project): Project.AsObject;
@@ -53,6 +56,7 @@ export namespace Project {
     id: number,
     title: string,
     repository: string,
+    owner: string,
   }
 }
 

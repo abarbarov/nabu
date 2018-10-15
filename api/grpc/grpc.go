@@ -457,6 +457,7 @@ func (ngs *nabuGrpcService) projects(userId int64) (chan *pb.Project, error) {
 				Id:         p.Id,
 				Title:      p.Title,
 				Repository: p.Repository.Name,
+				Owner:      p.Repository.Owner,
 			}
 
 			output <- project

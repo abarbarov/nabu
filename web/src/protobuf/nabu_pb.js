@@ -252,7 +252,8 @@ proto.protobuf.Project.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, 0),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    repository: jspb.Message.getFieldWithDefault(msg, 3, "")
+    repository: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    owner: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -300,6 +301,10 @@ proto.protobuf.Project.deserializeBinaryFromReader = function(msg, reader) {
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setRepository(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOwner(value);
       break;
     default:
       reader.skipField();
@@ -351,6 +356,13 @@ proto.protobuf.Project.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getOwner();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
 };
 
 
@@ -396,6 +408,21 @@ proto.protobuf.Project.prototype.getRepository = function() {
 /** @param {string} value */
 proto.protobuf.Project.prototype.setRepository = function(value) {
   jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string owner = 4;
+ * @return {string}
+ */
+proto.protobuf.Project.prototype.getOwner = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.protobuf.Project.prototype.setOwner = function(value) {
+  jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

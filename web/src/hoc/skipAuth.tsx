@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import history from '../history';
-import { RootState } from '../store';
+import {RootState} from '../store';
 
 export interface IAuthProps {
   authenticated: boolean;
@@ -27,8 +27,10 @@ export default function skipAuth<P extends object>(Component: React.ComponentTyp
   }
 
   function mapStateToProps(state: RootState) {
-    return { authenticated: state.projects.authenticated };
+    return {authenticated: state.projects.authenticated};
   }
 
+
+  // @ts-ignore
   return connect(mapStateToProps)(SkipAuth);
 }

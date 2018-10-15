@@ -78,8 +78,6 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
       return (
         <Fragment>
           <Header title={this.state.title}/>
-          {/*<ExampleWithMods mod1={true}/>*/}
-          {/*<ExampleWithMods mod1={true} mod2={true}/>*/}
           <Bem block="app" elem="projects">
             <div>Next Awesome Build Unit</div>
             {error}

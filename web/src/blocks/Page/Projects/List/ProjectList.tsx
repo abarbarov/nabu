@@ -16,6 +16,7 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
         <div>ID</div>
         <div>|Title</div>
         <div>|Repository</div>
+        <div>|Owner</div>
       </div>
       {props.projects.map((project, i) =>
         <div
@@ -30,6 +31,7 @@ const ProjectList: React.SFC<ProjectListProps> = (props) => {
           <div>{project.id}</div>
           <div>| {project.title}</div>
           <div>| {project.repository}</div>
+          <div>| {project.owner}</div>
         </div>
       )}
     </div>
