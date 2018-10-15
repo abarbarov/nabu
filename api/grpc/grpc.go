@@ -114,18 +114,42 @@ func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuSer
 		return err
 	}
 
-	projects, err := ngs.projects(claims.User.Id)
-	defer close(projects)
+	timeout := make(chan bool, 1)
+	go func() {
+		time.Sleep(5 * time.Second)
+		timeout <- true
+	}()
+
+	projects := make(chan *pb.Project)
+	err = ngs.projects(claims.User.Id, projects)
 
 	if err != nil {
 		return err
 	}
-	for project := range projects {
-		if err := stream.Send(&pb.ListProjectsResponse{Project: project}); err != nil {
-			return err
+
+	defer close(projects)
+	for {
+		select {
+		case p, _ := <-projects:
+			if err := stream.Send(&pb.ListProjectsResponse{Project: p}); err != nil {
+				return err
+			}
+		case <-timeout:
+			return nil
 		}
 	}
 
+	//
+	//time.AfterFunc(time.Second*10, func() {
+	//	close(projects)
+	//})
+
+	//for project := range projects {
+	//	if err := stream.Send(&pb.ListProjectsResponse{Project: project}); err != nil {
+	//		return err
+	//	}
+	//}
+	//
 	return nil
 }
 
@@ -443,14 +467,25 @@ func (ngs *nabuGrpcService) Restart(req *pb.RestartRequest, stream pb.NabuServic
 	}
 }
 
-func (ngs *nabuGrpcService) projects(userId int64) (chan *pb.Project, error) {
-
-	output := make(chan *pb.Project)
+func (ngs *nabuGrpcService) projects(userId int64, output chan *pb.Project) error {
 
 	projects, err := ngs.store.Projects(userId)
 	if err != nil {
 		log.Printf("%v", err)
 	}
+
+	//ch := make(chan  *pb.Project)
+	//for _, conn := range projects {
+	//	go func(c Conn) {
+	//		select {
+	//		case ch <- c.DoQuery(query):
+	//		default:
+	//		}
+	//	}(conn)
+	//}
+	//return <-ch
+	//
+
 	for _, p := range projects {
 		go func(p *store.Project) {
 			project := &pb.Project{
@@ -464,7 +499,7 @@ func (ngs *nabuGrpcService) projects(userId int64) (chan *pb.Project, error) {
 		}(p)
 	}
 
-	return output, nil
+	return nil
 }
 
 func convertStatus(status int) pb.StatusType {
