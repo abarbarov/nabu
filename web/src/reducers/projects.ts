@@ -13,7 +13,7 @@ import {
   SIGN_OUT
 } from '../actions/projects';
 
-import { Branch, Commit, Error, Message, Project, StatusType, User } from '../protobuf/nabu_pb';
+import { Branch, Commit, Error, Message, Project, StatusType, User } from '../proto/v1/nabu_pb';
 
 export type ProjectState = {
   readonly projects: { [projectId: number]: Project.AsObject },

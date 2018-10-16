@@ -21,10 +21,10 @@ import {
   Project,
   RestartRequest,
   User
-} from '../protobuf/nabu_pb';
+} from '../proto/v1/nabu_pb';
 import { GrpcAction, grpcRequest } from '../middleware/grpc';
 import { grpc } from 'grpc-web-client';
-import { NabuService } from '../protobuf/nabu_pb_service';
+import { NabuService } from '../proto/v1/nabu_pb_service';
 import history from '../history';
 
 export const INIT_PROJECTS = 'INIT_PROJECTS';

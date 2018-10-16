@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Branch, Commit, Project } from '../../../../protobuf/nabu_pb';
+import { Branch, Commit, Project } from '../../../../proto/v1/nabu_pb';
 import './CommitsList.css';
 
 type ProjectViewProps = {

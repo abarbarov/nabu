@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Branch, Project } from '../../../../protobuf/nabu_pb';
+import { Branch, Project } from '../../../../proto/v1/nabu_pb';
 
 type BranchesListProps = {
   token: string,

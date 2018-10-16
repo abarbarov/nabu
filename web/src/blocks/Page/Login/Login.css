@@ -14,19 +14,8 @@
     align-items: center;
 }
 
-.app-login-form {
+.app-login-links {
     display: flex;
     flex-direction: column;
-}
-
-.app-login-form .input {
-    margin-bottom: 1em;
-    min-width: 300px;
-}
-
-.form-errors p.error {
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
-    color: orangered;
+    align-items: center;
 }

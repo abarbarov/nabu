@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package protobuf;
+package v1;
 import "google/protobuf/timestamp.proto";
 
 message User {

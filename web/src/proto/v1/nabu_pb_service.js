@@ -1,13 +1,13 @@
 /* eslint-disable */
-// package: protobuf
-// file: protobuf/nabu.proto
+// package: v1
+// file: nabu.proto
 
-var protobuf_nabu_pb = require("../protobuf/nabu_pb");
+var nabu_pb = require("./nabu_pb");
 var grpc = require("grpc-web-client").grpc;
 
 var NabuService = (function () {
   function NabuService() {}
-  NabuService.serviceName = "protobuf.NabuService";
+  NabuService.serviceName = "v1.NabuService";
   return NabuService;
 }());
 
@@ -16,8 +16,8 @@ NabuService.Authenticate = {
   service: NabuService,
   requestStream: false,
   responseStream: false,
-  requestType: protobuf_nabu_pb.AuthRequest,
-  responseType: protobuf_nabu_pb.AuthResponse
+  requestType: nabu_pb.AuthRequest,
+  responseType: nabu_pb.AuthResponse
 };
 
 NabuService.Register = {
@@ -25,8 +25,8 @@ NabuService.Register = {
   service: NabuService,
   requestStream: false,
   responseStream: false,
-  requestType: protobuf_nabu_pb.AuthRequest,
-  responseType: protobuf_nabu_pb.AuthResponse
+  requestType: nabu_pb.AuthRequest,
+  responseType: nabu_pb.AuthResponse
 };
 
 NabuService.RefreshToken = {
@@ -34,8 +34,8 @@ NabuService.RefreshToken = {
   service: NabuService,
   requestStream: false,
   responseStream: false,
-  requestType: protobuf_nabu_pb.EmptyRequest,
-  responseType: protobuf_nabu_pb.AuthResponse
+  requestType: nabu_pb.EmptyRequest,
+  responseType: nabu_pb.AuthResponse
 };
 
 NabuService.ListProjects = {
@@ -43,8 +43,8 @@ NabuService.ListProjects = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.EmptyRequest,
-  responseType: protobuf_nabu_pb.ListProjectsResponse
+  requestType: nabu_pb.EmptyRequest,
+  responseType: nabu_pb.ListProjectsResponse
 };
 
 NabuService.ListBranches = {
@@ -52,8 +52,8 @@ NabuService.ListBranches = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.BranchRequest,
-  responseType: protobuf_nabu_pb.ListBranchesResponse
+  requestType: nabu_pb.BranchRequest,
+  responseType: nabu_pb.ListBranchesResponse
 };
 
 NabuService.ListCommits = {
@@ -61,8 +61,8 @@ NabuService.ListCommits = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.CommitsRequest,
-  responseType: protobuf_nabu_pb.ListCommitsResponse
+  requestType: nabu_pb.CommitsRequest,
+  responseType: nabu_pb.ListCommitsResponse
 };
 
 NabuService.Build = {
@@ -70,8 +70,8 @@ NabuService.Build = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.BuildRequest,
-  responseType: protobuf_nabu_pb.MessageResponse
+  requestType: nabu_pb.BuildRequest,
+  responseType: nabu_pb.MessageResponse
 };
 
 NabuService.Copy = {
@@ -79,8 +79,8 @@ NabuService.Copy = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.CopyRequest,
-  responseType: protobuf_nabu_pb.MessageResponse
+  requestType: nabu_pb.CopyRequest,
+  responseType: nabu_pb.MessageResponse
 };
 
 NabuService.Install = {
@@ -88,8 +88,8 @@ NabuService.Install = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.InstallRequest,
-  responseType: protobuf_nabu_pb.MessageResponse
+  requestType: nabu_pb.InstallRequest,
+  responseType: nabu_pb.MessageResponse
 };
 
 NabuService.Restart = {
@@ -97,8 +97,8 @@ NabuService.Restart = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.RestartRequest,
-  responseType: protobuf_nabu_pb.MessageResponse
+  requestType: nabu_pb.RestartRequest,
+  responseType: nabu_pb.MessageResponse
 };
 
 NabuService.Download = {
@@ -106,8 +106,8 @@ NabuService.Download = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.DownloadRequest,
-  responseType: protobuf_nabu_pb.MessageResponse
+  requestType: nabu_pb.DownloadRequest,
+  responseType: nabu_pb.MessageResponse
 };
 
 NabuService.Upload = {
@@ -115,8 +115,8 @@ NabuService.Upload = {
   service: NabuService,
   requestStream: false,
   responseStream: true,
-  requestType: protobuf_nabu_pb.UploadRequest,
-  responseType: protobuf_nabu_pb.MessageResponse
+  requestType: nabu_pb.UploadRequest,
+  responseType: nabu_pb.MessageResponse
 };
 
 exports.NabuService = NabuService;

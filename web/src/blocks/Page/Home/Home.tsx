@@ -5,11 +5,20 @@ import Header from '../../Header/HomeHeader';
 import Footer from '../../Footer/App-Footer';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import { Login as LoginForm } from '../../Forms/Login';
+import { Error } from '../../../proto/v1/nabu_pb';
+import { RootState } from '../../../store';
+import { Dispatch } from 'redux';
+import { RootAction } from '../../../actions';
+import { authenticate } from '../../../actions/projects';
+import { connect } from 'react-redux';
 
 export interface IAppProps {
   path: string;
   authenticated: boolean;
   signOut: () => void;
+  errors: Array<Error.AsObject> | null;
+  authenticate: (username: string, password: string) => void;
 }
 
 export interface IAppState {
@@ -45,7 +54,7 @@ class Home extends Block<IAppProps, IAppState> {
           </Bem>
           <Bem block="page-home" elem="login">
             <Bem block="page-home-login" elem="login">
-              <Link to={`/login`}>Login</Link>
+              <LoginForm onAuthenticate={this.props.authenticate} errors={this.props.errors}/>
             </Bem>
             <Bem block="page-home-login" elem="reg">
               <Link to={`/register`}>Register</Link>
@@ -67,4 +76,19 @@ class Home extends Block<IAppProps, IAppState> {
   }
 }
 
-export default Home;
+function mapStateToProps(state: RootState) {
+  return {
+    authenticated: state.projects.authenticated,
+    errors: state.projects.errors,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
+  return {
+    authenticate: (username: string, password: string) => {
+      dispatch(authenticate(username, password));
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

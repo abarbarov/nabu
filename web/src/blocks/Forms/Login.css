@@ -1,0 +1,21 @@
+.form-login {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-login-form .input {
+    margin-bottom: 1em;
+    min-width: 300px;
+}
+
+.form-login-errors p.error {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    color: orangered;
+}

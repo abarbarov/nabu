@@ -1,5 +1,5 @@
-// package: protobuf
-// file: protobuf/nabu.proto
+// package: v1
+// file: nabu.proto
 
 import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";

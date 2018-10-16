@@ -32,9 +32,6 @@ class AppHeader extends Elem<IHeaderProps> {
     return (
       <Fragment>
         <Bem block="app-header" elem="item">
-          <Bem tag="a" block="app-header" elem="link" href="/">Nodes</Bem>
-        </Bem>
-        <Bem block="app-header" elem="item">
           <Bem tag="a" block="app-header" elem="link" href="/projects">Projects</Bem>
         </Bem>
         <Bem block="app-header" elem="item">

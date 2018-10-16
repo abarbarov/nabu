@@ -11,7 +11,7 @@ import './Register.css';
 import Header from '../../Header/AppHeader';
 import Footer from '../../Footer/App-Footer';
 import { FormErrors } from '../../FormErrors';
-import { Error } from '../../../protobuf/nabu_pb';
+import { Error } from '../../../proto/v1/nabu_pb';
 
 export interface ILoginProps {
   path: string;

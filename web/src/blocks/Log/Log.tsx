@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Fragment } from 'react';
-import { Message } from '../../protobuf/nabu_pb';
+import { Message } from '../../proto/v1/nabu_pb';
 import './Log.css';
 import { Bem, Block } from 'bem-react-core';
 

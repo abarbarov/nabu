@@ -2,10 +2,10 @@ package grpc
 
 import (
 	"context"
+	pb "github.com/abarbarov/nabu/api/proto/v1"
 	"github.com/abarbarov/nabu/auth"
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
-	pb "github.com/abarbarov/nabu/protobuf"
 	"github.com/abarbarov/nabu/store"
 	"github.com/abarbarov/nabu/tools"
 	"github.com/dgrijalva/jwt-go"

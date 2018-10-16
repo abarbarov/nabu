@@ -1,15 +1,15 @@
-import {Bem, Block} from 'bem-react-core';
+import { Bem, Block } from 'bem-react-core';
 import * as React from 'react';
-import {Fragment} from 'react';
-import {Dispatch} from 'redux';
+import { Fragment } from 'react';
+import { Dispatch } from 'redux';
 import Header from '../../Header/AppHeader';
 import Footer from '../../Footer/App-Footer';
-import {Link} from 'react-router-dom';
-import {RootState} from '../../../store';
-import {connect} from 'react-redux';
-import {Branch, Commit, Error, Message, Project, User} from '../../../protobuf/nabu_pb';
+import { Link } from 'react-router-dom';
+import { RootState } from '../../../store';
+import { connect } from 'react-redux';
+import { Branch, Commit, Error, Message, Project, User } from '../../../proto/v1/nabu_pb';
 import Log from '../../Log/Log';
-import {RootAction} from '../../../actions';
+import { RootAction } from '../../../actions';
 import {
   buildProject,
   clearMessages,
@@ -28,7 +28,7 @@ import {
 import ProjectList from './List/ProjectList';
 import CommitsList from './List/CommitsList';
 import BranchesList from './List/BranchesList';
-import {Button} from '../../Button/Button';
+import { Button } from '../../Button/Button';
 import './Projects.css';
 
 export interface IProjectsProps {
@@ -71,7 +71,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
 
   public componentDidMount() {
     this.props.fetchProjects((this.props.user && this.props.user.token) || '');
-    this.setState({title: 'NABU projects'});
+    this.setState({ title: 'NABU projects' });
   }
 
   public content() {
