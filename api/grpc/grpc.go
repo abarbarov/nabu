@@ -116,7 +116,7 @@ func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuSer
 
 	timeout := make(chan bool, 1)
 	go func() {
-		time.Sleep(5 * time.Second)
+		time.Sleep(1 * time.Second)
 		timeout <- true
 	}()
 
@@ -139,17 +139,6 @@ func (ngs *nabuGrpcService) ListProjects(req *pb.EmptyRequest, stream pb.NabuSer
 		}
 	}
 
-	//
-	//time.AfterFunc(time.Second*10, func() {
-	//	close(projects)
-	//})
-
-	//for project := range projects {
-	//	if err := stream.Send(&pb.ListProjectsResponse{Project: project}); err != nil {
-	//		return err
-	//	}
-	//}
-	//
 	return nil
 }
 
@@ -467,24 +456,20 @@ func (ngs *nabuGrpcService) Restart(req *pb.RestartRequest, stream pb.NabuServic
 	}
 }
 
+func (ngs *nabuGrpcService) Download(req *pb.DownloadRequest, stream pb.NabuService_DownloadServer) error {
+	return nil
+}
+
+func (ngs *nabuGrpcService) Upload(req *pb.UploadRequest, stream pb.NabuService_UploadServer) error {
+	return nil
+}
+
 func (ngs *nabuGrpcService) projects(userId int64, output chan *pb.Project) error {
 
 	projects, err := ngs.store.Projects(userId)
 	if err != nil {
 		log.Printf("%v", err)
 	}
-
-	//ch := make(chan  *pb.Project)
-	//for _, conn := range projects {
-	//	go func(c Conn) {
-	//		select {
-	//		case ch <- c.DoQuery(query):
-	//		default:
-	//		}
-	//	}(conn)
-	//}
-	//return <-ch
-	//
 
 	for _, p := range projects {
 		go func(p *store.Project) {

@@ -12,6 +12,8 @@ type ProjectViewProps = {
   onCopy: (token: string, projectid: number, sha: string) => void
   onInstall: (token: string, projectid: number, sha: string, color: string) => void
   onRestart: (token: string, projectid: number, sha: string, color: string) => void
+  onDownload: (token: string, projectid: number, sha: string, color: string) => void
+  onUpload: (token: string, projectid: number, sha: string, color: string) => void
 };
 
 const CommitsList: React.SFC<ProjectViewProps> = (props) => {
@@ -44,8 +46,8 @@ const CommitsList: React.SFC<ProjectViewProps> = (props) => {
           className={`commits-row ${props.selectedCommit && commit.sha === props.selectedCommit.sha ? 'commits-row_selected' : ''}`}
           key={i}
         >
-          <div className="commits-col">[{getDate(commit)}]</div>
-          <div className="commits-col">| {commit.sha}</div>
+          <div className="commits-col commits-col_date">[{getDate(commit)}]</div>
+          <div className="commits-col commits-col_sha">| {commit.sha}</div>
           <div className="commits-col">| {commit.message}</div>
           <div className="commits-col commits-col_actions">
             <button type="button" className="btn btn_color_orange btn_square" onClick={() => props.onBuild(props.token, props.selectedProject.id, props.selectedBranch.name, commit.sha)} title="build">
@@ -78,12 +80,22 @@ const CommitsList: React.SFC<ProjectViewProps> = (props) => {
                 <path fill="#000000" d="M11,4C13.05,4 15.09,4.77 16.65,6.33C19.78,9.46 19.77,14.5 16.64,17.64C14.81,19.5 12.3,20.24 9.91,19.92L10.44,17.96C12.15,18.12 13.93,17.54 15.24,16.23C17.58,13.89 17.58,10.09 15.24,7.75C14.06,6.57 12.53,6 11,6V10.58L6.04,5.63L11,0.68V4M5.34,17.65C2.7,15 2.3,11 4.11,7.94L5.59,9.41C4.5,11.64 4.91,14.39 6.75,16.23C7.27,16.75 7.87,17.16 8.5,17.45L8,19.4C7,19 6.12,18.43 5.34,17.65Z"/>
               </svg>
             </button>
-            <button title="download backup" className="btn btn_square">
+            <button title="download green backup" className="btn btn_square" onClick={() => props.onDownload(props.token, props.selectedProject.id, commit.sha, 'green')}>
               <svg  className="btn_svg" viewBox="0 0 24 24">
                 <path fill="#000000" d="M19.92,12.08L12,20L4.08,12.08L5.5,10.67L11,16.17V2H13V16.17L18.5,10.66L19.92,12.08M12,20H2V22H22V20H12Z" />
               </svg>
             </button>
-            <button title="upload backup" className="btn btn_square">
+            <button title="download blue backup" className="btn btn_square" onClick={() => props.onDownload(props.token, props.selectedProject.id, commit.sha, 'blue')}>
+              <svg  className="btn_svg" viewBox="0 0 24 24">
+                <path fill="#000000" d="M19.92,12.08L12,20L4.08,12.08L5.5,10.67L11,16.17V2H13V16.17L18.5,10.66L19.92,12.08M12,20H2V22H22V20H12Z" />
+              </svg>
+            </button>
+            <button title="upload green backup" className="btn btn_square" onClick={() => props.onUpload(props.token, props.selectedProject.id, commit.sha, 'green')}>
+              <svg className="btn_svg" viewBox="0 0 24 24">
+                <path fill="#000000" d="M4.08,11.92L12,4L19.92,11.92L18.5,13.33L13,7.83V22H11V7.83L5.5,13.33L4.08,11.92M12,4H22V2H2V4H12Z" />
+              </svg>
+            </button>
+            <button title="upload blue backup" className="btn btn_square" onClick={() => props.onUpload(props.token, props.selectedProject.id, commit.sha, 'blue')}>
               <svg className="btn_svg" viewBox="0 0 24 24">
                 <path fill="#000000" d="M4.08,11.92L12,4L19.92,11.92L18.5,13.33L13,7.83V22H11V7.83L5.5,13.33L4.08,11.92M12,4H22V2H2V4H12Z" />
               </svg>

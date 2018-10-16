@@ -67,6 +67,8 @@ service NabuService {
     rpc Copy (CopyRequest) returns (stream MessageResponse);
     rpc Install (InstallRequest) returns (stream MessageResponse);
     rpc Restart (RestartRequest) returns (stream MessageResponse);
+    rpc Download (DownloadRequest) returns (stream MessageResponse);
+    rpc Upload (UploadRequest) returns (stream MessageResponse);
 }
 
 message EmptyRequest {
@@ -110,6 +112,20 @@ message InstallRequest {
 }
 
 message RestartRequest {
+    int64 project_id = 1;
+    string sha = 2;
+    string color = 3;
+    string token = 4;
+}
+
+message DownloadRequest {
+    int64 project_id = 1;
+    string sha = 2;
+    string color = 3;
+    string token = 4;
+}
+
+message UploadRequest {
     int64 project_id = 1;
     string sha = 2;
     string color = 3;

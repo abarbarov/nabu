@@ -9,6 +9,8 @@ import {
   CommitsRequest,
   CopyRequest,
   EmptyRequest,
+  DownloadRequest,
+  UploadRequest,
   Error,
   InstallRequest,
   ListBranchesResponse,
@@ -36,6 +38,8 @@ export const ADD_COMMIT = 'ADD_COMMIT';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const ADD_ERROR = 'ADD_ERROR';
+export const UPLOAD_BACKUP = 'UPLOAD_BACKUP';
+export const DOWNLOAD_BACKUP = 'DOWNLOAD_BACKUP';
 
 const host = 'http://localhost:9091';
 
@@ -203,6 +207,70 @@ export const buildProject = (token: string, projectId: number, branch: string, s
     },
     host: host,
     methodDescriptor: NabuService.Build,
+    onMessage: message => {
+      const m = message.getMessage();
+      if (m) {
+        return addMessage(m);
+      }
+      return;
+    }
+  });
+};
+
+export const downloadProject = (token: string, projectId: number, sha: string, color: string) => {
+
+  let req = new DownloadRequest();
+  req.setProjectId(projectId);
+  req.setColor(color);
+  req.setSha(sha);
+  req.setToken(token);
+
+  return grpcRequest<DownloadRequest, MessageResponse>({
+    request: req,
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error downloading project');
+
+        return addErrors([err.toObject()]);
+      }
+    },
+    host: host,
+    methodDescriptor: NabuService.Download,
+    onMessage: message => {
+      const m = message.getMessage();
+      if (m) {
+        return addMessage(m);
+      }
+      return;
+    }
+  });
+};
+
+export const uploadProject = (token: string, projectId: number, sha: string, color: string) => {
+
+  let req = new UploadRequest();
+  req.setProjectId(projectId);
+  req.setColor(color);
+  req.setSha(sha);
+  req.setToken(token);
+
+  return grpcRequest<UploadRequest, MessageResponse>({
+    request: req,
+    onEnd: (code: grpc.Code, message: string | undefined, trailers: grpc.Metadata): Action | void => {
+      console.log(code, message, trailers);
+      if (code === 2) {
+
+        let err = new Error();
+        err.setText(message || 'error uploading project');
+
+        return addErrors([err.toObject()]);
+      }
+    },
+    host: host,
+    methodDescriptor: NabuService.Upload,
     onMessage: message => {
       const m = message.getMessage();
       if (m) {

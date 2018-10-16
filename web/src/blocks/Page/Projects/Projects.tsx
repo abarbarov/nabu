@@ -1,19 +1,20 @@
-import { Bem, Block } from 'bem-react-core';
+import {Bem, Block} from 'bem-react-core';
 import * as React from 'react';
-import { Fragment } from 'react';
-import { Dispatch } from 'redux';
+import {Fragment} from 'react';
+import {Dispatch} from 'redux';
 import Header from '../../Header/AppHeader';
 import Footer from '../../Footer/App-Footer';
-import { Link } from 'react-router-dom';
-import { RootState } from '../../../store';
-import { connect } from 'react-redux';
-import { Branch, Commit, Error, Message, Project, User } from '../../../protobuf/nabu_pb';
+import {Link} from 'react-router-dom';
+import {RootState} from '../../../store';
+import {connect} from 'react-redux';
+import {Branch, Commit, Error, Message, Project, User} from '../../../protobuf/nabu_pb';
 import Log from '../../Log/Log';
-import { RootAction } from '../../../actions';
+import {RootAction} from '../../../actions';
 import {
   buildProject,
   clearMessages,
   copyProject,
+  downloadProject,
   initProjects,
   installProject,
   listBranches,
@@ -21,12 +22,13 @@ import {
   listProjects,
   restartProject,
   selectBranch,
-  selectProject
+  selectProject,
+  uploadProject
 } from '../../../actions/projects';
 import ProjectList from './List/ProjectList';
 import CommitsList from './List/CommitsList';
 import BranchesList from './List/BranchesList';
-import { Button } from '../../Button/Button';
+import {Button} from '../../Button/Button';
 import './Projects.css';
 
 export interface IProjectsProps {
@@ -47,6 +49,8 @@ export interface IProjectsProps {
   copy: (token: string, projectId: number, sha: string) => void;
   install: (token: string, projectId: number, sha: string, color: string) => void;
   restart: (token: string, projectId: number, sha: string, color: string) => void;
+  upload: (token: string, projectId: number, sha: string, color: string) => void;
+  download: (token: string, projectId: number, sha: string, color: string) => void;
   user: User.AsObject | null;
 }
 
@@ -67,7 +71,7 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
 
   public componentDidMount() {
     this.props.fetchProjects((this.props.user && this.props.user.token) || '');
-    this.setState({ title: 'NABU projects' });
+    this.setState({title: 'NABU projects'});
   }
 
   public content() {
@@ -122,6 +126,8 @@ class Projects extends Block<IProjectsProps, IProjectsState> {
                     onCopy={this.props.copy}
                     onInstall={this.props.install}
                     onRestart={this.props.restart}
+                    onUpload={this.props.upload}
+                    onDownload={this.props.download}
                   />
                   : null
                 }
@@ -192,6 +198,14 @@ function mapDispatchToProps(dispatch: Dispatch<RootAction>) {
     restart: (token: string, projectId: number, sha: string, color: string) => {
       dispatch(clearMessages());
       dispatch(restartProject(token, projectId, sha, color));
+    },
+    upload: (token: string, projectId: number, sha: string, color: string) => {
+      dispatch(clearMessages());
+      dispatch(uploadProject(token, projectId, sha, color));
+    },
+    download: (token: string, projectId: number, sha: string, color: string) => {
+      dispatch(clearMessages());
+      dispatch(downloadProject(token, projectId, sha, color));
     }
   };
 }

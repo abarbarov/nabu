@@ -133,7 +133,7 @@ var projects = []*Project{
 	{
 		Id:     7,
 		UserId: 1,
-		Title:  "tgnabu",
+		Title:  "nabu.tg",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "nabu.tg",

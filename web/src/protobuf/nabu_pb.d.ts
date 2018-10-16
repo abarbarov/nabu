@@ -432,6 +432,70 @@ export namespace RestartRequest {
   }
 }
 
+export class DownloadRequest extends jspb.Message {
+  getProjectId(): number;
+  setProjectId(value: number): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  getColor(): string;
+  setColor(value: string): void;
+
+  getToken(): string;
+  setToken(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DownloadRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: DownloadRequest): DownloadRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DownloadRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DownloadRequest;
+  static deserializeBinaryFromReader(message: DownloadRequest, reader: jspb.BinaryReader): DownloadRequest;
+}
+
+export namespace DownloadRequest {
+  export type AsObject = {
+    projectId: number,
+    sha: string,
+    color: string,
+    token: string,
+  }
+}
+
+export class UploadRequest extends jspb.Message {
+  getProjectId(): number;
+  setProjectId(value: number): void;
+
+  getSha(): string;
+  setSha(value: string): void;
+
+  getColor(): string;
+  setColor(value: string): void;
+
+  getToken(): string;
+  setToken(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UploadRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UploadRequest): UploadRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: UploadRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UploadRequest;
+  static deserializeBinaryFromReader(message: UploadRequest, reader: jspb.BinaryReader): UploadRequest;
+}
+
+export namespace UploadRequest {
+  export type AsObject = {
+    projectId: number,
+    sha: string,
+    color: string,
+    token: string,
+  }
+}
+
 export class MessageResponse extends jspb.Message {
   hasMessage(): boolean;
   clearMessage(): void;

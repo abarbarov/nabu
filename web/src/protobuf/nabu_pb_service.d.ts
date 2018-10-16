@@ -94,6 +94,24 @@ type NabuServiceRestart = {
   readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
 };
 
+type NabuServiceDownload = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.DownloadRequest;
+  readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
+};
+
+type NabuServiceUpload = {
+  readonly methodName: string;
+  readonly service: typeof NabuService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof protobuf_nabu_pb.UploadRequest;
+  readonly responseType: typeof protobuf_nabu_pb.MessageResponse;
+};
+
 export class NabuService {
   static readonly serviceName: string;
   static readonly Authenticate: NabuServiceAuthenticate;
@@ -106,6 +124,8 @@ export class NabuService {
   static readonly Copy: NabuServiceCopy;
   static readonly Install: NabuServiceInstall;
   static readonly Restart: NabuServiceRestart;
+  static readonly Download: NabuServiceDownload;
+  static readonly Upload: NabuServiceUpload;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -157,5 +177,7 @@ export class NabuServiceClient {
   copy(requestMessage: protobuf_nabu_pb.CopyRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
   install(requestMessage: protobuf_nabu_pb.InstallRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
   restart(requestMessage: protobuf_nabu_pb.RestartRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
+  download(requestMessage: protobuf_nabu_pb.DownloadRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
+  upload(requestMessage: protobuf_nabu_pb.UploadRequest, metadata?: grpc.Metadata): ResponseStream<protobuf_nabu_pb.MessageResponse>;
 }
 
