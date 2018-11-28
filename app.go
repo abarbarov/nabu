@@ -48,7 +48,7 @@ hkjvHkQ8uXys+hE3XwIDAQAB
 
 type Opts struct {
 	Port         int    `long:"port" env:"NABU_PORT" default:"9091" description:"port"`
-	WebRoot      string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web" description:"web root directory"`
+	WebRoot      string `long:"web-root" env:"NABU_WEB_ROOT" default:"./web/build" description:"web root directory"`
 	BuildOutput  string `long:"build-output" env:"NABU_BUILD_OUTPUT" default:"/builds/output" description:"build output root directory"`
 	GoExecutable string `long:"go-executable" env:"NABU_GO_EXEC_PATH" default:"go" description:"go executable file"`
 }

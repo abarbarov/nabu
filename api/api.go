@@ -6,9 +6,11 @@ import (
 	"github.com/abarbarov/nabu/auth"
 	"log"
 	"net/http"
+	"path/filepath"
 	"sync"
 	"time"
-
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth_chi"
 	"github.com/abarbarov/nabu/api/middleware"
 	"github.com/go-chi/chi"
 	"strings"
@@ -83,17 +85,34 @@ func (s *Server) routes() chi.Router {
 	router.Use(grpcMiddleware.Handler)
 	//router.Use(corsMiddleware.Handler)
 
+
+	router.Route("/", func(r chi.Router) {
+		r.Use(tollbooth_chi.LimitHandler(tollbooth.NewLimiter(10, nil)))
+		//r.Use(corsOpts.Handler)
+		r.Get("/", s.staticFile("index.html"))
+		r.Get("/favicon.ico", s.staticFile("favicon.ico"))
+		r.Get("/static/css/*", s.staticHandler)
+		r.Get("/static/js/*", s.staticHandler)
+	})
+
 	router.Route("/api/v1", func(rapi chi.Router) {
 		rapi.Group(func(ropen chi.Router) {
 			ropen.Get("/ping", s.pingCtrl)
 		})
 	})
 
-	//file server for static content from /web
-	addFileServer(router, "/web", http.Dir(s.WebRoot))
-
 	return router
 }
+func (s *Server) staticHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, filepath.Join(s.WebRoot, r.URL.Path[1:]))
+}
+
+func (s *Server) staticFile(file string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(s.WebRoot, file))
+	}
+}
+
 
 func (s *Server) pingCtrl(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" && strings.HasSuffix(strings.ToLower(r.URL.Path), "/ping") {
@@ -104,15 +123,4 @@ func (s *Server) pingCtrl(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-}
-
-// serves static files from /web
-func addFileServer(r chi.Router, path string, root http.FileSystem) {
-	log.Printf("[INFO] run file server for %s, path %s", root, path)
-	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
-		path += "/"
-	}
-
-	path += "*"
 }
