@@ -3,17 +3,17 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/abarbarov/nabu/api/middleware"
 	"github.com/abarbarov/nabu/auth"
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth_chi"
+	"github.com/go-chi/chi"
 	"log"
 	"net/http"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
-	"github.com/didip/tollbooth"
-	"github.com/didip/tollbooth_chi"
-	"github.com/abarbarov/nabu/api/middleware"
-	"github.com/go-chi/chi"
-	"strings"
 
 	"github.com/abarbarov/nabu/builder"
 	"github.com/abarbarov/nabu/github"
@@ -85,11 +85,11 @@ func (s *Server) routes() chi.Router {
 	router.Use(grpcMiddleware.Handler)
 	//router.Use(corsMiddleware.Handler)
 
-
 	router.Route("/", func(r chi.Router) {
 		r.Use(tollbooth_chi.LimitHandler(tollbooth.NewLimiter(10, nil)))
 		//r.Use(corsOpts.Handler)
 		r.Get("/", s.staticFile("index.html"))
+		r.Get("/projects", s.staticFile("index.html"))
 		r.Get("/favicon.ico", s.staticFile("favicon.ico"))
 		r.Get("/static/css/*", s.staticHandler)
 		r.Get("/static/js/*", s.staticHandler)
@@ -112,7 +112,6 @@ func (s *Server) staticFile(file string) http.HandlerFunc {
 		http.ServeFile(w, r, filepath.Join(s.WebRoot, file))
 	}
 }
-
 
 func (s *Server) pingCtrl(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" && strings.HasSuffix(strings.ToLower(r.URL.Path), "/ping") {
