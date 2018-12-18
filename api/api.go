@@ -71,19 +71,9 @@ func (s *Server) Shutdown() {
 func (s *Server) routes() chi.Router {
 	router := chi.NewRouter()
 
-	//corsMiddleware := cors.New(cors.Options{
-	//	AllowedOrigins:   []string{"*"},
-	//	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	//	AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-XSRF-Token"},
-	//	ExposedHeaders:   []string{"Link"},
-	//	AllowCredentials: true,
-	//	MaxAge:           300,
-	//})
-
 	grpcMiddleware := middleware.NewGrpcWebMiddleware(s.Store, s.Github, s.Builder, s.Authenticator)
 
 	router.Use(grpcMiddleware.Handler)
-	//router.Use(corsMiddleware.Handler)
 
 	router.Route("/", func(r chi.Router) {
 		r.Use(tollbooth_chi.LimitHandler(tollbooth.NewLimiter(10, nil)))

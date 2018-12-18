@@ -24,7 +24,7 @@ var projects = []*Project{
 		Title:  "firstfile-dev",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "trademark.web",
+			Name:  "firstfile.web",
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
@@ -38,7 +38,7 @@ var projects = []*Project{
 		Title:  "firstfile-PRODUCTION",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "trademark.web",
+			Name:  "firstfile.web",
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
@@ -108,7 +108,7 @@ var projects = []*Project{
 		Title:  "firstfile-dev",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "trademark.web",
+			Name:  "firstfile.web",
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
@@ -122,7 +122,7 @@ var projects = []*Project{
 		Title:  "firstfile-PROD",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "trademark.web",
+			Name:  "firstfile.web",
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
@@ -143,6 +143,34 @@ var projects = []*Project{
 		Host: "95.216.163.61:22",
 		Exec: "tg.nabu.%s.service",
 		Dir:  "/apps/tg.nabu/%s",
+	},
+	{
+		Id:     8,
+		UserId: 1,
+		Title:  "deliv-PRODUCTION",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "deliv",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "95.216.186.149:22",
+		Exec: "deliv.%s.service",
+		Dir:  "/apps/deliv/%s",
+	},
+	{
+		Id:     9,
+		UserId: 1,
+		Title:  "deliv",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "deliv",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "95.216.186.149:22",
+		Exec: "delivtest.%s.service",
+		Dir:  "/apps/delivtest/%s",
 	},
 }
 
