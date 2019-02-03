@@ -147,20 +147,6 @@ var projects = []*Project{
 	{
 		Id:     8,
 		UserId: 1,
-		Title:  "deliv-PRODUCTION",
-		Repository: &Repository{
-			Id:    1,
-			Name:  "deliv",
-			Owner: "abarbarov",
-			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
-		},
-		Host: "95.216.186.149:22",
-		Exec: "deliv.%s.service",
-		Dir:  "/apps/deliv/%s",
-	},
-	{
-		Id:     9,
-		UserId: 1,
 		Title:  "deliv",
 		Repository: &Repository{
 			Id:    1,
@@ -168,9 +154,9 @@ var projects = []*Project{
 			Owner: "abarbarov",
 			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
 		},
-		Host: "95.216.186.149:22",
-		Exec: "delivtest.%s.service",
-		Dir:  "/apps/delivtest/%s",
+		Host: "95.216.163.61:22",
+		Exec: "deliv.%s.service",
+		Dir:  "/apps/deliv/%s",
 	},
 }
 
