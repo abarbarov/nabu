@@ -12,3 +12,4 @@
 *.out
 .idea/
 *.sum
+.DS_Store
