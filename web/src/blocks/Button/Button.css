@@ -85,11 +85,12 @@
 }
 
 .btn_square {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
+    box-shadow: 1px 1px 2px #9b9b9b;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    margin: 2px;
     text-align: center;
-    margin-right: 1px;
     display: inline-flex;
     padding: 0;
     justify-content: center;

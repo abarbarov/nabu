@@ -21,12 +21,12 @@ var projects = []*Project{
 	{
 		Id:     1,
 		UserId: 1,
-		Title:  "firstfile-dev",
+		Title:  "First to File (DEV)",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "firstfile.web",
-			Owner: "abarbarov",
-			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+			Name:  "web",
+			Owner: "firsttofile",
+			Token: "f87a24802641914a892b85e67add8f6b828bb6e7",
 		},
 		Host: "95.216.163.61:22",
 		Exec: "firstfile.%s.service",
@@ -35,12 +35,12 @@ var projects = []*Project{
 	{
 		Id:     2,
 		UserId: 1,
-		Title:  "firstfile-PRODUCTION",
+		Title:  "First to File (PROD)",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "firstfile.web",
-			Owner: "abarbarov",
-			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+			Name:  "web",
+			Owner: "firsttofile",
+			Token: "f87a24802641914a892b85e67add8f6b828bb6e7",
 		},
 		Host: "5.23.53.238:22",
 		Exec: "trademark.%s.service",
@@ -105,12 +105,12 @@ var projects = []*Project{
 	{
 		Id:     1,
 		UserId: 2,
-		Title:  "firstfile-dev",
+		Title:  "First to File (DEV)",
 		Repository: &Repository{
 			Id:    1,
-			Name:  "firstfile.web",
-			Owner: "abarbarov",
-			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+			Name:  "web",
+			Owner: "firsttofile",
+			Token: "f87a24802641914a892b85e67add8f6b828bb6e7",
 		},
 		Host: "95.216.163.61:22",
 		Exec: "firstfile.%s.service",
@@ -119,7 +119,7 @@ var projects = []*Project{
 	{
 		Id:     2,
 		UserId: 2,
-		Title:  "firstfile-PROD",
+		Title:  "First to File (PROD)",
 		Repository: &Repository{
 			Id:    1,
 			Name:  "firstfile.web",
@@ -157,6 +157,34 @@ var projects = []*Project{
 		Host: "95.216.163.61:22",
 		Exec: "deliv.%s.service",
 		Dir:  "/apps/deliv/%s",
+	},
+	{
+		Id:     3,
+		UserId: 2,
+		Title:  "First to File's MKTU service (PROD)",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "mktu",
+			Owner: "firsttofile",
+			Token: "f87a24802641914a892b85e67add8f6b828bb6e7",
+		},
+		Host: "95.216.163.61:22",
+		Exec: "firstfilemktu.%s.service",
+		Dir:  "/apps/firstfilemktu/%s",
+	},
+	{
+		Id:     9,
+		UserId: 1,
+		Title:  "First to File's MKTU service (PROD)",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "mktu",
+			Owner: "firsttofile",
+			Token: "f87a24802641914a892b85e67add8f6b828bb6e7",
+		},
+		Host: "95.216.163.61:22",
+		Exec: "firstfilemktu.%s.service",
+		Dir:  "/apps/firstfilemktu/%s",
 	},
 }
 

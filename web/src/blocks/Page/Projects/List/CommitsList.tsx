@@ -19,7 +19,7 @@ type ProjectViewProps = {
 const CommitsList: React.SFC<ProjectViewProps> = (props) => {
   function getDate(c: Commit.AsObject | undefined) {
     if (c && c.timestamp) {
-      return new Date(c.timestamp.seconds * 1000).toISOString();
+      return new Date(c.timestamp.seconds * 1000).toLocaleString('en-GB', { timeZone: 'UTC' });
     }
 
     return '';

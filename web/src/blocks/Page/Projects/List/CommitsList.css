@@ -24,16 +24,17 @@
 .commits-col {
     display: flex;
     align-items: center;
+    font-size: 10pt;
 }
 
 .commits-col_actions {
     justify-content: flex-end;
 }
 
-.commits-col_date{
+.commits-col_date {
 
 }
 
-.commits-col_sha{
+.commits-col_sha {
 
 }

@@ -16,7 +16,6 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 )
@@ -258,10 +257,8 @@ func (b *Builder) vgoBuild(dir, sha string) error {
 	cmd = exec.Command(b.GoExecutable, args...)
 
 	env := os.Environ()
-	if runtime.GOOS == "windows" {
-		env = append(env, fmt.Sprintf("GOOS=%s", "linux"))
-		env = append(env, fmt.Sprintf("GOARCH=%s", "amd64"))
-	}
+	env = append(env, fmt.Sprintf("GOOS=%s", "linux"))
+	env = append(env, fmt.Sprintf("GOARCH=%s", "amd64"))
 
 	cmd.Env = env
 	cmd.Dir, _ = filepath.Abs(dir)

@@ -15,6 +15,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
+	"runtime"
 	"syscall"
 )
 
@@ -73,6 +75,17 @@ func parseRsaKeys() (*rsa.PublicKey, *rsa.PrivateKey, error) {
 	return verifyKey, signKey, nil
 }
 
+func userHomeDir() string {
+	if runtime.GOOS == "windows" {
+		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		return home
+	}
+	return os.Getenv("HOME")
+}
+
 func main() {
 	fmt.Printf("[INFO] nabu %s\nbuild date: %s\n", revision, buildstamp)
 
@@ -84,7 +97,7 @@ func main() {
 
 	log.Print("[INFO] started nabu service")
 
-	err := tools.MakeDirs(opts.BuildOutput)
+	err := tools.MakeDirs(filepath.Join(userHomeDir(), opts.BuildOutput))
 
 	if err != nil {
 		log.Fatalf("[ERROR] failed to create dirs, %+v", err)
@@ -112,7 +125,7 @@ func Create(opts Opts) (*Application, error) {
 	gh := &github.Github{}
 	b := &builder.Builder{
 		Github:       gh,
-		BuildOutput:  opts.BuildOutput,
+		BuildOutput:  filepath.Join(userHomeDir(), opts.BuildOutput),
 		GoExecutable: opts.GoExecutable,
 	}
 
