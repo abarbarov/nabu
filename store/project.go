@@ -186,6 +186,21 @@ var projects = []*Project{
 		Exec: "firstfilemktu.%s.service",
 		Dir:  "/apps/firstfilemktu/%s",
 	},
+	{
+		Id:     10,
+		UserId: 1,
+		Title:  "Iriski releases",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "iriski.releases",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "116.203.144.74:22",
+		Exec: "iriski.%s.service",
+		Dir:  "/apps/iriski/%s",
+	},
+
 }
 
 func (ds *DataStore) Projects(userId int64) ([]*Project, error) {
