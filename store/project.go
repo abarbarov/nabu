@@ -200,7 +200,20 @@ var projects = []*Project{
 		Exec: "iriski.%s.service",
 		Dir:  "/apps/iriski/%s",
 	},
-
+	{
+		Id:     11,
+		UserId: 1,
+		Title:  "Iriski license",
+		Repository: &Repository{
+			Id:    1,
+			Name:  "iriski.license",
+			Owner: "abarbarov",
+			Token: "dc374e4fc6a6c4912bb7599aaf4b138f0d942227",
+		},
+		Host: "159.69.188.79:22",
+		Exec: "iriski.license.service",
+		Dir:  "/apps/iriski/license",
+	},
 }
 
 func (ds *DataStore) Projects(userId int64) ([]*Project, error) {

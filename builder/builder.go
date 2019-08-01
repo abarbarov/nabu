@@ -153,8 +153,16 @@ func (b *Builder) Install(proj store.Project, sha, color string, messages chan *
 	staticAssetsPath := filepath.Join(b.BuildOutput, fullName, "static")
 
 	remoteBuildDir := fmt.Sprintf("/home/dev/out-%s", sha)
-	remoteServiceDir := fmt.Sprintf(proj.Dir, color)
-	serviceName := fmt.Sprintf(proj.Exec, color)
+
+	remoteServiceDir := proj.Dir
+	if strings.Count(proj.Dir, "%s") == 1 {
+		remoteServiceDir = fmt.Sprintf(proj.Dir, color)
+	}
+
+	serviceName:=proj.Exec
+	if strings.Count(proj.Exec, "%s") == 1 {
+		serviceName = fmt.Sprintf(proj.Exec, color)
+	}
 
 	stop := fmt.Sprintf("sudo systemctl stop %s", serviceName)
 	cpStatic := fmt.Sprintf("sudo cp -R %s/static %s", remoteBuildDir, remoteServiceDir)
