@@ -231,7 +231,10 @@ func (b *Builder) Restart(proj store.Project, sha, color string, messages chan *
 
 	outOk(messages, fmt.Sprintf("[INFO] restarting %s-%s app...", sha, color), 0)
 
-	serviceName := fmt.Sprintf(proj.Exec, color)
+	serviceName:=proj.Exec
+	if strings.Count(proj.Exec, "%s") == 1 {
+		serviceName = fmt.Sprintf(proj.Exec, color)
+	}
 
 	restart := fmt.Sprintf("sudo systemctl restart %s", serviceName)
 
